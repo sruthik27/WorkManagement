@@ -8,6 +8,7 @@ const AdminHome = () => {
 
     const [inputEmail, setInputEmail] = useState("");
     const [inputPassword, setInputPassword] = useState("");
+    const [inputCheckbox, setInputCheckbox] = useState(false);
 
     const HandleInputEmail = (e) => {
         setInputEmail(e.target.value);
@@ -22,7 +23,10 @@ const AdminHome = () => {
             Email : inputEmail,
             Password : inputPassword
         };
-        console.log(loginData);
+    }
+
+    const HandleCheckbox = () => {
+        inputCheckbox ? setInputCheckbox(false) : setInputCheckbox(true);
     }
     return (
         <div className="Home">
@@ -35,7 +39,7 @@ const AdminHome = () => {
                 </div>
                 <div className="Login-container">
                     <div>
-                        <input className="checkbox" type="checkbox"/>
+                        <input className="checkbox" type="checkbox" value={inputCheckbox} onClick={HandleCheckbox}/>
                         <label>Remember me</label>
                     </div>
                     <a className="Login" href="/AdminMain"><img className="Login-img" src={Ellipse} alt="Login-Button" onClick={HandleSubmit}/></a>
