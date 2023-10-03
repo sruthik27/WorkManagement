@@ -1,22 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
+import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import AppRoutes from './AppRoutes';
-import { Layout } from './components/Layout';
-import './custom.css';
+import AdminHome from './components/AdminHome';
+import AdminMain from './components/AdminMain';
 
-export default class App extends Component {
-  static displayName = App.name;
-
-  render() {
-    return (
-      <Layout>
-        <Routes>
-          {AppRoutes.map((route, index) => {
-            const { element, ...rest } = route;
-            return <Route key={index} {...rest} element={element} />;
-          })}
-        </Routes>
-      </Layout>
-    );
-  }
+function App() {
+  return (
+    <Routes>
+      <Route path='/' element={<AdminHome/>}/>
+      <Route path='/AdminMain' element={ <AdminMain/> }/>
+    </Routes>
+  );
 }
+
+export default App;
