@@ -2,6 +2,7 @@
   "name": "workmanagement",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://localhost:7286",
   "dependencies": {
     "bootstrap": "^5.2.3",
     "http-proxy-middleware": "^2.0.6",
