@@ -17,8 +17,7 @@ public class DbController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        var logins = _context.Logins.ToList();
-        return Ok(logins);
+        return Ok(_context.Works);
     }
 
     [Route("verify")]
