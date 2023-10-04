@@ -22,7 +22,6 @@ const AdminHome = () => {
     const [inputEmail, setInputEmail] = useState("");
     const [inputPassword, setInputPassword] = useState("");
     const [inputCheckbox, setInputCheckbox] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
 
 
     const HandleInputEmail = (e) => {
@@ -77,6 +76,7 @@ const AdminHome = () => {
                     
                 } else {
                     console.log('Authentication failed');
+                    alert('Authentication failed');
                     // Handle authentication failure (e.g., display an error message)
                 }
             })
@@ -89,34 +89,28 @@ const AdminHome = () => {
         <div className="Home">
             <div className="Home-Container">
                 <h1 className="Admin-head">ADMIN PORTAL</h1>
-                <p>LOGIN TO MANAGE YOUR WORKERS AND WORKS</p>
+                <p className="Admin-info">LOGIN TO MANAGE YOUR WORKERS AND WORKS</p>
                 <div className="user-input">
                     <input className="input1" type="email" value={inputEmail} onChange={HandleInputEmail} placeholder="Email"/>
                     <input
                         className="input1"
-                        type={showPassword ? "text" : "password"}
+                        type={"password"}
                         value={inputPassword}
                         onChange={HandleInputPassword}
-                        placeholder="Password"
+                        placeholder="Password"                        
                     />
-                    <span
-                        className="eye-icon"
-                        onClick={() => setShowPassword(!showPassword)}
-                    >
-  {showPassword ? "👁️" : "🔒"}
-</span>
                 </div>
                 <div className="Login-container">
                     <div>
                         <input className="checkbox" type="checkbox" value={inputCheckbox} onClick={HandleCheckbox}/>
                         <label>Remember me</label>
                     </div>
-                    <a className="Login"><img className="Login-img" src={Ellipse} alt="Login-Button" onClick={HandleSubmit}/></a>
+                    <div className="Login" ><img className="Login-img" src={Ellipse} alt="Login-Button" onClick={HandleSubmit}/></div>
                     <a className="forgot" href="/ForgotPassword">Forgot password?</a>
                 </div>
-            </div>
-            <div>
-                <img className="Footer-img" src={ Footer } alt="AdminHomeFooter"/>
+                <div>
+                    <img className="Footer-img" src={ Footer } alt="AdminHomeFooter"/>
+                </div>
             </div>
         </div>
     )

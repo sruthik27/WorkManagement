@@ -3,8 +3,8 @@ import "./AdminMain.css";
 
 const AdminMain = () => {
     return (
-        <div>
-            <p>Hello Welcome</p>
+        <div className="ahome">
+            <p className="para">Hello Welcome</p>
         </div>
     )
 }
