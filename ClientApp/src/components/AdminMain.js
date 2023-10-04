@@ -1,12 +1,16 @@
-import React from "react";
+import React, { Component } from 'react';
 import "./AdminMain.css";
+import TaskTable from './TaskTable';
 
 const AdminMain = () => {
-    return (
-        <div className="ahome">
-            <p className="para">Hello Welcome</p>
-        </div>
-    )
+  return (
+    <>
+      <div className="ahome">
+        <p className="para">WELCOME TO THE DASHBOARD!</p>
+        <TaskTable/>
+      </div>
+    </>
+  );
 }
 
 export default AdminMain;

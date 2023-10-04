@@ -22,7 +22,7 @@ const AdminHome = () => {
     const [inputEmail, setInputEmail] = useState("");
     const [inputPassword, setInputPassword] = useState("");
     const [inputCheckbox, setInputCheckbox] = useState(false);
-
+    const [inputLoginFail, setInputLoginFail] = useState("");
 
     const HandleInputEmail = (e) => {
         setInputEmail(e.target.value);
@@ -76,7 +76,7 @@ const AdminHome = () => {
                     
                 } else {
                     console.log('Authentication failed');
-                    alert('Authentication failed');
+                    setInputLoginFail("Invalid Email or Password");
                     // Handle authentication failure (e.g., display an error message)
                 }
             })
@@ -86,33 +86,36 @@ const AdminHome = () => {
             });
     };
     return (
-        <div className="Home">
-            <div className="Home-Container">
-                <h1 className="Admin-head">ADMIN PORTAL</h1>
-                <p className="Admin-info">LOGIN TO MANAGE YOUR WORKERS AND WORKS</p>
-                <div className="user-input">
-                    <input className="input1" type="email" value={inputEmail} onChange={HandleInputEmail} placeholder="Email"/>
-                    <input
-                        className="input1"
-                        type={"password"}
-                        value={inputPassword}
-                        onChange={HandleInputPassword}
-                        placeholder="Password"                        
-                    />
-                </div>
-                <div className="Login-container">
-                    <div>
-                        <input className="checkbox" type="checkbox" value={inputCheckbox} onClick={HandleCheckbox}/>
-                        <label>Remember me</label>
+        <>
+            <div className="Home">
+                <div className="Home-Container">
+                    <h1 className="Admin-head">ADMIN PORTAL</h1>
+                    <p className="Admin-info">LOGIN TO MANAGE YOUR WORKERS AND WORKS</p>
+                    <div className="user-input">
+                        <input className="input1" type="email" value={inputEmail} onChange={HandleInputEmail} placeholder="Email"/>
+                        <input
+                            className="input1"
+                            type={"password"}
+                            value={inputPassword}
+                            onChange={HandleInputPassword}
+                            placeholder="Password"                        
+                        />
                     </div>
-                    <div className="Login" ><img className="Login-img" src={Ellipse} alt="Login-Button" onClick={HandleSubmit}/></div>
-                    <a className="forgot" href="/ForgotPassword">Forgot password?</a>
-                </div>
-                <div>
-                    <img className="Footer-img" src={ Footer } alt="AdminHomeFooter"/>
+                    <div className="Login-container">
+                        <div>
+                            <input className="checkbox" type="checkbox" value={inputCheckbox} onClick={HandleCheckbox}/>
+                            <label>Remember me</label>
+                        </div>
+                        <div className="Login" ><img className="Login-img" src={Ellipse} alt="Login-Button" onClick={HandleSubmit}/></div>
+                        <a className="forgot" href="/ForgotPassword">Forgot password?</a>
+                    </div>
+                    <p>{inputLoginFail}</p>
+                    <div>
+                        <img className="Footer-img" src={ Footer } alt="AdminHomeFooter"/>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 
