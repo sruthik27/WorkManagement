@@ -40,7 +40,7 @@ class TaskTable extends Component {
             <>
                 <div className="task-table">
                     <div>
-                        <h1>Active Task</h1>
+                        <h2>Active Task</h2>
                         <ul>
                             {activeTask.map((x, i) => (
                                 <p key={i}>{x}</p>
@@ -48,13 +48,13 @@ class TaskTable extends Component {
                         </ul>
                     </div>
                     <div >
-                        <h1>Completed Task</h1>
+                        <h2>Completed Task</h2>
                         <ul>
                             {completeTask.map((x,i)=>(<p key={i}>{x}</p>))}
                         </ul>
                     </div>
                     <div>
-                        <h1>Completed Task</h1>
+                        <h2>Completed Task</h2>
                         <ul>
                             {incompleteTask.map((x,i)=>(<p key={i}>{x}</p>))}
                         </ul>

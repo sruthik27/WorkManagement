@@ -19,3 +19,26 @@
     width: 986px;
     height: 330px;
 }
+
+.base-item {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.feedback {
+    display: grid;
+}
+
+.feedback-input {
+    border-radius: 20px;
+    border: 1.5px solid #9E00EB;
+    background: #FFF;
+    padding: 10px 180px 80px 10px;
+}
+
+.send-button {
+    margin: 20px;
+    border-radius: 40px;
+    background: #54B442;
+    padding: 15px 40px;
+}
