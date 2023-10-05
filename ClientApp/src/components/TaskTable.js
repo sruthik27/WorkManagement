@@ -26,11 +26,11 @@ class TaskTable extends Component {
         if (prevProps.data !== this.props.data) {
             this.processData(this.props.data);
         }
+        console.log(this.props.data)
     }
 
     handleItemClick = (item) => {
         // Set the selected item when a p tag is clicked
-        
         this.setState({ selectedItem: item });
     }
     
@@ -58,26 +58,34 @@ class TaskTable extends Component {
         return (
             <>
                 <div className="task-table">
-                    <div>
-                        <h2>Active Task</h2>
+                    <div className='table-border1'>
+                        <h2 className='table-head'>Active Task</h2>
                         <ul>
                             {activeTask.map((x, i) => (
-                                <p key={i} onClick={() => this.handleItemClick(x)}>
+                                <p className='table_content' key={i} onClick={() => this.handleItemClick(x)}>
                                     {x.work_name}
                                 </p>
                             ))}
                         </ul>
                     </div>
                     <div >
-                        <h2>Completed Task</h2>
+                        <h2 className='table-head' >Completed Task</h2>
                         <ul>
-                            {completeTask.map((x,i)=>(<p key={i}>{x.work_name}</p>))}
+                            {completeTask.map((x,i)=>(
+                                <p className='table_content' key={i} onClick={() => this.handleItemClick(x)}>
+                                    {x.work_name}
+                                </p>
+                            ))}
                         </ul>
                     </div>
                     <div>
-                        <h2>Incomplete Task</h2>
+                        <h2 className='table-head' >Incomplete Task</h2>
                         <ul>
-                            {incompleteTask.map((x,i)=>(<p key={i}>{x.work_name}</p>))}
+                            {incompleteTask.map((x,i)=>(
+                                <p className='table_content' key={i} onClick={() => this.handleItemClick(x)}>
+                                    {x.work_name}
+                                </p>
+                            ))}
                         </ul>
                     </div>
                 </div>
@@ -88,6 +96,14 @@ class TaskTable extends Component {
                             <h1 className="close-btn" onClick={() => this.setState({ selectedItem: null })}>x</h1>
                             {/* Display information related to the selectedItem here */}
                             <p>{selectedItem.work_name}</p>
+                            <div>
+                                <h2>Work Details:</h2>
+                                <p>Work Name: {selectedItem.work_name}</p>
+                                <p>Time Period: {selectedItem.start_date} - {selectedItem.due_date}</p>
+                                <p>Coordinator: {selectedItem.coordinator}</p>
+                                <p>Worker: {selectedItem.worker}</p>
+                                <p>Total Expense: {selectedItem.wage}</p>
+                            </div>
                             {/* Add other information */}
                         </div>
                     )}

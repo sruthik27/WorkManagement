@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import "./AdminMain.css";
 import TaskTable from './TaskTable';
 import PieChart from './PieChart';
-import PopUp from './PopUp';
+
 
 class AdminMain extends Component {
   constructor(props) {
@@ -43,27 +43,16 @@ class AdminMain extends Component {
           <TaskTable data={itemData} />
           <div className='base-item'>
             <div>
-              <h2>Progress for the day:</h2>
+              <h2 className='table-head'>Progress for the day:</h2>
               <PieChart percentage={percent}/>
             </div>
             <div>
               <div className='feedback'>
-                <h2>Broadcast Announcements</h2>
+                <h2 className='table-head'>Broadcast Announcements</h2>
                 <input className='feedback-input' placeholder='Type announcement here...'/>
                 <button className='send-button'>SEND</button>
               </div>
             </div>
-          </div>
-          <div>
-            <PopUp trigger={false}>
-              <div>
-                <h2>Work Details:</h2>
-                <p>Work Name:</p>
-                <p>Time Period: xx - yy</p>
-                <p>Coordinator:</p>
-                <p>Worker:</p>
-              </div>
-            </PopUp>
           </div>
         </div>
     );

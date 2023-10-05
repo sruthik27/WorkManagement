@@ -1,8 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Judson&family=Lexend+Deca&family=Montserrat&family=Rammetto+One&family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alatsi&display=swap');
 
 
 .ahome {
-    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .para {
@@ -21,16 +24,29 @@
     background: #E6E1FF;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     width: 986px;
-    height: 330px;
+    margin-bottom: 4vw;
 }
 
 .base-item {
-    display: flex;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-columns: 1fr 1fr
 }
 
 .feedback {
     display: grid;
+}
+
+.table_content {
+    cursor: pointer;
+}
+
+.table-head {
+    color: #259F46;
+    font-family: Alatsi;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;   
 }
 
 .feedback-input {
@@ -41,12 +57,29 @@
 }
 
 .send-button {
-    margin: 20px;
+    margin: 20px 80px 20px 80px;
     border-radius: 40px;
     background: #54B442;
-    padding: 15px 40px;
+    color: var(--light-text-color, #FFF);
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 32px; /* 133.333% */
+    letter-spacing: 0.1px;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
 }
 
+.send-button:hover {
+    background: #2dac17;
+}
+
+.send-button:active {
+    background: #188306;
+}
 .popUp-head {
     position: fixed;
     top: 0;
@@ -65,10 +98,15 @@
     width: 100%;
     max-width: 700px;
     background: #FFF;
+    border-radius: 7px;
 }
 
 .popup-inner .close-btn {
     position: absolute;
-    top: 16px;
-    right: 16px;
+    top: 0;
+    right: 30px;
+    cursor: pointer;
+    font-size: xx-large;
+    font-family: Arial;
+    color: #54B442;
 }
