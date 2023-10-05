@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import "./AdminMain.css";
+import PopUp from "./PopUp";
 
 class TaskTable extends Component {
     constructor(props) {
@@ -9,6 +10,7 @@ class TaskTable extends Component {
             activeTask: [],
             completeTask: [],
             incompleteTask: [],
+            selectedItem: null,
         };
     }
 
@@ -26,15 +28,21 @@ class TaskTable extends Component {
         }
     }
 
+    handleItemClick = (item) => {
+        // Set the selected item when a p tag is clicked
+        
+        this.setState({ selectedItem: item });
+    }
+    
     processData(data) {
         let activeTask = [];
         let completeTask = [];
         let incompleteTask = [];
 
         data.forEach(x => {
-            if (x.work_status === 'A') activeTask.push(x.work_name);
-            else if (x.work_status === 'C') completeTask.push(x.work_name);
-            else if (x.work_status === 'I') incompleteTask.push(x.work_name);
+            if (x.work_status === 'A') activeTask.push(x);
+            else if (x.work_status === 'C') completeTask.push(x);
+            else if (x.work_status === 'I') incompleteTask.push(x);
         });
 
         this.setState({
@@ -45,7 +53,7 @@ class TaskTable extends Component {
     }
 
     render() {
-        const { activeTask, completeTask, incompleteTask } = this.state;
+        const { activeTask, completeTask, incompleteTask,selectedItem } = this.state;
 
         return (
             <>
@@ -54,23 +62,36 @@ class TaskTable extends Component {
                         <h2>Active Task</h2>
                         <ul>
                             {activeTask.map((x, i) => (
-                                <p key={i}>{x}</p>
+                                <p key={i} onClick={() => this.handleItemClick(x)}>
+                                    {x.work_name}
+                                </p>
                             ))}
                         </ul>
                     </div>
                     <div >
                         <h2>Completed Task</h2>
                         <ul>
-                            {completeTask.map((x,i)=>(<p key={i}>{x}</p>))}
+                            {completeTask.map((x,i)=>(<p key={i}>{x.work_name}</p>))}
                         </ul>
                     </div>
                     <div>
                         <h2>Incomplete Task</h2>
                         <ul>
-                            {incompleteTask.map((x,i)=>(<p key={i}>{x}</p>))}
+                            {incompleteTask.map((x,i)=>(<p key={i}>{x.work_name}</p>))}
                         </ul>
                     </div>
                 </div>
+                <PopUp trigger={selectedItem !== null}>
+                    {/* Pass the selectedItem as a prop to the PopUp */}
+                    {selectedItem && (
+                        <div>
+                            <h1 className="close-btn" onClick={() => this.setState({ selectedItem: null })}>x</h1>
+                            {/* Display information related to the selectedItem here */}
+                            <p>{selectedItem.work_name}</p>
+                            {/* Add other information */}
+                        </div>
+                    )}
+                </PopUp>
             </>
         );
     }
