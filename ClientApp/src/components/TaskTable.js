@@ -33,7 +33,7 @@ class TaskTable extends Component {
         // Set the selected item when a p tag is clicked
         let fetchedtasks = await fetch(`/db/gettasks?n=${item.work_id}`);
         let tasks = await fetchedtasks.json();
-
+        console.log('hello');
         // Use the callback function of setState to ensure the state is updated
         this.setState({ selectedItem: item, selectedSubTasks: tasks }, () => {
             console.log(this.state.selectedSubTasks);
