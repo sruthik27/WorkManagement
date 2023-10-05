@@ -25,7 +25,7 @@ class PieChart extends Component {
             <div style={{ width: '100px', height: '100px' }}>
                 <CircularProgressbar
                     value={percentage}
-                    text={`${percentage}%`}
+                    text={`${percentage.toFixed(2)}%`}
                     styles={buildStyles({
                         textColor: '#000',
                         pathColor: '#ff5722',

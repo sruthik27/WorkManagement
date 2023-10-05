@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import "./AdminMain.css";
 import TaskTable from './TaskTable';
 import PieChart from './PieChart';
+import PopUp from './PopUp';
 
 class AdminMain extends Component {
   constructor(props) {
@@ -18,10 +19,12 @@ class AdminMain extends Component {
 
   async fetchData() {
     try {
-      const response = await fetch('/db');
+      const response = await fetch('/db/getworks'); //need to add "/getWorks" after backend is pushed
       const data = await response.json();
       this.setState({ itemData: data });
 
+      const popUpData = data[0];
+      this.setState({ popUpdata: popUpData});
       const totalTask = data.length;
       const completeTask = data.filter(x => x.work_status === 'C').length;
       const calculatedPercent = (completeTask / totalTask) * 100;
@@ -32,7 +35,7 @@ class AdminMain extends Component {
   }
 
   render() {
-    const { itemData, percent } = this.state;
+    const { itemData, percent, popUpdata } = this.state;
 
     return (
         <div className="ahome">
@@ -50,6 +53,17 @@ class AdminMain extends Component {
                 <button className='send-button'>SEND</button>
               </div>
             </div>
+          </div>
+          <div>
+            <PopUp trigger={false}>
+              <div>
+                <h2>Work Details:</h2>
+                <p>Work Name:</p>
+                <p>Time Period: xx - yy</p>
+                <p>Coordinator:</p>
+                <p>Worker:</p>
+              </div>
+            </PopUp>
           </div>
         </div>
     );
