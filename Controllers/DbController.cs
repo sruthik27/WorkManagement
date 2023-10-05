@@ -63,7 +63,23 @@ public class DbController : ControllerBase
         return Ok(new { CompletedTasksCount = completedTasksCount });
     }
 
-
+    [Route("updateorder")]
+    [HttpPut]
+    public IActionResult UpdateOrder( string task_id,int new_order)
+    {
+        var taskid = long.Parse(task_id);
+        //FindTask by taskid
+        var task = _context.Tasks.FirstOrDefault(t => t.task_id == taskid);
+        if (task == null)
+        {
+            return BadRequest("Task not found");
+        }
+        //Update task's order
+        task.order_no = new_order;
+        _context.SaveChanges();
+        return Ok(new { message = "Order updated succesfully" });
+    }
+    
 
     [Route("verify")]
     [HttpPost]
