@@ -34,10 +34,14 @@ class TaskTable extends Component {
         console.log(item.work_id);
         let fetchedtasks = await fetch(`/db/gettasks?n=${item.work_id}`);
         let tasks = await fetchedtasks.json();
-        console.log(tasks);
-        this.setState({ selectedItem: item,selectedTasks:tasks});
+
+        // Use the callback function of setState to ensure the state is updated
+        this.setState({ selectedItem: item, selectedTasks: tasks }, () => {
+            console.log(this.state.selectedTasks);
+        });
     }
-    
+
+
     processData(data) {
         let activeTask = [];
         let completeTask = [];
