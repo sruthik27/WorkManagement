@@ -31,13 +31,12 @@ class TaskTable extends Component {
 
     handleItemClick = async (item) => {
         // Set the selected item when a p tag is clicked
-        console.log(item.work_id);
         let fetchedtasks = await fetch(`/db/gettasks?n=${item.work_id}`);
         let tasks = await fetchedtasks.json();
 
         // Use the callback function of setState to ensure the state is updated
-        this.setState({ selectedItem: item, selectedTasks: tasks }, () => {
-            console.log(this.state.selectedTasks);
+        this.setState({ selectedItem: item, selectedSubTasks: tasks }, () => {
+            console.log(this.state.selectedSubTasks);
         });
     }
 
