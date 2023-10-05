@@ -11,6 +11,7 @@ class TaskTable extends Component {
             completeTask: [],
             incompleteTask: [],
             selectedItem: null,
+            selectedSubtasks:[]
         };
     }
 
@@ -28,10 +29,13 @@ class TaskTable extends Component {
         }
     }
 
-    handleItemClick = (item) => {
+    handleItemClick = async (item) => {
         // Set the selected item when a p tag is clicked
-        
-        this.setState({ selectedItem: item });
+        console.log(item.work_id);
+        let fetchedtasks = await fetch(`/db/gettasks?n=${item.work_id}`);
+        let tasks = await fetchedtasks.json();
+        console.log(tasks);
+        this.setState({ selectedItem: item,selectedTasks:tasks});
     }
     
     processData(data) {
@@ -71,13 +75,21 @@ class TaskTable extends Component {
                     <div >
                         <h2>Completed Task</h2>
                         <ul>
-                            {completeTask.map((x,i)=>(<p key={i}>{x.work_name}</p>))}
+                            {completeTask.map((x, i) => (
+                                <p key={i} onClick={() => this.handleItemClick(x)}>
+                                    {x.work_name}
+                                </p>
+                            ))}
                         </ul>
                     </div>
                     <div>
                         <h2>Incomplete Task</h2>
                         <ul>
-                            {incompleteTask.map((x,i)=>(<p key={i}>{x.work_name}</p>))}
+                            {incompleteTask.map((x, i) => (
+                                <p key={i} onClick={() => this.handleItemClick(x)}>
+                                    {x.work_name}
+                                </p>
+                            ))}
                         </ul>
                     </div>
                 </div>

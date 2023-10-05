@@ -18,14 +18,32 @@ public class DbController : ControllerBase
     [HttpGet]
     public IActionResult GetWorks()
     {
-        return Ok(_context.Works);
+        var works = _context.Works.Select(work => new
+        {
+            work_id = work.work_id.ToString(),
+            work.work_name,
+            work.work_description,
+            work.work_status,
+            work.start_date,
+            work.due_date,
+            work.total_subtasks,
+            work.completed_subtasks,
+            work.wage,
+            worker = work.worker.ToString(),
+            work.advance_paid,
+            work.bill_paid,
+            coordinator = work.coordinator.ToString() // Convert coordinator to string
+        });
+
+        return Ok(works);
     }
+
 
     [Route("gettasks")]
     [HttpGet]
-    public IActionResult GetTasks(long n)
+    public IActionResult GetTasks(string n)
     {
-        return Ok(_context.Tasks.Where(x=>x.work_id==n));
+        return Ok(_context.Tasks.Where(x=>x.work_id==long.Parse(n)).Select(y=>new{task_id = y.task_id.ToString(),work_id=y.work_id.ToString(),y.order_no,y.completed}));
     }
 
     [Route("verify")]
