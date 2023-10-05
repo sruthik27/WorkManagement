@@ -37,7 +37,7 @@ class TaskTable extends Component {
 
         // Use the callback function of setState to ensure the state is updated
         this.setState({ selectedItem: item, selectedTasks: tasks }, () => {
-            console.log(this.state.selectedTasks);
+            console.log(this.state.selectedSubtasks);
         });
     }
 
