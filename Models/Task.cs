@@ -18,6 +18,12 @@ public class Task
 
     [Column("completed")]
     public bool? completed { get; set; }
+    
+    [Column("due_date")]
+    public DateTime? due_date { get; set; }
+    
+    [Column("task_name")] 
+    public string? task_name { get; set; }
 
     // Navigation property to represent the foreign key relationship
     [ForeignKey("work_id")]

@@ -43,8 +43,27 @@ public class DbController : ControllerBase
     [HttpGet]
     public IActionResult GetTasks(string n)
     {
-        return Ok(_context.Tasks.Where(x=>x.work_id==long.Parse(n)).Select(y=>new{task_id = y.task_id.ToString(),work_id=y.work_id.ToString(),y.order_no,y.completed}));
+        return Ok(_context.Tasks.Where(x=>x.work_id==long.Parse(n)).Select(y=>new{task_id = y.task_id.ToString(),work_id=y.work_id.ToString(),y.order_no,y.completed,y.due_date,y.task_name}));
     }
+    
+    [HttpGet("completedcount")]
+    public IActionResult GetCompletedTasksCount(string dueDate)
+    {
+        // Convert the dueDate string to a DateTime object in UTC.
+        if (!DateTime.TryParse(dueDate, out DateTime dueDateDateTime))
+        {
+            return BadRequest("Invalid due date format");
+        }
+        dueDateDateTime = DateTime.SpecifyKind(dueDateDateTime, DateTimeKind.Utc);
+
+        // Query the database to count completed tasks on the specified due date.
+        int completedTasksCount = _context.Tasks
+            .Count(task => task.completed == true && task.due_date == dueDateDateTime);
+
+        return Ok(new { CompletedTasksCount = completedTasksCount });
+    }
+
+
 
     [Route("verify")]
     [HttpPost]
