@@ -13,11 +13,19 @@ public class DbController : ControllerBase
     {
         _context = context;
     }
-
+    
+    [Route("getworks")]
     [HttpGet]
-    public IActionResult Get()
+    public IActionResult GetWorks()
     {
         return Ok(_context.Works);
+    }
+
+    [Route("gettasks")]
+    [HttpGet]
+    public IActionResult GetTasks(long n)
+    {
+        return Ok(_context.Tasks.Where(x=>x.work_id==n));
     }
 
     [Route("verify")]
