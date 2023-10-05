@@ -22,9 +22,6 @@ class AdminMain extends Component {
       const response = await fetch('/db/getworks'); //need to add "/getWorks" after backend is pushed
       const data = await response.json();
       this.setState({ itemData: data });
-
-      const popUpData = data[0];
-      this.setState({ popUpdata: popUpData});
       const totalTask = data.length;
       const completeTask = data.filter(x => x.work_status === 'C').length;
       const calculatedPercent = (completeTask / totalTask) * 100;
@@ -35,7 +32,7 @@ class AdminMain extends Component {
   }
 
   render() {
-    const { itemData, percent, popUpdata } = this.state;
+    const { itemData, percent} = this.state;
 
     return (
         <div className="ahome">

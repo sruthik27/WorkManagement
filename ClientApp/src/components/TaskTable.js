@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import "./AdminMain.css";
 import PopUp from "./PopUp";
+import PieChart from './PieChart';
 
 class TaskTable extends Component {
     constructor(props) {
@@ -33,11 +34,8 @@ class TaskTable extends Component {
         // Set the selected item when a p tag is clicked
         let fetchedtasks = await fetch(`/db/gettasks?n=${item.work_id}`);
         let tasks = await fetchedtasks.json();
-        console.log('hello');
         // Use the callback function of setState to ensure the state is updated
-        this.setState({ selectedItem: item, selectedSubTasks: tasks }, () => {
-            console.log(this.state.selectedSubTasks);
-        });
+        this.setState({ selectedItem: item, selectedSubTasks: tasks });
     }
 
 
@@ -60,7 +58,7 @@ class TaskTable extends Component {
     }
 
     render() {
-        const { activeTask, completeTask, incompleteTask,selectedItem } = this.state;
+        const { activeTask, completeTask, incompleteTask,selectedItem, selectedSubtasks } = this.state;
 
         return (
             <>
@@ -69,7 +67,7 @@ class TaskTable extends Component {
                         <h2>Active Task</h2>
                         <ul>
                             {activeTask.map((x, i) => (
-                                <p key={i} onClick={() => this.handleItemClick(x)}>
+                                <p className='table_content' key={i} onClick={() => this.handleItemClick(x)}>
                                     {x.work_name}
                                 </p>
                             ))}
@@ -79,7 +77,7 @@ class TaskTable extends Component {
                         <h2>Completed Task</h2>
                         <ul>
                             {completeTask.map((x, i) => (
-                                <p key={i} onClick={() => this.handleItemClick(x)}>
+                                <p className='table_content' key={i} onClick={() => this.handleItemClick(x)}>
                                     {x.work_name}
                                 </p>
                             ))}
@@ -89,7 +87,7 @@ class TaskTable extends Component {
                         <h2>Incomplete Task</h2>
                         <ul>
                             {incompleteTask.map((x, i) => (
-                                <p key={i} onClick={() => this.handleItemClick(x)}>
+                                <p className='table_content' key={i} onClick={() => this.handleItemClick(x)}>
                                     {x.work_name}
                                 </p>
                             ))}
@@ -102,7 +100,26 @@ class TaskTable extends Component {
                         <div>
                             <h1 className="close-btn" onClick={() => this.setState({ selectedItem: null })}>x</h1>
                             {/* Display information related to the selectedItem here */}
-                            <p>{selectedItem.work_name}</p>
+                            <h2 className='popup-head'>Work Details:</h2>
+                            <div className='popup-info'>
+                                <div className='popup-details1'>
+                                    <p>Work Name: {selectedItem.work_name}</p>
+                                    <p>Time Period: {selectedItem.start_date} - {selectedItem.due_date}</p>
+                                    <p>Coordinator: {selectedItem.coordinator}</p>
+                                    <p>Worker: {selectedItem.worker}</p>
+                                    <p>Total Expense: {selectedItem.wage}</p>
+                                    <p>Sub Task: </p>
+                                </div>
+                                <div className='popup-piechart'>
+                                    <p>Work Process: </p>
+                                    <PieChart percentage={(selectedItem.completed_subtasks / selectedItem.total_subtasks) * 100}/>
+                                </div>
+                            </div>
+                            <div>
+                                <ul>
+                                    {console.log(this.state.selectedSubtasks)}
+                                </ul>
+                            </div>
                             {/* Add other information */}
                         </div>
                     )}

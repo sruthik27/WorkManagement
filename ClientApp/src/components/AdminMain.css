@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Judson&family=Lexend+Deca&family=Montserrat&family=Rammetto+One&family=Roboto:wght@400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Alatsi&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Alatsi&family=Lexend+Deca:wght@300&display=swap');
 
 .ahome {
     display: flex;
@@ -97,7 +97,7 @@
     padding: 32px;
     width: 100%;
     max-width: 700px;
-    background: #FFF;
+    background: #E6E1FF;
     border-radius: 7px;
 }
 
@@ -109,4 +109,30 @@
     font-size: xx-large;
     font-family: Arial;
     color: #54B442;
+}
+
+.popup-head {
+    color: #538F1D;
+    font-family: Lexend Deca;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 47.5px; /* 110.465% */
+}
+
+.popup-details1 {
+    color: #45176D;
+    font-family: Lexend Deca;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+}
+
+.popup-info {
+    display: flex;
+    justify-content: space-around;
+}
+
+.popup-piechart {
+    padding-left: 20px;
 }
