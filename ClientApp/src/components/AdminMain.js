@@ -35,6 +35,7 @@ class AdminMain extends Component {
     const { itemData, percent} = this.state;
 
     return (
+      <>
         <div className="ahome">
           <p className="para">WELCOME TO THE DASHBOARD!</p>
           <TaskTable data={itemData} />
@@ -52,6 +53,7 @@ class AdminMain extends Component {
             </div>
           </div>
         </div>
+      </>
     );
   }
 }

@@ -136,3 +136,18 @@
 .popup-piechart {
     padding-left: 20px;
 }
+
+.coordinator-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    column-gap: 10vw;
+}
+
+.coo-button {
+    border-radius: 10px;
+    background: #389600;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.30);
+    padding: 1vw 4vw 1vw 4vw;
+    border: none;
+}
