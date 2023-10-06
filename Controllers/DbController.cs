@@ -65,8 +65,9 @@ public class DbController : ControllerBase
 
     [Route("updateorder")]
     [HttpPut]
-    public IActionResult UpdateOrder( string task_id,int new_order)
+    public IActionResult UpdateOrder(string task_id,int new_order)
     {
+        Console.WriteLine("console writing");
         var taskid = long.Parse(task_id);
         //FindTask by taskid
         var task = _context.Tasks.FirstOrDefault(t => t.task_id == taskid);
@@ -79,6 +80,32 @@ public class DbController : ControllerBase
         _context.SaveChanges();
         return Ok(new { message = "Order updated succesfully" });
     }
+    /*
+     * const task_id = "905912396327616513"; // Replace with your task_id
+const new_order = 4; // Replace with the new_order value
+
+const url = `https://localhost:7286/db/updateorder?task_id=${task_id}&new_order=${new_order}`;
+
+fetch(url, {
+  method: "PUT",
+  headers: {
+    "Content-Type": "application/json",
+  },
+})
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  })
+  .then((data) => {
+    console.log("Success:", data);
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
+
+     */
     
 
     [Route("verify")]

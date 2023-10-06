@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import "./AdminMain.css";
 import PopUp from "./PopUp";
 import PieChart from './PieChart';
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 class TaskTable extends Component {
     constructor(props) {
@@ -38,6 +39,15 @@ class TaskTable extends Component {
         // Use the callback function of setState to ensure the state is updated
         this.setState({ selectedItem: item, selectedSubtasks: tasks });
     }
+
+    handleOnDragEnd = (result) => {
+        if (!result.destination) return;
+        const items = Array.from(this.state.selectedSubtasks);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+
+        this.setState({ selectedSubtasks: items });
+    };
 
 
     processData(data) {
@@ -98,7 +108,7 @@ class TaskTable extends Component {
                     {/* Pass the selectedItem as a prop to the PopUp */}
                     {selectedItem && (
                         <div>
-                            <h1 className="close-btn" onClick={() => this.setState({ selectedItem: null })}>x</h1>
+                            <h1 className="close-btn" onClick={() => {this.setState({ selectedItem: null });console.log(this.state.selectedSubtasks)}}>x</h1>
                             {/* Display information related to the selectedItem here */}
                             <h2 className='popup-head'>Work Details:</h2>
                             <div className='popup-info'>
@@ -116,13 +126,25 @@ class TaskTable extends Component {
                                 </div>
                             </div>
                             <div>
-                                <ul>
-                                    {selectedSubtasks.map((subtask, index) => (
-                                        <li key={index}>{subtask.task_name}</li>
-                                    ))}
-                                </ul>
+                                <DragDropContext onDragEnd={this.handleOnDragEnd}>
+                                    <Droppable droppableId="subtasks">
+                                        {(provided) => (
+                                            <ol {...provided.droppableProps} ref={provided.innerRef}>
+                                                {selectedSubtasks.map((subtask, index) => (
+                                                    <Draggable key={subtask.task_id} draggableId={String(subtask.task_id)} index={index}>
+                                                        {(provided) => (
+                                                            <li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                                                                {subtask.task_name}
+                                                            </li>
+                                                        )}
+                                                    </Draggable>
+                                                ))}
+                                                {provided.placeholder}
+                                            </ol>
+                                        )}
+                                    </Droppable>
+                                </DragDropContext>
                             </div>
-                            {/* Add other information */}
                         </div>
                     )}
                 </PopUp>
