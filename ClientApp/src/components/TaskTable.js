@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
-import "./AdminMain.css";
 import PopUp from "./PopUp";
 import PieChart from './PieChart';
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
+import DatePicker from "react-date-picker";
+import 'react-date-picker/dist/DatePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import './TaskTable.css';
+
 
 class TaskTable extends Component {
     constructor(props) {
@@ -14,9 +18,10 @@ class TaskTable extends Component {
             incompleteTask: [],
             selectedItem: null,
             selectedSubtasks: [],
-            orderChanged:false,
-            editable:this.props.editable,
-            editMode:false
+            selectedDate: new Date(),
+            orderChanged: false,
+            editable: this.props.editable,
+            editMode: false
         };
     }
 
@@ -28,8 +33,11 @@ class TaskTable extends Component {
     }
 
     // Add componentDidUpdate to handle updates to props.data
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         if (prevProps.data !== this.props.data) {
+            this.processData(this.props.data);
+        }
+        if (prevState.selectedDate !== this.state.selectedDate) {
             this.processData(this.props.data);
         }
     }
@@ -48,35 +56,35 @@ class TaskTable extends Component {
         const [reorderedItem] = items.splice(result.source.index, 1);
         items.splice(result.destination.index, 0, reorderedItem);
 
-        this.setState({selectedSubtasks: items,orderChanged:true});
+        this.setState({selectedSubtasks: items, orderChanged: true});
     };
 
     handleClose = () => {
         this.setState({selectedItem: null});
         if (this.state.orderChanged) {
             this.state.selectedSubtasks.map((v, i) => {
-            const url = `/db/updateorder?task_id=${v.task_id}&new_order=${i + 1}`;
+                const url = `/db/updateorder?task_id=${v.task_id}&new_order=${i + 1}`;
 
-            fetch(url, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("Network response was not ok");
-                    }
-                    return response.json();
+                fetch(url, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
                 })
-                .then((data) => {
-                    console.log("Success:", data);
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                });
-        });
-            this.setState({orderChanged:false});
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                        }
+                        return response.json();
+                    })
+                    .then((data) => {
+                        console.log("Success:", data);
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                    });
+            });
+            this.setState({orderChanged: false});
         }
     }
 
@@ -85,6 +93,9 @@ class TaskTable extends Component {
         let activeTask = [];
         let completeTask = [];
         let incompleteTask = [];
+
+        // Filter the data based on the selectedDate and start_date
+        data = data.filter(x => new Date(x.start_date) <= this.state.selectedDate);
 
         data.forEach(x => {
             if (x.work_status === 'A') activeTask.push(x);
@@ -99,10 +110,19 @@ class TaskTable extends Component {
         });
     }
 
+
     render() {
         const {activeTask, completeTask, incompleteTask, selectedItem, selectedSubtasks} = this.state;
         return (
             <>
+                <div className="datepickerwrapper">
+                    <DatePicker
+                    className="custom-datepicker"
+                    selected={this.state.selectedDate}
+                    value = {this.state.selectedDate}
+                    onChange={date => this.setState({selectedDate: date})}
+                />
+                </div>
                 <div className="task-table">
                     <div>
                         <h2>Active Task</h2>
@@ -145,42 +165,43 @@ class TaskTable extends Component {
                             <div className='popup-info'>
                                 <div className='popup-details1'>
                                     <p>Work Name: {selectedItem.work_name}</p>
-                                    <p>Time Period: {selectedItem.start_date} - {selectedItem.due_date}</p>
+                                    <p>Time
+                                        Period: {selectedItem.start_date.slice(0, 10)} to {selectedItem.due_date.slice(0, 10)}</p>
                                     <p>Coordinator: {selectedItem.coordinator}</p>
                                     <p>Worker: {selectedItem.worker}</p>
-                                    <p>Total Expense: {selectedItem.wage}</p>
+                                    <p>Total Expense: ₹{selectedItem.wage}</p>
                                     <p>Sub Task: </p>
                                 </div>
                                 <div className='popup-piechart'>
-                                    <p>Work Process: </p>
+                                    <p>Work Progress: </p>
                                     <PieChart
                                         percentage={(selectedItem.completed_subtasks / selectedItem.total_subtasks) * 100}/>
                                 </div>
                             </div>
-                            {this.state.editable?<div>
-                                <DragDropContext onDragEnd={this.handleOnDragEnd}>
-                                    <Droppable droppableId="subtasks">
-                                        {(provided) => (
-                                            <ol {...provided.droppableProps} ref={provided.innerRef}>
-                                                {selectedSubtasks.map((subtask, index) => (
-                                                    <Draggable key={subtask.task_id}
-                                                               draggableId={String(subtask.task_id)} index={index}>
-                                                        {(provided) => (
-                                                            <li {...provided.draggableProps} {...provided.dragHandleProps}
-                                                                ref={provided.innerRef}>
-                                                                {subtask.task_name}
-                                                            </li>
-                                                        )}
-                                                    </Draggable>
-                                                ))}
-                                                {provided.placeholder}
-                                            </ol>
-                                        )}
-                                    </Droppable>
-                                </DragDropContext>
-                            </div>:
+                            {this.state.editable ? <div>
+                                    <DragDropContext onDragEnd={this.handleOnDragEnd}>
+                                        <Droppable droppableId="subtasks">
+                                            {(provided) => (
+                                                <ol {...provided.droppableProps} ref={provided.innerRef}>
+                                                    {selectedSubtasks.map((subtask, index) => (
+                                                        <Draggable key={subtask.task_id}
+                                                                   draggableId={String(subtask.task_id)} index={index}>
+                                                            {(provided) => (
+                                                                <li {...provided.draggableProps} {...provided.dragHandleProps}
+                                                                    ref={provided.innerRef}>
+                                                                    {subtask.task_name}
+                                                                </li>
+                                                            )}
+                                                        </Draggable>
+                                                    ))}
+                                                    {provided.placeholder}
+                                                </ol>
+                                            )}
+                                        </Droppable>
+                                    </DragDropContext>
+                                </div> :
                                 <ol>
-                                    {selectedSubtasks.map((subtask, index) =><li key={index}>{subtask.task_name}</li>)}
+                                    {selectedSubtasks.map((subtask, index) => <li key={index}>{subtask.task_name}</li>)}
                                 </ol>}
 
                         </div>

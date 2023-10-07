@@ -34,7 +34,7 @@ const Coordinator = () => {
       </div>
       <div className='coordinator-buttons'>
         <button className='coo-button' >ASSIGN WORK</button>
-        <button className='coo-button'>CREATE NEW WORK</button>
+        <a href={'/NewTask'}><button className='coo-button'>CREATE NEW WORK</button></a>
       </div>
     </>
   )
