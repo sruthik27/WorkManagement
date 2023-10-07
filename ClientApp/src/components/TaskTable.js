@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import "./AdminMain.css";
 import PopUp from "./PopUp";
 import PieChart from './PieChart';
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 
 class TaskTable extends Component {
     constructor(props) {
@@ -13,7 +13,10 @@ class TaskTable extends Component {
             completeTask: [],
             incompleteTask: [],
             selectedItem: null,
-            selectedSubtasks:[]
+            selectedSubtasks: [],
+            orderChanged:false,
+            editable:this.props.editable,
+            editMode:false
         };
     }
 
@@ -35,9 +38,8 @@ class TaskTable extends Component {
         // Set the selected item when a p tag is clicked
         let fetchedtasks = await fetch(`/db/gettasks?n=${item.work_id}`);
         let tasks = await fetchedtasks.json();
-        console.log(tasks);
         // Use the callback function of setState to ensure the state is updated
-        this.setState({ selectedItem: item, selectedSubtasks: tasks });
+        this.setState({selectedItem: item, selectedSubtasks: tasks});
     }
 
     handleOnDragEnd = (result) => {
@@ -46,8 +48,37 @@ class TaskTable extends Component {
         const [reorderedItem] = items.splice(result.source.index, 1);
         items.splice(result.destination.index, 0, reorderedItem);
 
-        this.setState({ selectedSubtasks: items });
+        this.setState({selectedSubtasks: items,orderChanged:true});
     };
+
+    handleClose = () => {
+        this.setState({selectedItem: null});
+        if (this.state.orderChanged) {
+            this.state.selectedSubtasks.map((v, i) => {
+            const url = `/db/updateorder?task_id=${v.task_id}&new_order=${i + 1}`;
+
+            fetch(url, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log("Success:", data);
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        });
+            this.setState({orderChanged:false});
+        }
+    }
 
 
     processData(data) {
@@ -69,7 +100,7 @@ class TaskTable extends Component {
     }
 
     render() {
-        const { activeTask, completeTask, incompleteTask,selectedItem, selectedSubtasks } = this.state;
+        const {activeTask, completeTask, incompleteTask, selectedItem, selectedSubtasks} = this.state;
         return (
             <>
                 <div className="task-table">
@@ -83,7 +114,7 @@ class TaskTable extends Component {
                             ))}
                         </ul>
                     </div>
-                    <div >
+                    <div>
                         <h2>Completed Task</h2>
                         <ul>
                             {completeTask.map((x, i) => (
@@ -108,7 +139,7 @@ class TaskTable extends Component {
                     {/* Pass the selectedItem as a prop to the PopUp */}
                     {selectedItem && (
                         <div>
-                            <h1 className="close-btn" onClick={() => {this.setState({ selectedItem: null });console.log(this.state.selectedSubtasks)}}>x</h1>
+                            <h1 className="close-btn" onClick={this.handleClose}>x</h1>
                             {/* Display information related to the selectedItem here */}
                             <h2 className='popup-head'>Work Details:</h2>
                             <div className='popup-info'>
@@ -122,18 +153,21 @@ class TaskTable extends Component {
                                 </div>
                                 <div className='popup-piechart'>
                                     <p>Work Process: </p>
-                                    <PieChart percentage={(selectedItem.completed_subtasks / selectedItem.total_subtasks) * 100}/>
+                                    <PieChart
+                                        percentage={(selectedItem.completed_subtasks / selectedItem.total_subtasks) * 100}/>
                                 </div>
                             </div>
-                            <div>
+                            {this.state.editable?<div>
                                 <DragDropContext onDragEnd={this.handleOnDragEnd}>
                                     <Droppable droppableId="subtasks">
                                         {(provided) => (
                                             <ol {...provided.droppableProps} ref={provided.innerRef}>
                                                 {selectedSubtasks.map((subtask, index) => (
-                                                    <Draggable key={subtask.task_id} draggableId={String(subtask.task_id)} index={index}>
+                                                    <Draggable key={subtask.task_id}
+                                                               draggableId={String(subtask.task_id)} index={index}>
                                                         {(provided) => (
-                                                            <li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                                                            <li {...provided.draggableProps} {...provided.dragHandleProps}
+                                                                ref={provided.innerRef}>
                                                                 {subtask.task_name}
                                                             </li>
                                                         )}
@@ -144,13 +178,18 @@ class TaskTable extends Component {
                                         )}
                                     </Droppable>
                                 </DragDropContext>
-                            </div>
+                            </div>:
+                                <ol>
+                                    {selectedSubtasks.map((subtask, index) =><li key={index}>{subtask.task_name}</li>)}
+                                </ol>}
+
                         </div>
                     )}
                 </PopUp>
             </>
         );
     }
+
 }
 
 export default TaskTable;

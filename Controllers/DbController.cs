@@ -43,7 +43,7 @@ public class DbController : ControllerBase
     [HttpGet]
     public IActionResult GetTasks(string n)
     {
-        return Ok(_context.Tasks.Where(x=>x.work_id==long.Parse(n)).Select(y=>new{task_id = y.task_id.ToString(),work_id=y.work_id.ToString(),y.order_no,y.completed,y.due_date,y.task_name}));
+        return Ok(_context.Tasks.Where(x=>x.work_id==long.Parse(n)).OrderBy(t=>t.order_no).Select(y=>new{task_id = y.task_id.ToString(),work_id=y.work_id.ToString(),y.order_no,y.completed,y.due_date,y.task_name}));
     }
     
     [HttpGet("completedcount")]
@@ -67,7 +67,6 @@ public class DbController : ControllerBase
     [HttpPut]
     public IActionResult UpdateOrder(string task_id,int new_order)
     {
-        Console.WriteLine("console writing");
         var taskid = long.Parse(task_id);
         //FindTask by taskid
         var task = _context.Tasks.FirstOrDefault(t => t.task_id == taskid);
@@ -80,32 +79,7 @@ public class DbController : ControllerBase
         _context.SaveChanges();
         return Ok(new { message = "Order updated succesfully" });
     }
-    /*
-     * const task_id = "905912396327616513"; // Replace with your task_id
-const new_order = 4; // Replace with the new_order value
 
-const url = `https://localhost:7286/db/updateorder?task_id=${task_id}&new_order=${new_order}`;
-
-fetch(url, {
-  method: "PUT",
-  headers: {
-    "Content-Type": "application/json",
-  },
-})
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    return response.json();
-  })
-  .then((data) => {
-    console.log("Success:", data);
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
-
-     */
     
 
     [Route("verify")]
@@ -127,8 +101,13 @@ fetch(url, {
         // Compare the provided password with the stored password
         if (existingLogin.password == login.password)
         {
-            // Passwords match, return true
-            return Ok(new { redirectTo = "AdminMain" });
+            // Passwords match, and admin
+            if (existingLogin.designation=='A')
+            {
+                return Ok(new { redirectTo = "AdminMain",where='A' });
+            }
+
+            return Ok(new { redirectTo = "coordinator",where='C'});
         }
         else
         {

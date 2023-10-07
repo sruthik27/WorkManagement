@@ -11,7 +11,7 @@ function App() {
     <Routes>
       <Route path='/' element={<AdminHome/>}/>
       <Route path='/AdminMain' element={ <AdminMain/> }/>
-      <Route path='/co-ordinator' element={<Coordinator/>}/>
+      <Route path='/coordinator' element={<Coordinator/>}/>
       <Route path='/NewTask' element={<NewTask/>}/>
     </Routes>
   );

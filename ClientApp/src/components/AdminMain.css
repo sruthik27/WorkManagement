@@ -27,6 +27,10 @@
     margin-bottom: 4vw;
 }
 
+.piechartdiv{
+    width: 200px;
+}
+
 .base-item {
     display: grid;
     grid-template-columns: 1fr 1fr

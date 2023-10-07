@@ -11,11 +11,13 @@ const AdminHome = () => {
     const navigate = useNavigate();
     
     useEffect(() => {
-        const rememberMe = document.cookie.includes("rememberMe=true");
-        console.log(rememberMe);
-        if (rememberMe) {
+        const rememberMe = document.cookie;
+        if (rememberMe.includes("rememberAMe=true")) {
             // Use the obfuscated name for redirection
-            navigate(routeMappings["aGVsbG9="]);
+            navigate(routeMappings["aGVsbG9="],{ state: { fromAdminHome: true } });
+        }
+        else if (rememberMe.includes("rememberCMe")) {
+            navigate(routeMappings["bHWtcH10="],{ state: { fromAdminHome: true } });
         }
     }, [navigate]);
 
@@ -32,11 +34,14 @@ const AdminHome = () => {
         setInputPassword(e.target.value);
     }
 
-    const setRememberMeCookie = () => {
+    const setRememberMeCookie = (who) => {
         // Set a cookie with an expiration date (e.g., 30 days)
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 30);
-        document.cookie = `rememberMe=true; expires=${expirationDate.toUTCString()}; path=/`;
+        if (who==='A')
+        document.cookie = `rememberAMe=true; expires=${expirationDate.toUTCString()}; path=/;Secure;`;
+        else
+            document.cookie = `rememberCMe=true; expires=${expirationDate.toUTCString()}; path=/;Secure;`
     };
 
     const HandleCheckbox = () => {
@@ -46,8 +51,7 @@ const AdminHome = () => {
         // Create an object with the login data
         const loginData = {
             email: inputEmail,
-            password: inputPassword,
-            designation: 'A',
+            password: inputPassword
         };
 
         // Make a POST request to your API
@@ -69,10 +73,10 @@ const AdminHome = () => {
                     //set remember me cookie if checkbox enabled
                     if (inputCheckbox) {
                         // User wants to remember login
-                        setRememberMeCookie();
+                        setRememberMeCookie(data.where);
                     }
                     // Navigate to the specified route using React Router
-                    navigate(data.redirectTo);
+                    navigate(data.redirectTo,{ state: { fromAdminHome: true } });
                     
                 } else {
                     console.log('Authentication failed');
