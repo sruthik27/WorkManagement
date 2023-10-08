@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.css";
 const NewTask = () => {
     const [coords, setCoords] = useState([]);
     const [workName, setWorkName] = useState("");
-    const [workCost, setWorkCost] = useState();
+    const [workCost, setWorkCost] = useState("");
     const [startDate, setStartDate] = useState(new Date());
     const [dueDate, setDueDate] = useState(new Date());
     const [taskDescription, setTaskDescription] = useState("");
