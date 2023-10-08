@@ -4,7 +4,6 @@
   "private": true,
   "proxy": "https://localhost:7286",
   "dependencies": {
-    "@mui/x-date-pickers": "^6.16.1",
     "bootstrap": "^5.2.3",
     "http-proxy-middleware": "^2.0.6",
     "jquery": "^3.6.4",
@@ -14,7 +13,6 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-bootstrap": "^2.9.0",
     "react-circular-progressbar": "^2.1.0",
-    "react-date-picker": "^10.5.1",
     "react-dom": "^18.2.0",
     "react-minimal-pie-chart": "^8.4.0",
     "react-router-bootstrap": "^0.26.2",

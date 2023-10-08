@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 [Table("task",Schema = "public")]
 public class Task
@@ -26,6 +27,7 @@ public class Task
     public string? task_name { get; set; }
 
     // Navigation property to represent the foreign key relationship
+    [JsonIgnore]
     [ForeignKey("work_id")]
-    public Work Work { get; set; }
+    public Work? Work { get; set; }
 }

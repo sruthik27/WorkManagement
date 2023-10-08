@@ -90,8 +90,6 @@ public class DbController : ControllerBase
         return Ok(new { message = "Order updated succesfully" });
     }
 
-    
-
     [Route("verify")]
     [HttpPost]
     public IActionResult Verify([FromBody] Login login)
@@ -143,20 +141,51 @@ public class DbController : ControllerBase
         Console.WriteLine("IST Time: " + istTime.ToString("yyyy-MM-dd HH:mm:ss"));
         return Ok(new { message = "Broadcast added successfully." });
     }
+    
+    //TO ADD NEW WORK ALONG WITH SUBTASKS
+    public class WorkWithSubtasks
+    {
+        public Work Work { get; set; }
+        public List<Task> Subtasks { get; set; }
+    }
 
     [Route("addwork")]
     [HttpPost]
-    public IActionResult AddWork([FromBody] Work newWork)
+    public IActionResult AddWork([FromBody] WorkWithSubtasks newWork)
     {
-        Console.WriteLine(newWork);
         if (newWork == null)
         {
             return BadRequest("Invalid work data.");
         }
-        newWork.coordinator = (long) newWork.coordinator;
-        _context.Works.Add(newWork);
+
+        Work workpart = newWork.Work;
+        workpart.coordinator = (long) workpart.coordinator;
+        _context.Works.Add(workpart);
         _context.SaveChanges();
-        return Ok(new { message = "Work added successfully.", work_id = newWork.work_id });
+
+        List<Task> taskspart = newWork.Subtasks;
+        foreach (var subtask in taskspart)
+        {
+            subtask.work_id = workpart.work_id;
+            _context.Tasks.Add(subtask);
+        }
+        _context.SaveChanges();
+        return Ok(new { message = "Work added successfully.", work_id = workpart.work_id });
+    }
+
+    //To directly add subtask
+    [Route("addsubtask")]
+    [HttpPost]
+    public IActionResult AddSubTask([FromBody] Task newTask)
+    {
+        if (newTask==null)
+        {
+            return BadRequest("Invalid subtask");
+        }
+
+        _context.Tasks.Add(newTask);
+        _context.SaveChanges();
+        return Ok(new { message = "new task added" });
     }
 
 

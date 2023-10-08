@@ -32,6 +32,7 @@ const NewTask = () => {
 
     const handleFormSubmit = () => {
         const newWork = {
+            work:{
             work_name: workName,
             work_description: taskDescription,
             work_status: 'A', // You can change this as needed
@@ -44,8 +45,9 @@ const NewTask = () => {
             bill_paid: false,
             coordinator: coordinator,
             // Add the other fields as needed
+        },
+            subtasks:subtasks
         };
-        console.log(newWork);
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         var jsonData = {
@@ -189,7 +191,7 @@ const NewTask = () => {
             <div>
                 {subtasks.map((subtask, index) => (
                     <div key={index}>
-                        <p>Description: {subtask.description}</p>
+                        <p>Description: {subtask.task_name}</p>
                         <p>Due Date: {new Date(subtask.due_date).toDateString()}</p>
                     </div>
                 ))}
