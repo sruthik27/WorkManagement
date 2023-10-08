@@ -1,6 +1,7 @@
 import React, {useState} from "react";
-import "./NewTask.css";
 import {useEffect} from "react";
+import {Modal, Button, Form, Container, Row, Col} from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.css";
 
 const NewTask = () => {
     const [coords, setCoords] = useState([]);
@@ -10,6 +11,11 @@ const NewTask = () => {
     const [dueDate, setDueDate] = useState(new Date());
     const [taskDescription, setTaskDescription] = useState("");
     const [coordinator, setCoordinator] = useState("");
+    const [subtaskDescription, setSubtaskDescription] = useState("");
+    const [subtaskDueDate, setSubtaskDueDate] = useState(new Date());
+    const [noOfSubtasks, setNoOfSubtasks] = useState(1);
+    const [subtasks, setSubtasks] = useState([]);
+    const [showModal, setShowModal] = useState(false);
 
 
     const fetchCoordsNames = () => {
@@ -54,41 +60,139 @@ const NewTask = () => {
             .catch(error => console.log('error', error));
     };
 
+    // Function to handle subtask form submit
+    const handleSubtaskFormSubmit = () => {
+        const newSubtask = {
+            task_name: subtaskDescription,
+            due_date: subtaskDueDate.toISOString(),
+            completed: false,
+            order_no: noOfSubtasks
+        };
+        setSubtasks([...subtasks, newSubtask]);
+        setNoOfSubtasks(x => x + 1);
+        setSubtaskDescription("");
+        setSubtaskDueDate(new Date());
+        handleCloseModal();
+    };
+
+    // Functions to handle modal visibility
+    const handleShowModal = () => setShowModal(true);
+    const handleCloseModal = () => setShowModal(false);
+
     return (
         <>
-            <div className="Home">
-                <h1 className="home-title">PUBLISH NEW TASK</h1>
-                <div className="input-div-1">
-                    <input className="input-bar-1" type="text" placeholder="Type Work Name" value={workName}
-                           onChange={event => setWorkName(event.target.value)}/>
-                    <input className="input-bar-1" type="number" placeholder="Type Work Cost" value={workCost}
-                           onChange={event => setWorkCost(event.target.value)}/>
-                </div>
-                <div className="input-div-1">
-                    <input
-                        className="input-bar-1"
-                        type="date"
-                        value={startDate.toISOString().split('T')[0]}
-                        onChange={(event) => setStartDate(new Date(event.target.value))}
-                    />
-                    <input
-                        className="input-bar-1"
-                        type="date"
-                        value={dueDate.toISOString().split('T')[0]}
-                        onChange={(event) => setDueDate(new Date(event.target.value))}
-                    />
-
-                </div>
-                <div className="input-div-2">
-                    <input className="input-bar-2" type="text" placeholder="Type task description"
-                           onChange={(event) => setTaskDescription(event.target.value)}/>
-                    <select placeholder={'Who is coordinating this work?'} value={coordinator}
-                            onChange={(event) => setCoordinator(event.target.value)}>
-                        <option value="" disabled>Select Coordinator</option>
-                        {coords.map((v, i) => (<option key={i} value={v.coordinator_id}>{v.coordinator_name}</option>))}
-                    </select>
-                </div>
-                <button className="Add-button" onClick={handleFormSubmit}>Add Task</button>
+            <Container className="mt-4">
+                <Row className="justify-content-md-center">
+                    <Col xs={12} md={8}>
+                        <h1 className="text-center">PUBLISH NEW TASK</h1>
+                        <Form>
+                            <Form.Group>
+                                <Form.Label>Work Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Type Work Name"
+                                    value={workName}
+                                    onChange={event => setWorkName(event.target.value)}
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Work Cost</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Type Work Cost"
+                                    value={workCost}
+                                    onChange={event => setWorkCost(event.target.value)}
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Start Date</Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    value={startDate.toISOString().split('T')[0]}
+                                    onChange={(event) => setStartDate(new Date(event.target.value))}
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Due Date</Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    value={dueDate.toISOString().split('T')[0]}
+                                    onChange={(event) => setDueDate(new Date(event.target.value))}
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Task Description</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Type task description"
+                                    onChange={(event) => setTaskDescription(event.target.value)}
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Coordinator</Form.Label>
+                                <Form.Control as="select" value={coordinator}
+                                              onChange={(event) => setCoordinator(event.target.value)}>
+                                    <option value="" disabled>Select Coordinator</option>
+                                    {coords.map((v, i) => (
+                                        <option key={i} value={v.coordinator_id}>{v.coordinator_name}</option>))}
+                                </Form.Control>
+                            </Form.Group>
+                            <Button variant="primary" onClick={handleShowModal} className="mr-2">
+                                Add Subtask
+                            </Button>
+                            <br/>
+                            <Button variant="success" onClick={handleFormSubmit}>
+                                Add Task
+                            </Button>
+                        </Form>
+                    </Col>
+                </Row>
+            </Container>
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Add Subtask {noOfSubtasks}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group>
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter subtask description"
+                                value={subtaskDescription}
+                                onChange={(event) =>
+                                    setSubtaskDescription(event.target.value)
+                                }
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Due Date</Form.Label>
+                            <Form.Control
+                                type="date"
+                                value={subtaskDueDate.toISOString().split("T")[0]}
+                                onChange={(event) =>
+                                    setSubtaskDueDate(new Date(event.target.value))
+                                }
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleSubtaskFormSubmit}>
+                        Add Subtask
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <div>
+                {subtasks.map((subtask, index) => (
+                    <div key={index}>
+                        <p>Description: {subtask.description}</p>
+                        <p>Due Date: {new Date(subtask.due_date).toDateString()}</p>
+                    </div>
+                ))}
             </div>
         </>
     )

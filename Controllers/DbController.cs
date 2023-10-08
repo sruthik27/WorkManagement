@@ -156,7 +156,8 @@ public class DbController : ControllerBase
         newWork.coordinator = (long) newWork.coordinator;
         _context.Works.Add(newWork);
         _context.SaveChanges();
-        return Ok(new { message = "Work added successfully." });
+        return Ok(new { message = "Work added successfully.", work_id = newWork.work_id });
     }
+
 
 }
