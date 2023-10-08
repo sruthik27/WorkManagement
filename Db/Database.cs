@@ -13,7 +13,7 @@ public class DefaultDbContext : DbContext
     public DbSet<Login> Logins { get; set; }
     public DbSet<Work> Works { get; set; }
 
-    public DbSet<Task> Tasks { get; set; }
+    public DbSet<SubTask> Tasks { get; set; }
     
     public DbSet<Broadcast> Broadcasts { get; set; }
     

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 [Table("task",Schema = "public")]
-public class Task
+public class SubTask
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

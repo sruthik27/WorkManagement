@@ -146,7 +146,7 @@ public class DbController : ControllerBase
     public class WorkWithSubtasks
     {
         public Work Work { get; set; }
-        public List<Task> Subtasks { get; set; }
+        public List<SubTask> Subtasks { get; set; }
     }
 
     [Route("addwork")]
@@ -163,7 +163,7 @@ public class DbController : ControllerBase
         _context.Works.Add(workpart);
         _context.SaveChanges();
 
-        List<Task> taskspart = newWork.Subtasks;
+        List<SubTask> taskspart = newWork.Subtasks;
         foreach (var subtask in taskspart)
         {
             subtask.work_id = workpart.work_id;
@@ -176,7 +176,7 @@ public class DbController : ControllerBase
     //To directly add subtask
     [Route("addsubtask")]
     [HttpPost]
-    public IActionResult AddSubTask([FromBody] Task newTask)
+    public IActionResult AddSubTask([FromBody] SubTask newTask)
     {
         if (newTask==null)
         {

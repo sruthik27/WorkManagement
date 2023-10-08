@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WorkManagement.Db;
+using WorkManagement.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+builder.Services.AddHostedService<WorkStatusUpdateService>();
 
 var app = builder.Build();
 
