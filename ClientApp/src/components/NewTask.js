@@ -5,14 +5,11 @@ import {useEffect} from "react";
 const NewTask = () => {
     const [coords, setCoords] = useState([]);
     const [workName, setWorkName] = useState("");
-    const [workCost, setWorkCost] = useState("");
+    const [workCost, setWorkCost] = useState();
     const [startDate, setStartDate] = useState(new Date());
     const [dueDate, setDueDate] = useState(new Date());
     const [taskDescription, setTaskDescription] = useState("");
-    const [advancePaymentDate, setAdvancePaymentDate] = useState(new Date());
-    const [advancePaymentAmount, setAdvancePaymentAmount] = useState("");
     const [coordinator, setCoordinator] = useState("");
-    const [advancePaid, setAdvancePaid] = useState(false);
 
 
     const fetchCoordsNames = () => {
@@ -32,29 +29,30 @@ const NewTask = () => {
             work_name: workName,
             work_description: taskDescription,
             work_status: 'A', // You can change this as needed
-            start_date: startDate,
-            due_date: dueDate,
+            start_date: startDate.toISOString(),
+            due_date: dueDate.toISOString(),
+            total_subtasks: 0,
+            completed_subtasks: 0,
             wage: workCost,
+            advance_paid: false,
+            bill_paid: false,
             coordinator: coordinator,
             // Add the other fields as needed
         };
-
-        fetch('/db/addwork', {
+        console.log(newWork);
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        var jsonData = {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(newWork)
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response data
-                console.log(data);
-            })
-            .catch(error => {
-                // Handle the error
-                console.error('Error:', error);
-            });
+            headers: myHeaders,
+            body: JSON.stringify(newWork), // Convert JavaScript object to JSON
+            redirect: 'follow'
+        };
+        fetch("/db/addwork", jsonData)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
     };
-
 
     return (
         <>
@@ -63,53 +61,29 @@ const NewTask = () => {
                 <div className="input-div-1">
                     <input className="input-bar-1" type="text" placeholder="Type Work Name" value={workName}
                            onChange={event => setWorkName(event.target.value)}/>
-                    <input className="input-bar-1" type="text" placeholder="Type Work Cost" value={workCost}
+                    <input className="input-bar-1" type="number" placeholder="Type Work Cost" value={workCost}
                            onChange={event => setWorkCost(event.target.value)}/>
                 </div>
                 <div className="input-div-1">
                     <input
                         className="input-bar-1"
                         type="date"
-                        value={startDate}
-                        onChange={event => setStartDate(event.target.value)}
+                        value={startDate.toISOString().split('T')[0]}
+                        onChange={(event) => setStartDate(new Date(event.target.value))}
                     />
                     <input
                         className="input-bar-1"
                         type="date"
-                        value={dueDate}
-                        onChange={event => setDueDate(event.target.value)}
+                        value={dueDate.toISOString().split('T')[0]}
+                        onChange={(event) => setDueDate(new Date(event.target.value))}
                     />
 
                 </div>
                 <div className="input-div-2">
-                    <input className="input-bar-2" type="text" placeholder="Type task description"/>
-                    <label>Advance Paid</label>
-                    <input
-                        type="checkbox"
-                        checked={advancePaid}
-                        onChange={event => setAdvancePaid(event.target.checked)}
-                    />
-
-                    {advancePaid && (
-                        <>
-                            <input
-                                className="input-bar-2"
-                                type="date"
-                                placeholder="Type Date of Advance payment"
-                                value={advancePaymentDate}
-                                onChange={event => setAdvancePaymentDate(event.target.value)}
-                            />
-                            <input
-                                className="input-bar-2"
-                                type="number"
-                                placeholder="Type amount paid in advance "
-                                value={advancePaymentAmount}
-                                onChange={event => setAdvancePaymentAmount(event.target.value)}
-                            />
-                        </>
-                    )}
-
-                    <select placeholder={'Who is coordinating this work?'}>
+                    <input className="input-bar-2" type="text" placeholder="Type task description"
+                           onChange={(event) => setTaskDescription(event.target.value)}/>
+                    <select placeholder={'Who is coordinating this work?'} value={coordinator}
+                            onChange={(event) => setCoordinator(event.target.value)}>
                         <option value="" disabled>Select Coordinator</option>
                         {coords.map((v, i) => (<option key={i} value={v.coordinator_id}>{v.coordinator_name}</option>))}
                     </select>

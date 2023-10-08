@@ -61,8 +61,17 @@ public class DbController : ControllerBase
     [HttpGet("getcoords")]
     public IActionResult GetCoordinators()
     {
-        return Ok(_context.Coordinators);
+        var coords = _context.Coordinators
+            .AsNoTracking() // Prevent entity tracking
+            .Select(coord => new
+            {
+                coordinator_id = coord.coordinator_id.ToString(),
+                coord.coordinator_name
+            });
+    
+        return Ok(coords);
     }
+
 
     [Route("updateorder")]
     [HttpPut]
@@ -139,11 +148,12 @@ public class DbController : ControllerBase
     [HttpPost]
     public IActionResult AddWork([FromBody] Work newWork)
     {
+        Console.WriteLine(newWork);
         if (newWork == null)
         {
             return BadRequest("Invalid work data.");
         }
-
+        newWork.coordinator = (long) newWork.coordinator;
         _context.Works.Add(newWork);
         _context.SaveChanges();
         return Ok(new { message = "Work added successfully." });

@@ -2,9 +2,6 @@ import React, {Component} from 'react';
 import PopUp from "./PopUp";
 import PieChart from './PieChart';
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
-import DatePicker from "react-date-picker";
-import 'react-date-picker/dist/DatePicker.css';
-import 'react-calendar/dist/Calendar.css';
 import './TaskTable.css';
 
 
@@ -116,12 +113,12 @@ class TaskTable extends Component {
         return (
             <>
                 <div className="datepickerwrapper">
-                    <DatePicker
-                    className="custom-datepicker"
-                    selected={this.state.selectedDate}
-                    value = {this.state.selectedDate}
-                    onChange={date => this.setState({selectedDate: date})}
-                />
+                    <input
+                        type="date"
+                        className="custom-datepicker"
+                        value={this.state.selectedDate.toISOString().split('T')[0]}
+                        onChange={(e) => this.setState({selectedDate: new Date(e.target.value)})}
+                    />
                 </div>
                 <div className="task-table">
                     <div>
@@ -170,15 +167,23 @@ class TaskTable extends Component {
                                     <p>Coordinator: {selectedItem.coordinator}</p>
                                     <p>Worker: {selectedItem.worker}</p>
                                     <p>Total Expense: ₹{selectedItem.wage}</p>
-                                    <p>Sub Task: </p>
+                                    {selectedItem.advance_paid ?
+                                        <>
+                                            <p>Advance paid: ✅</p>
+                                            <p>Advance amount:</p>
+                                            <p>Advance paid date:</p>
+                                        </>
+                                        : <p>Advance paid: ❌</p>}
+                                    <p>Sub Tasks: </p>
                                 </div>
                                 <div className='popup-piechart'>
                                     <p>Work Progress: </p>
                                     <PieChart
-                                        percentage={(selectedItem.completed_subtasks / selectedItem.total_subtasks) * 100}/>
+                                        percentage={selectedItem.total_subtasks!==0?(selectedItem.completed_subtasks / selectedItem.total_subtasks) * 100:0}/>
                                 </div>
                             </div>
-                            {this.state.editable ? <div>
+                            {this.state.editable ?
+                                <div>
                                     <DragDropContext onDragEnd={this.handleOnDragEnd}>
                                         <Droppable droppableId="subtasks">
                                             {(provided) => (

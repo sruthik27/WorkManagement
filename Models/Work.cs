@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 [Table("work",Schema = "public")]
 public class Work
@@ -34,10 +35,12 @@ public class Work
     public bool? bill_paid { get; set; }
 
     public long? coordinator { get; set; }
-
+    
+    [JsonIgnore]
     [ForeignKey("worker")]
-    public Worker WorkerNavigation { get; set; }
+    public Worker? WorkerNavigation { get; set; }
 
+    [JsonIgnore]
     [ForeignKey("coordinator")]
-    public Coordinator CoordinatorNavigation { get; set; }
+    public Coordinator? CoordinatorNavigation { get; set; }
 }

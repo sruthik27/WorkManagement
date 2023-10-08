@@ -1,4 +1,27 @@
-.datepickerwrapper {
-    display: flex !important;
-    flex-direction: column !important;
+/* Add these styles to your CSS file */
+.custom-datepicker {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+}
+
+/* Style the date picker when it's focused */
+.custom-datepicker:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Style the date picker's calendar icon (optional) */
+.custom-datepicker::-webkit-calendar-picker-indicator {
+  color: #007bff;
+  cursor: pointer;
+}
+
+/* Style the date picker's drop-down arrow (optional) */
+.custom-datepicker::-webkit-inner-spin-button,
+.custom-datepicker::-webkit-outer-spin-button {
+  appearance: none;
+  display: none;
 }
