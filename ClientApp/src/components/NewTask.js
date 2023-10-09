@@ -39,7 +39,8 @@ const NewTask = () => {
                 wage: workCost,
                 worker: worker,
                 advance_paid: false,
-                bill_paid: false
+                bill_paid: false,
+                coordinator:coordinator
             },
             subtasks: subtasks
         };
@@ -148,7 +149,7 @@ const NewTask = () => {
                         <label>Coordinator</label>
                         <input
                             type="text"
-                            placeholder="Who is coordinating?"
+                            placeholder="Who is supervising?"
                             onChange={(event) => setCoordinator(event.target.value)}
                             className="form-control"
                         />

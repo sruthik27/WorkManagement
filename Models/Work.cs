@@ -34,13 +34,9 @@ public class Work
 
     public bool? bill_paid { get; set; }
 
-    public long? coordinator { get; set; }
+    public string? coordinator { get; set; }
     
     [JsonIgnore]
     [ForeignKey("worker")]
     public Worker? WorkerNavigation { get; set; }
-
-    [JsonIgnore]
-    [ForeignKey("coordinator")]
-    public Coordinator? CoordinatorNavigation { get; set; }
 }

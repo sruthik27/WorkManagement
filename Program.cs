@@ -21,7 +21,8 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
-builder.Services.AddHostedService<WorkStatusUpdateService>();
+
+// builder.Services.AddHostedService<WorkStatusUpdateService>();
 
 var app = builder.Build();
 

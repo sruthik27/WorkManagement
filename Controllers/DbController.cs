@@ -24,7 +24,7 @@ public class DbController : ControllerBase
     {
         
         var works = _context.Works
-            .Include(work => work.CoordinatorNavigation).Include(work=>work.CoordinatorNavigation) // Eager load the coordinator data
+            .Include(work => work.WorkerNavigation)// Eager load the worker data
             .AsNoTracking()
             .Select(work => new
             {
@@ -40,37 +40,17 @@ public class DbController : ControllerBase
                 worker = work.WorkerNavigation.worker_name,
                 work.advance_paid,
                 work.bill_paid,
-                coordinator = work.CoordinatorNavigation.coordinator_name// Use the eagerly loaded data
+                work.coordinator
             });
         return Ok(works);
     }
-
     
     [HttpGet("gettasks")]
     public IActionResult GetTasks(string n)
     {
         return Ok(_context.Tasks.Where(x=>x.work_id==long.Parse(n)).OrderBy(t=>t.order_no).Select(y=>new{task_id = y.task_id.ToString(),work_id=y.work_id.ToString(),y.order_no,y.completed,y.due_date,y.task_name}));
     }
-
-    [HttpGet("getbroadcasts")]
-    public IActionResult GetBroadcasts()
-    {
-        return Ok(_context.Broadcasts);
-    }
     
-    // [HttpGet("getcoords")]
-    // public IActionResult GetCoordinators()
-    // {
-    //     var coords = _context.Coordinators
-    //         .AsNoTracking() // Prevent entity tracking
-    //         .Select(coord => new
-    //         {
-    //             coordinator_id = coord.coordinator_id.ToString(),
-    //             coord.coordinator_name
-    //         });
-    //
-    //     return Ok(coords);
-    // }
 
     [HttpGet("getworkers")]
     public IActionResult GetWorkers()
@@ -83,7 +63,7 @@ public class DbController : ControllerBase
         return Ok(workers);
     }
 
-
+    //TO UPDATE ORDER OF SUBTASK
     [Route("updateorder")]
     [HttpPut]
     public IActionResult UpdateOrder(string task_id,int new_order)
@@ -183,21 +163,6 @@ public class DbController : ControllerBase
         _context.SaveChanges();
         return Ok(new { message = "Work added successfully.", work_id = workpart.work_id });
     }
-
-    //To directly add subtask
-    [Route("addsubtask")]
-    [HttpPost]
-    public IActionResult AddSubTask([FromBody] SubTask newTask)
-    {
-        if (newTask==null)
-        {
-            return BadRequest("Invalid subtask");
-        }
-
-        _context.Tasks.Add(newTask);
-        _context.SaveChanges();
-        return Ok(new { message = "new task added" });
-    }
-
+    
 
 }
