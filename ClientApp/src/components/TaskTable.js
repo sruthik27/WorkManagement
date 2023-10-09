@@ -3,7 +3,7 @@ import PopUp from "./PopUp";
 import PieChart from './PieChart';
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 import './TaskTable.css';
-
+import './AdminHome.css';
 
 class TaskTable extends Component {
     constructor(props) {
@@ -113,16 +113,17 @@ class TaskTable extends Component {
         return (
             <>
                 <div className="datepickerwrapper">
-                    <input
-                        type="date"
-                        className="custom-datepicker"
-                        value={this.state.selectedDate.toISOString().split('T')[0]}
-                        onChange={(e) => this.setState({selectedDate: new Date(e.target.value)})}
-                    />
+                    <p className='datepickerhead'> Filter by date: <input
+                            type="date"
+                            className="custom-datepicker"
+                            value={this.state.selectedDate.toISOString().split('T')[0]}
+                            onChange={(e) => this.setState({selectedDate: new Date(e.target.value)})}
+                        />
+                    </p>
                 </div>
                 <div className="task-table">
                     <div>
-                        <h2>Active Task</h2>
+                        <p className='table-head'>Active Task</p>
                         <ul>
                             {activeTask.map((x, i) => (
                                 <p className='table_content' key={i} onClick={() => this.handleItemClick(x)}>
@@ -132,7 +133,7 @@ class TaskTable extends Component {
                         </ul>
                     </div>
                     <div>
-                        <h2>Completed Task</h2>
+                        <p className='table-head'>Completed Task</p>
                         <ul>
                             {completeTask.map((x, i) => (
                                 <p className='table_content' key={i} onClick={() => this.handleItemClick(x)}>
@@ -142,7 +143,7 @@ class TaskTable extends Component {
                         </ul>
                     </div>
                     <div>
-                        <h2>Incomplete Task</h2>
+                        <p className='table-head'>Incomplete Task</p>
                         <ul>
                             {incompleteTask.map((x, i) => (
                                 <p className='table_content' key={i} onClick={() => this.handleItemClick(x)}>
@@ -183,7 +184,7 @@ class TaskTable extends Component {
                                 </div>
                             </div>
                             {this.state.editable ?
-                                <div>
+                                <div className='subtask-table'>
                                     <DragDropContext onDragEnd={this.handleOnDragEnd}>
                                         <Droppable droppableId="subtasks">
                                             {(provided) => (

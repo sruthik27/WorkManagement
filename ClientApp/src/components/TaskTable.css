@@ -1,27 +1,33 @@
-/* Add these styles to your CSS file */
+@import url('https://fonts.googleapis.com/css2?family=Alatsi&family=Lexend+Deca:wght@300&display=swap');
+
+.datepickerwrapper {
+    margin-bottom: 2vw;
+}
+
 .custom-datepicker {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-  outline: none;
+    color: #9E00EB;
+    font-family: Alatsi;
+    font-size: 20px;
+    font-style: normal;
+    padding: 5px;
 }
 
-/* Style the date picker when it's focused */
-.custom-datepicker:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+.datepickerhead {
+    color: #259F46;
+    font-family: Alatsi;
+    font-size: 25px;
+    font-style: normal;
 }
 
-/* Style the date picker's calendar icon (optional) */
-.custom-datepicker::-webkit-calendar-picker-indicator {
-  color: #007bff;
-  cursor: pointer;
+.table-head {
+    color: #259F46;
+    font-family: Alatsi;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
-/* Style the date picker's drop-down arrow (optional) */
-.custom-datepicker::-webkit-inner-spin-button,
-.custom-datepicker::-webkit-outer-spin-button {
-  appearance: none;
-  display: none;
+.subtask-table {
+    background-color: white;
 }

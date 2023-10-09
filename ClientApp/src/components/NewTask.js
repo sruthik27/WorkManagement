@@ -83,7 +83,7 @@ const NewTask = () => {
 
     return (
         <>
-            <Container className="mt-4">
+            <Container className="mt-4 form-main">
                 <Row className="justify-content-md-center">
                     <Col xs={12} md={8}>
                         <h1 className="text-center">PUBLISH NEW TASK</h1>
