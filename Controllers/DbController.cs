@@ -58,18 +58,29 @@ public class DbController : ControllerBase
         return Ok(_context.Broadcasts);
     }
     
-    [HttpGet("getcoords")]
-    public IActionResult GetCoordinators()
+    // [HttpGet("getcoords")]
+    // public IActionResult GetCoordinators()
+    // {
+    //     var coords = _context.Coordinators
+    //         .AsNoTracking() // Prevent entity tracking
+    //         .Select(coord => new
+    //         {
+    //             coordinator_id = coord.coordinator_id.ToString(),
+    //             coord.coordinator_name
+    //         });
+    //
+    //     return Ok(coords);
+    // }
+
+    [HttpGet("getworkers")]
+    public IActionResult GetWorkers()
     {
-        var coords = _context.Coordinators
-            .AsNoTracking() // Prevent entity tracking
-            .Select(coord => new
-            {
-                coordinator_id = coord.coordinator_id.ToString(),
-                coord.coordinator_name
-            });
-    
-        return Ok(coords);
+        var workers = _context.Workers.AsNoTracking().Select(w => new
+        {
+            worker_id = w.worker_id.ToString(),
+            w.worker_name
+        });
+        return Ok(workers);
     }
 
 
@@ -159,7 +170,7 @@ public class DbController : ControllerBase
         }
 
         Work workpart = newWork.Work;
-        workpart.coordinator = (long) workpart.coordinator;
+        workpart.worker = (long) workpart.worker;
         _context.Works.Add(workpart);
         _context.SaveChanges();
 
