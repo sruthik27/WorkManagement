@@ -81,6 +81,7 @@ public class DbController : ControllerBase
         return Ok(new { message = "Order updated succesfully" });
     }
 
+    //LOGIN VERIFICATION
     [Route("verify")]
     [HttpPost]
     public IActionResult Verify([FromBody] Login login)
@@ -115,22 +116,21 @@ public class DbController : ControllerBase
         }
     }
     
-    [HttpPost("addbroadcast")]
-    public IActionResult AddBroadcast([FromBody] Broadcast newBroadcast)
+    //ADD QUERY
+    [HttpPost("addquery")]
+    public IActionResult AddQuery([FromBody] Query newQuery)
     {
-        if (newBroadcast == null)
+        if (newQuery == null)
         {
-            return BadRequest("Invalid broadcast data.");
+            return BadRequest("Invalid query data.");
         }
-        // Set the date and time components of the new broadcast
-        // Set the date and time components of the new broadcast
-        newBroadcast.Date = DateTime.UtcNow.Date; // Set the date to UTC date
-        newBroadcast.Time = DateTime.UtcNow.TimeOfDay; // Set the time to UTC time
-        _context.Broadcasts.Add(newBroadcast);
+        newQuery.query_date = DateTime.UtcNow.Date; // Set the date to UTC date
+        newQuery.query_time = DateTime.UtcNow.TimeOfDay; // Set the time to UTC time
+        _context.Queries.Add(newQuery);
         _context.SaveChanges();
         DateTime istTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, istTimeZone);
         Console.WriteLine("IST Time: " + istTime.ToString("yyyy-MM-dd HH:mm:ss"));
-        return Ok(new { message = "Broadcast added successfully." });
+        return Ok(new { message = "Query added successfully." });
     }
     
     //TO ADD NEW WORK ALONG WITH SUBTASKS
@@ -164,5 +164,37 @@ public class DbController : ControllerBase
         return Ok(new { message = "Work added successfully.", work_id = workpart.work_id });
     }
     
+    //ADD PAYMENT
+    [Route("addpayment")]
+    [HttpPost]
+    public IActionResult AddPayment([FromBody] Payment newpayment)
+    {
+        if (newpayment==null)
+        {
+            return BadRequest("Invalid payment data.");
+        }
+
+        newpayment.work = (long) newpayment.work;
+        _context.Payments.Add(newpayment);
+        var work = _context.Works.Find(newpayment.work);
+        if (work != null)
+        {
+            if (newpayment.payment_type=='A')
+            {
+                work.advance_paid = true;
+            }
+            else if (newpayment.payment_type=='B')
+            {
+                work.bill_paid = true;
+            }
+        }
+        _context.SaveChanges();
+        return Ok(new
+        {
+            message = "payment added sucessfully"
+            
+        });
+    }
+        
 
 }

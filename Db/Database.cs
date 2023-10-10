@@ -15,9 +15,11 @@ public class DefaultDbContext : DbContext
 
     public DbSet<SubTask> Tasks { get; set; }
     
-    public DbSet<Broadcast> Broadcasts { get; set; }
+    public DbSet<Query> Queries { get; set; }
     
     public DbSet<Coordinator> Coordinators { get; set; }
+    
+    public DbSet<Payment> Payments { get; set; }
     
     public DbSet<Worker> Workers { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

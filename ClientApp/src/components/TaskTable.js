@@ -22,8 +22,8 @@ class TaskTable extends Component {
             editMode: false,
             isChecked: false,
             advancePaid: "",
-            dateOfPaid: "",
-            
+            dateOfPaid: new Date(),
+
         };
     }
 
@@ -110,21 +110,42 @@ class TaskTable extends Component {
 
     handleToggle = () => {
         this.setState(prevState => ({
-          isChecked: !prevState.isChecked
+            isChecked: !prevState.isChecked
         }));
     };
 
     handleSubmit = () => {
-        const advanceFromPopup = {
-            advance_Paid: this.state.advancePaid,
-            date_advancePaid: this.state.dateOfPaid
-        }
-        console.log(advanceFromPopup);
+        var requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                payment_type: 'A',
+                paid_amount: this.state.advancePaid,
+                paid_date: this.state.dateOfPaid.toISOString(),
+                work: this.state.selectedItem.work_id,
+            }),
+            redirect: 'follow'
+        };
+
+        fetch("https://localhost:7286/db/addpayment", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
     }
 
 
     render() {
-        const {activeTask, completeTask, selectedItem, selectedSubtasks, isChecked, advancePaid, dateOfPaid} = this.state;
+        const {
+            activeTask,
+            completeTask,
+            selectedItem,
+            selectedSubtasks,
+            isChecked,
+            advancePaid,
+            dateOfPaid
+        } = this.state;
 
         const now = new Date();
         console.log(now);
@@ -132,11 +153,11 @@ class TaskTable extends Component {
             <>
                 <div className="datepickerwrapper">
                     <p className='datepickerhead'> Filter by date: <input
-                            type="date"
-                            className="custom-datepicker"
-                            value={this.state.selectedDate.toISOString().split('T')[0]}
-                            onChange={(e) => this.setState({selectedDate: new Date(e.target.value)})}
-                        />
+                        type="date"
+                        className="custom-datepicker"
+                        value={this.state.selectedDate.toISOString().split('T')[0]}
+                        onChange={(e) => this.setState({selectedDate: new Date(e.target.value)})}
+                    />
                     </p>
                 </div>
                 <div className="task-table">
@@ -186,19 +207,23 @@ class TaskTable extends Component {
                                                 </>
                                                 :
                                                 <>
-                                                    <p>Advance Paid: <Switch checked={isChecked} onChange={this.handleToggle} /></p>
-                                                    {isChecked ? 
+                                                    <p>Advance Paid: <Switch checked={isChecked}
+                                                                             onChange={this.handleToggle}/></p>
+                                                    {isChecked ?
                                                         <div>
-                                                            <input type='number' placeholder='Advance to be Paid' value={this.state.advancePaid} onChange={(e) => {
-                                                                this.setState({advancePaid : e.target.value});
+                                                            <input type='number' placeholder='Advance to be Paid'
+                                                                   value={this.state.advancePaid} onChange={(e) => {
+                                                                this.setState({advancePaid: e.target.value});
                                                             }}/>
-                                                            <input type='date' value={this.state.dateOfPaid} onChange={(e) => {
-                                                                this.setState({dateOfPaid: e.target.value});
-                                                            }} placeholder='Date'/>
+                                                            <input type='date' value={this.state.dateOfPaid.toISOString().split('T')[0]}
+                                                                   onChange={(e) => {
+                                                                       this.setState({dateOfPaid: new Date(e.target.value)});
+                                                                   }} placeholder='Date'/>
+
                                                             <button onClick={this.handleSubmit}>Submit</button>
                                                         </div>
                                                         : ''}
-                                                </> 
+                                                </>
                                             }
                                         </> :
 
@@ -212,7 +237,7 @@ class TaskTable extends Component {
                                                 :
                                                 <>
                                                     <p>Advance Paid: ❌</p>
-                                                </> 
+                                                </>
                                             }
                                         </>
 
@@ -222,9 +247,9 @@ class TaskTable extends Component {
                                 <div className='popup-piechart'>
                                     <p>Work Progress: </p>
                                     <PieChart
-                                        percentage={selectedItem.total_subtasks!==0?(selectedItem.completed_subtasks / selectedItem.total_subtasks) * 100:0}
+                                        percentage={selectedItem.total_subtasks !== 0 ? (selectedItem.completed_subtasks / selectedItem.total_subtasks) * 100 : 0}
                                     />
-                                    {this.state.editable ? <p>{""}</p> : <CommentBox workid={selectedItem.work_id}/> }
+                                    {this.state.editable ? <p>{""}</p> : <CommentBox workid={selectedItem.work_id}/>}
                                 </div>
                             </div>
                             {this.state.editable ?
