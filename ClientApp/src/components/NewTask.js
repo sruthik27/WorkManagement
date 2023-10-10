@@ -34,7 +34,7 @@ const NewTask = () => {
                 work_status: 'A',
                 start_date: startDate.toISOString(),
                 due_date: dueDate.toISOString(),
-                total_subtasks: 0,
+                total_subtasks: subtasks.length,
                 completed_subtasks: 0,
                 wage: workCost,
                 worker: worker,

@@ -80,6 +80,41 @@ public class DbController : ControllerBase
         _context.SaveChanges();
         return Ok(new { message = "Order updated succesfully" });
     }
+    
+    //UPDATE COMPLETION OF TASKS (WORK)
+    [Route(("updatetaskcompletion"))]
+    [HttpPut]
+    public IActionResult UpdateCompletion(string task_id)
+    {
+        var taskid = long.Parse(task_id);
+        var task = _context.Tasks.Find(taskid);
+        if (task == null)
+        {
+            return BadRequest("Task not found");
+        }
+
+        task.completed = true;
+        var workId = task.work_id.GetValueOrDefault();
+        var work = _context.Works.Find(workId);
+        work.completed_subtasks += 1;
+        _context.SaveChanges();
+
+        // Check if all tasks for the same work_id are completed
+        var allTasksCompleted = _context.Tasks.Where(t => t.work_id == workId && !t.completed.HasValue || !t.completed.Value).Count() == 0;
+
+        if (allTasksCompleted)
+        {
+            // Update work_status in the work table to true
+            if (work != null)
+            {
+                work.work_status = 'C';
+                _context.SaveChanges();
+            }
+        }
+
+        return Ok(new { message = "Completion updated successfully" });
+    }
+
 
     //LOGIN VERIFICATION
     [Route("verify")]
