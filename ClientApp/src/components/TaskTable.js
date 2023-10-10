@@ -4,6 +4,7 @@ import PieChart from './PieChart';
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 import './TaskTable.css';
 import './AdminHome.css';
+import CommentBox from './CommentBox';
 
 class TaskTable extends Component {
     constructor(props) {
@@ -12,13 +13,13 @@ class TaskTable extends Component {
         this.state = {
             activeTask: [],
             completeTask: [],
-            incompleteTask: [],
             selectedItem: null,
             selectedSubtasks: [],
             selectedDate: new Date(),
             orderChanged: false,
             editable: this.props.editable,
             editMode: false
+            
         };
     }
 
@@ -85,11 +86,9 @@ class TaskTable extends Component {
         }
     }
 
-
     processData(data) {
         let activeTask = [];
         let completeTask = [];
-        let incompleteTask = [];
 
         // Filter the data based on the selectedDate and start_date
         data = data.filter(x => new Date(x.start_date) <= this.state.selectedDate);
@@ -97,19 +96,20 @@ class TaskTable extends Component {
         data.forEach(x => {
             if (x.work_status === 'A') activeTask.push(x);
             else if (x.work_status === 'C') completeTask.push(x);
-            else if (x.work_status === 'I') incompleteTask.push(x);
         });
 
         this.setState({
             activeTask,
             completeTask,
-            incompleteTask,
         });
     }
 
 
     render() {
-        const {activeTask, completeTask, incompleteTask, selectedItem, selectedSubtasks} = this.state;
+        const {activeTask, completeTask, selectedItem, selectedSubtasks} = this.state;
+
+        const now = new Date();
+        console.log(now);
         return (
             <>
                 <div className="datepickerwrapper">
@@ -136,16 +136,6 @@ class TaskTable extends Component {
                         <p className='table-head'>Completed Task</p>
                         <ul>
                             {completeTask.map((x, i) => (
-                                <p className='table_content' key={i} onClick={() => this.handleItemClick(x)}>
-                                    {x.work_name}
-                                </p>
-                            ))}
-                        </ul>
-                    </div>
-                    <div>
-                        <p className='table-head'>Incomplete Task</p>
-                        <ul>
-                            {incompleteTask.map((x, i) => (
                                 <p className='table_content' key={i} onClick={() => this.handleItemClick(x)}>
                                     {x.work_name}
                                 </p>
@@ -180,7 +170,9 @@ class TaskTable extends Component {
                                 <div className='popup-piechart'>
                                     <p>Work Progress: </p>
                                     <PieChart
-                                        percentage={selectedItem.total_subtasks!==0?(selectedItem.completed_subtasks / selectedItem.total_subtasks) * 100:0}/>
+                                        percentage={selectedItem.total_subtasks!==0?(selectedItem.completed_subtasks / selectedItem.total_subtasks) * 100:0}
+                                    />
+                                    {this.state.editable ? <p>{""}</p> : <CommentBox workid={selectedItem.work_id}/> }
                                 </div>
                             </div>
                             {this.state.editable ?
@@ -208,7 +200,8 @@ class TaskTable extends Component {
                                 </div> :
                                 <ol>
                                     {selectedSubtasks.map((subtask, index) => <li key={index}>{subtask.task_name}</li>)}
-                                </ol>}
+                                </ol>
+                            }
 
                         </div>
                     )}
