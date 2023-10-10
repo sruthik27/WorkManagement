@@ -5,6 +5,7 @@ import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 import './TaskTable.css';
 import './AdminHome.css';
 import CommentBox from './CommentBox';
+import Switch from '@mui/material/Switch';
 
 class TaskTable extends Component {
     constructor(props) {
@@ -18,7 +19,10 @@ class TaskTable extends Component {
             selectedDate: new Date(),
             orderChanged: false,
             editable: this.props.editable,
-            editMode: false
+            editMode: false,
+            isChecked: false,
+            advancePaid: "",
+            dateOfPaid: "",
             
         };
     }
@@ -104,9 +108,23 @@ class TaskTable extends Component {
         });
     }
 
+    handleToggle = () => {
+        this.setState(prevState => ({
+          isChecked: !prevState.isChecked
+        }));
+    };
+
+    handleSubmit = () => {
+        const advanceFromPopup = {
+            advance_Paid: this.state.advancePaid,
+            date_advancePaid: this.state.dateOfPaid
+        }
+        console.log(advanceFromPopup);
+    }
+
 
     render() {
-        const {activeTask, completeTask, selectedItem, selectedSubtasks} = this.state;
+        const {activeTask, completeTask, selectedItem, selectedSubtasks, isChecked, advancePaid, dateOfPaid} = this.state;
 
         const now = new Date();
         console.log(now);
@@ -158,13 +176,47 @@ class TaskTable extends Component {
                                     <p>Coordinator: {selectedItem.coordinator}</p>
                                     <p>Worker: {selectedItem.worker}</p>
                                     <p>Total Expense: ₹{selectedItem.wage}</p>
-                                    {selectedItem.advance_paid ?
+                                    {this.state.editable ?
                                         <>
-                                            <p>Advance paid: ✅</p>
-                                            <p>Advance amount:</p>
-                                            <p>Advance paid date:</p>
+                                            {selectedItem.advance_paid ?
+                                                <>
+                                                    <p>Advance paid: ✅</p>
+                                                    <p>Advance amount:</p>
+                                                    <p>Advance paid date:</p>
+                                                </>
+                                                :
+                                                <>
+                                                    <p>Advance Paid: <Switch checked={isChecked} onChange={this.handleToggle} /></p>
+                                                    {isChecked ? 
+                                                        <div>
+                                                            <input type='number' placeholder='Advance to be Paid' value={this.state.advancePaid} onChange={(e) => {
+                                                                this.setState({advancePaid : e.target.value});
+                                                            }}/>
+                                                            <input type='date' value={this.state.dateOfPaid} onChange={(e) => {
+                                                                this.setState({dateOfPaid: e.target.value});
+                                                            }} placeholder='Date'/>
+                                                            <button onClick={this.handleSubmit}>Submit</button>
+                                                        </div>
+                                                        : ''}
+                                                </> 
+                                            }
+                                        </> :
+
+                                        <>
+                                            {selectedItem.advance_paid ?
+                                                <>
+                                                    <p>Advance paid: ✅</p>
+                                                    <p>Advance amount:</p>
+                                                    <p>Advance paid date:</p>
+                                                </>
+                                                :
+                                                <>
+                                                    <p>Advance Paid: ❌</p>
+                                                </> 
+                                            }
                                         </>
-                                        : <p>Advance paid: ❌</p>}
+
+                                    }
                                     <p>Sub Tasks: </p>
                                 </div>
                                 <div className='popup-piechart'>
