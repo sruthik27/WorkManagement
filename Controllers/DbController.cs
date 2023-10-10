@@ -108,6 +108,8 @@ public class DbController : ControllerBase
             if (work != null)
             {
                 work.work_status = 'C';
+                var worker = _context.Workers.Find(workId);
+                worker.current_works.Remove(workId);
                 _context.SaveChanges();
             }
         }
@@ -168,7 +170,7 @@ public class DbController : ControllerBase
         return Ok(new { message = "Query added successfully." });
     }
     
-    //TO ADD NEW WORK ALONG WITH SUBTASKS
+    //ADD NEW WORK ALONG WITH SUBTASKS
     public class WorkWithSubtasks
     {
         public Work Work { get; set; }
@@ -188,7 +190,11 @@ public class DbController : ControllerBase
         workpart.worker = (long) workpart.worker;
         _context.Works.Add(workpart);
         _context.SaveChanges();
-
+        var worker = _context.Workers.Find(workpart.worker);
+        worker.works_done += 1;
+        worker.current_works.Add(workpart.work_id);
+        _context.SaveChanges();
+        
         List<SubTask> taskspart = newWork.Subtasks;
         foreach (var subtask in taskspart)
         {
@@ -229,6 +235,19 @@ public class DbController : ControllerBase
             message = "payment added sucessfully"
             
         });
+    }
+    
+    //ADD WORKER
+    [Route("addworker")]
+    [HttpPost]
+    public IActionResult AddWorker([FromForm] Worker newworker)
+    {
+        if (newworker==null)
+        {
+            return BadRequest("Invalid worker data.");
+        }
+        _context.Workers.Add(newworker);
+        return Ok(new { message = "Worker added succesfully" });
     }
         
 

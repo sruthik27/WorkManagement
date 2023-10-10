@@ -16,7 +16,7 @@ public class Worker
 
     public long? works_done { get; set; }
 
-    public List<long> current_works { get; set; }
+    public List<long>? current_works { get; set; }
 
     [Required]
     public string email { get; set; }
