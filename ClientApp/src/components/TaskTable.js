@@ -19,7 +19,6 @@ class TaskTable extends Component {
             selectedDate: new Date(),
             orderChanged: false,
             editable: this.props.editable,
-            editMode: false,
             isChecked: false,
             advancePaid: "",
             dateOfPaid: new Date(),
