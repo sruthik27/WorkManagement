@@ -80,7 +80,45 @@ public class DbController : ControllerBase
         _context.SaveChanges();
         return Ok(new { message = "Order updated succesfully" });
     }
+    
+    //UPDATE COMPLETION OF TASKS (WORK)
+    [Route(("updatetaskcompletion"))]
+    [HttpPut]
+    public IActionResult UpdateCompletion(string task_id)
+    {
+        var taskid = long.Parse(task_id);
+        var task = _context.Tasks.Find(taskid);
+        if (task == null)
+        {
+            return BadRequest("Task not found");
+        }
 
+        task.completed = true;
+        var workId = task.work_id;
+        var work = _context.Works.Find(workId);
+        work.completed_subtasks += 1;
+        _context.SaveChanges();
+
+        // Check if all tasks for the same work_id are completed
+        var allTasksCompleted = _context.Tasks.Where(t => t.work_id == workId && t.completed!=true).Count() == 0;
+
+        if (allTasksCompleted)
+        {
+            // Update work_status in the work table to true
+            if (work != null)
+            {
+                work.work_status = 'C';
+                var worker = _context.Workers.Find(work.worker);
+                worker.current_works.Remove((long)workId);
+                _context.SaveChanges();
+            }
+        }
+
+        return Ok(new { message = "Completion updated successfully" });
+    }
+
+
+    //LOGIN VERIFICATION
     [Route("verify")]
     [HttpPost]
     public IActionResult Verify([FromBody] Login login)
@@ -105,8 +143,9 @@ public class DbController : ControllerBase
             {
                 return Ok(new { redirectTo = "AdminMain",where='A' });
             }
-
-            return Ok(new { redirectTo = "coordinator",where='C'});
+            if (existingLogin.designation=='C')
+                return Ok(new { redirectTo = "coordinator",where='C'});
+            return Ok(new { redirectTo = "worker" });
         }
         else
         {
@@ -115,25 +154,24 @@ public class DbController : ControllerBase
         }
     }
     
-    [HttpPost("addbroadcast")]
-    public IActionResult AddBroadcast([FromBody] Broadcast newBroadcast)
+    //ADD QUERY
+    [HttpPost("addquery")]
+    public IActionResult AddQuery([FromBody] Query newQuery)
     {
-        if (newBroadcast == null)
+        if (newQuery == null)
         {
-            return BadRequest("Invalid broadcast data.");
+            return BadRequest("Invalid query data.");
         }
-        // Set the date and time components of the new broadcast
-        // Set the date and time components of the new broadcast
-        newBroadcast.Date = DateTime.UtcNow.Date; // Set the date to UTC date
-        newBroadcast.Time = DateTime.UtcNow.TimeOfDay; // Set the time to UTC time
-        _context.Broadcasts.Add(newBroadcast);
+        newQuery.query_date = DateTime.UtcNow.Date; // Set the date to UTC date
+        newQuery.query_time = DateTime.UtcNow.TimeOfDay; // Set the time to UTC time
+        _context.Queries.Add(newQuery);
         _context.SaveChanges();
         DateTime istTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, istTimeZone);
         Console.WriteLine("IST Time: " + istTime.ToString("yyyy-MM-dd HH:mm:ss"));
-        return Ok(new { message = "Broadcast added successfully." });
+        return Ok(new { message = "Query added successfully." });
     }
     
-    //TO ADD NEW WORK ALONG WITH SUBTASKS
+    //ADD NEW WORK ALONG WITH SUBTASKS
     public class WorkWithSubtasks
     {
         public Work Work { get; set; }
@@ -153,7 +191,11 @@ public class DbController : ControllerBase
         workpart.worker = (long) workpart.worker;
         _context.Works.Add(workpart);
         _context.SaveChanges();
-
+        var worker = _context.Workers.Find(workpart.worker);
+        worker.works_done += 1;
+        worker.current_works.Add(workpart.work_id);
+        _context.SaveChanges();
+        
         List<SubTask> taskspart = newWork.Subtasks;
         foreach (var subtask in taskspart)
         {
@@ -164,5 +206,50 @@ public class DbController : ControllerBase
         return Ok(new { message = "Work added successfully.", work_id = workpart.work_id });
     }
     
+    //ADD PAYMENT
+    [Route("addpayment")]
+    [HttpPost]
+    public IActionResult AddPayment([FromBody] Payment newpayment)
+    {
+        if (newpayment==null)
+        {
+            return BadRequest("Invalid payment data.");
+        }
+
+        newpayment.work = (long) newpayment.work;
+        _context.Payments.Add(newpayment);
+        var work = _context.Works.Find(newpayment.work);
+        if (work != null)
+        {
+            if (newpayment.payment_type=='A')
+            {
+                work.advance_paid = true;
+            }
+            else if (newpayment.payment_type=='B')
+            {
+                work.bill_paid = true;
+            }
+        }
+        _context.SaveChanges();
+        return Ok(new
+        {
+            message = "payment added sucessfully"
+            
+        });
+    }
+    
+    //ADD WORKER
+    [Route("addworker")]
+    [HttpPost]
+    public IActionResult AddWorker([FromForm] Worker newworker)
+    {
+        if (newworker==null)
+        {
+            return BadRequest("Invalid worker data.");
+        }
+        _context.Workers.Add(newworker);
+        return Ok(new { message = "Worker added succesfully" });
+    }
+        
 
 }

@@ -19,11 +19,10 @@ class TaskTable extends Component {
             selectedDate: new Date(),
             orderChanged: false,
             editable: this.props.editable,
-            editMode: false,
             isChecked: false,
             advancePaid: "",
             dateOfPaid: "",
-            isAdvancePaid: false,
+            
         };
     }
 
@@ -110,7 +109,7 @@ class TaskTable extends Component {
 
     handleToggle = () => {
         this.setState(prevState => ({
-          isChecked: !prevState.isChecked
+            isChecked: !prevState.isChecked
         }));
     };
 
@@ -134,11 +133,11 @@ class TaskTable extends Component {
             <>
                 <div className="datepickerwrapper">
                     <p className='datepickerhead'> Filter by date: <input
-                            type="date"
-                            className="custom-datepicker"
-                            value={this.state.selectedDate.toISOString().split('T')[0]}
-                            onChange={(e) => this.setState({selectedDate: new Date(e.target.value)})}
-                        />
+                        type="date"
+                        className="custom-datepicker"
+                        value={this.state.selectedDate.toISOString().split('T')[0]}
+                        onChange={(e) => this.setState({selectedDate: new Date(e.target.value)})}
+                    />
                     </p>
                 </div>
                 <div className="task-table">
@@ -188,30 +187,18 @@ class TaskTable extends Component {
                                                 </>
                                                 :
                                                 <>
-                                                    {isAdvancePaid ? 
-                                                        <>
-                                                            <p>Advance paid: ✅</p>
-                                                            <p>Advance amount: {advancePaid}</p>
-                                                            <p>Advance paid date: {dateOfPaid}</p>
-                                                        </>
-                                                        :
-                                                        <>
-                                                            <p>Advance Paid: <Switch checked={isChecked} onChange={this.handleToggle} /></p>
-                                                            {isChecked ? 
-                                                                <div>
-                                                                    <input type='number' placeholder='Advance to be Paid' value={this.state.advancePaid} onChange={(e) => {
-                                                                        this.setState({advancePaid : e.target.value});
-                                                                    }}/>
-                                                                    <input type='date' value={this.state.dateOfPaid} onChange={(e) => {
-                                                                        this.setState({dateOfPaid: e.target.value});
-                                                                    }} placeholder='Date'/>
-                                                                    <button onClick={this.handleSubmit}>Submit</button>
-                                                                </div>
-                                                            : ''}
-                                                        </>
-
-                                                    }
-                                                    
+                                                    <p>Advance Paid: <Switch checked={isChecked} onChange={this.handleToggle} /></p>
+                                                    {isChecked ? 
+                                                        <div>
+                                                            <input type='number' placeholder='Advance to be Paid' value={this.state.advancePaid} onChange={(e) => {
+                                                                this.setState({advancePaid : e.target.value});
+                                                            }}/>
+                                                            <input type='date' value={this.state.dateOfPaid} onChange={(e) => {
+                                                                this.setState({dateOfPaid: e.target.value});
+                                                            }} placeholder='Date'/>
+                                                            <button onClick={this.handleSubmit}>Submit</button>
+                                                        </div>
+                                                        : ''}
                                                 </> 
                                             }
                                         </> :
@@ -226,7 +213,7 @@ class TaskTable extends Component {
                                                 :
                                                 <>
                                                     <p>Advance Paid: ❌</p>
-                                                </> 
+                                                </>
                                             }
                                         </>
 
@@ -236,9 +223,9 @@ class TaskTable extends Component {
                                 <div className='popup-piechart'>
                                     <p>Work Progress: </p>
                                     <PieChart
-                                        percentage={selectedItem.total_subtasks!==0?(selectedItem.completed_subtasks / selectedItem.total_subtasks) * 100:0}
+                                        percentage={selectedItem.total_subtasks !== 0 ? (selectedItem.completed_subtasks / selectedItem.total_subtasks) * 100 : 0}
                                     />
-                                    {this.state.editable ? <p>{""}</p> : <CommentBox workid={selectedItem.work_id}/> }
+                                    {this.state.editable ? <p>{""}</p> : <CommentBox workid={selectedItem.work_id}/>}
                                 </div>
                             </div>
                             {this.state.editable ?

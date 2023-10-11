@@ -4,38 +4,25 @@ import "./AdminMain.css";
 const CommentBox = (props) => {
     const [comment, setComment] = useState("");  
     const HandleSubmit = () => {
-        const message = {
-            word_id: props.workid,
-            comment_info: comment,
+        const jsonData = {
+            work: props.workid,
+            message: comment,
+            who:"A"
         }
-        console.log(message);
-        // const handleSendAnnouncement = () => {
-            //         const newBroadcast = {
-            //     message: announcementText // Replace with your message
-            // };
-            
-            // // Send a POST request to add a new broadcast
-            // fetch("/db/addbroadcast", {
-            //     method: "POST",
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //     },
-            //     body: JSON.stringify(newBroadcast),
-            // })
-            //     .then((response) => {
-            //         if (!response.ok) {
-            //             throw new Error("Network response was not ok");
-            //         }
-            //         return response.json();
-            //     })
-            //     .then((data) => {
-            //         console.log(data.message); // Message from the server
-            //         setAnnouncementText('');
-            //     })
-            //     .catch((error) => {
-            //         console.error("There was a problem with the fetch operation:", error);
-            //     });
-            // };
+        console.log(jsonData);
+        var requestOptions = {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json' // Set the content type to JSON
+  },
+  body: JSON.stringify(jsonData), // Convert JavaScript object to JSON
+  redirect: 'follow'
+};
+
+fetch("/db/addquery", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
     }
     return(
         <div className='feedback'>
