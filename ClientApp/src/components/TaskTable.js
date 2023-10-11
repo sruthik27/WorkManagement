@@ -21,7 +21,7 @@ class TaskTable extends Component {
             editable: this.props.editable,
             isChecked: false,
             advancePaid: "",
-            dateofPaid: "",
+            dateofPaid: new Date(),
             isAdvancePaid: false,
         };
     }
@@ -115,26 +115,26 @@ class TaskTable extends Component {
 
 
     handleSubmit = () => {
-            var requestOptions = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    payment_type: 'A',
-                    paid_amount: this.state.advancePaid,
-                    paid_date: this.state.dateOfPaid.toISOString(),
-                    work: this.state.selectedItem.work_id,
-                }),
-                redirect: 'follow'
-            };
+        var requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                payment_type: 'A',
+                paid_amount: this.state.advancePaid,
+                paid_date: this.state.dateofPaid.toISOString,
+                work: this.state.selectedItem.work_id,
+            }),
+            redirect: 'follow'
+        };
 
-            fetch("https://localhost:7286/db/addpayment", requestOptions)
-                .then(response => response.text())
-                .then(result => console.log(result))
-                .catch(error => console.log('error', error));
-            this.setState({isAdvancePaid: true});
-        }
+        fetch("https://localhost:7286/db/addpayment", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+        this.setState({isAdvancePaid: true});
+    }
         
 
 
