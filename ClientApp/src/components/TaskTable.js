@@ -114,13 +114,27 @@ class TaskTable extends Component {
     };
 
     handleSubmit = () => {
-        const advanceFromPopup = {
-            advance_Paid: this.state.advancePaid,
-            date_advancePaid: this.state.dateofPaid
+        handleSubmit = () => {
+            var requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    payment_type: 'A',
+                    paid_amount: this.state.advancePaid,
+                    paid_date: this.state.dateOfPaid.toISOString(),
+                    work: this.state.selectedItem.work_id,
+                }),
+                redirect: 'follow'
+            };
+
+            fetch("https://localhost:7286/db/addpayment", requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
         }
-        console.log(advanceFromPopup);
         this.setState({isAdvancePaid: true});
-        
     }
 
 
