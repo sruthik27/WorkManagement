@@ -113,8 +113,8 @@ class TaskTable extends Component {
         }));
     };
 
+
     handleSubmit = () => {
-        handleSubmit = () => {
             var requestOptions = {
                 method: 'POST',
                 headers: {
@@ -133,9 +133,9 @@ class TaskTable extends Component {
                 .then(response => response.text())
                 .then(result => console.log(result))
                 .catch(error => console.log('error', error));
+            this.setState({isAdvancePaid: true});
         }
-        this.setState({isAdvancePaid: true});
-    }
+        
 
 
     render() {
