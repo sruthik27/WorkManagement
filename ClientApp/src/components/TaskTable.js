@@ -133,7 +133,7 @@ class TaskTable extends Component {
             .then(response => response.text())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
-        this.setState({isAdvancePaid: true});
+        this.setState({selectedItem.advance_paid: true});
     }
         
 
@@ -201,7 +201,7 @@ class TaskTable extends Component {
                                                 </>
                                                 :
                                                 <>
-                                                    {isAdvancePaid ? 
+                                                    {selectedItem.advance_paid ? 
                                                         <>
                                                             <p>Advance paid: ✅</p>
                                                             <p>Advance amount: {advancePaid}</p>
@@ -220,7 +220,8 @@ class TaskTable extends Component {
                                                                     }} placeholder='Date'/>
                                                                     <button onClick={this.handleSubmit}>Submit</button>
                                                                 </div>
-                                                                : ''}
+                                                                : ''
+                                                            }
                                                         </>
                                                     }
                                                 </> 
