@@ -21,8 +21,8 @@ class TaskTable extends Component {
             editable: this.props.editable,
             isChecked: false,
             advancePaid: "",
-            dateOfPaid: "",
-            
+            dateofPaid: "",
+            isAdvancePaid: false,
         };
     }
 
@@ -116,7 +116,7 @@ class TaskTable extends Component {
     handleSubmit = () => {
         const advanceFromPopup = {
             advance_Paid: this.state.advancePaid,
-            date_advancePaid: this.state.dateOfPaid
+            date_advancePaid: this.state.dateofPaid
         }
         console.log(advanceFromPopup);
         this.setState({isAdvancePaid: true});
@@ -125,7 +125,7 @@ class TaskTable extends Component {
 
 
     render() {
-        const {activeTask, completeTask, selectedItem, selectedSubtasks, isChecked, advancePaid, dateOfPaid, isAdvancePaid} = this.state;
+        const {activeTask, completeTask, selectedItem, selectedSubtasks, isChecked, advancePaid, dateofPaid, isAdvancePaid} = this.state;
 
         const now = new Date();
         console.log(now);
@@ -187,18 +187,28 @@ class TaskTable extends Component {
                                                 </>
                                                 :
                                                 <>
-                                                    <p>Advance Paid: <Switch checked={isChecked} onChange={this.handleToggle} /></p>
-                                                    {isChecked ? 
-                                                        <div>
-                                                            <input type='number' placeholder='Advance to be Paid' value={this.state.advancePaid} onChange={(e) => {
-                                                                this.setState({advancePaid : e.target.value});
-                                                            }}/>
-                                                            <input type='date' value={this.state.dateOfPaid} onChange={(e) => {
-                                                                this.setState({dateOfPaid: e.target.value});
-                                                            }} placeholder='Date'/>
-                                                            <button onClick={this.handleSubmit}>Submit</button>
-                                                        </div>
-                                                        : ''}
+                                                    {isAdvancePaid ? 
+                                                        <>
+                                                            <p>Advance paid: ✅</p>
+                                                            <p>Advance amount: {advancePaid}</p>
+                                                            <p>Advance paid date: {dateofPaid}</p>
+                                                        </>
+                                                        :
+                                                        <>
+                                                            <p>Advance Paid: <Switch checked={isChecked} onChange={this.handleToggle} /></p>
+                                                            {isChecked ? 
+                                                                <div>
+                                                                    <input type='number' placeholder='Advance to be Paid' value={this.state.advancePaid} onChange={(e) => {
+                                                                        this.setState({advancePaid : e.target.value});
+                                                                    }}/>
+                                                                    <input type='date' value={this.state.dateofPaid} onChange={(e) => {
+                                                                        this.setState({dateofPaid: e.target.value});
+                                                                    }} placeholder='Date'/>
+                                                                    <button onClick={this.handleSubmit}>Submit</button>
+                                                                </div>
+                                                                : ''}
+                                                        </>
+                                                    }
                                                 </> 
                                             }
                                         </> :
