@@ -94,13 +94,13 @@ public class DbController : ControllerBase
         }
 
         task.completed = true;
-        var workId = task.work_id.GetValueOrDefault();
+        var workId = task.work_id;
         var work = _context.Works.Find(workId);
         work.completed_subtasks += 1;
         _context.SaveChanges();
 
         // Check if all tasks for the same work_id are completed
-        var allTasksCompleted = _context.Tasks.Where(t => t.work_id == workId && !t.completed.HasValue || !t.completed.Value).Count() == 0;
+        var allTasksCompleted = _context.Tasks.Where(t => t.work_id == workId && t.completed!=true).Count() == 0;
 
         if (allTasksCompleted)
         {
@@ -108,8 +108,8 @@ public class DbController : ControllerBase
             if (work != null)
             {
                 work.work_status = 'C';
-                var worker = _context.Workers.Find(workId);
-                worker.current_works.Remove(workId);
+                var worker = _context.Workers.Find(work.worker);
+                worker.current_works.Remove((long)workId);
                 _context.SaveChanges();
             }
         }
@@ -143,8 +143,9 @@ public class DbController : ControllerBase
             {
                 return Ok(new { redirectTo = "AdminMain",where='A' });
             }
-
-            return Ok(new { redirectTo = "coordinator",where='C'});
+            if (existingLogin.designation=='C')
+                return Ok(new { redirectTo = "coordinator",where='C'});
+            return Ok(new { redirectTo = "worker" });
         }
         else
         {
