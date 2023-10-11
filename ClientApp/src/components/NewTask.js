@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import './NewTask.css';
 
 const NewTask = () => {
     const [workName, setWorkName] = useState("");
@@ -80,13 +81,13 @@ const NewTask = () => {
 
     return (
         <>
-            <div className="mt-4 form-main">
-                <div className="text-center">
-                    <h1>PUBLISH NEW TASK</h1>
+            <div className="form">
+                <div>
+                    <h1 className="heading">PUBLISH NEW TASK</h1>
                 </div>
                 <form>
                     <div className="form-group">
-                        <label>Work Name</label>
+                        <label>Work Name: </label>
                         <input
                             type="text"
                             className="form-control"
@@ -96,7 +97,7 @@ const NewTask = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Work Cost</label>
+                        <label>Work Cost: </label>
                         <input
                             type="number"
                             className="form-control"
@@ -106,7 +107,7 @@ const NewTask = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Start Date</label>
+                        <label>Start Date: </label>
                         <input
                             type="date"
                             value={startDate.toISOString().split('T')[0]}
@@ -115,7 +116,7 @@ const NewTask = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Due Date</label>
+                        <label>Due Date: </label>
                         <input
                             type="date"
                             value={dueDate.toISOString().split('T')[0]}
@@ -124,7 +125,7 @@ const NewTask = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Task Description</label>
+                        <label>Task Description: </label>
                         <input
                             type="text"
                             placeholder="Type task description"
@@ -133,7 +134,7 @@ const NewTask = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Agency</label>
+                        <label>Agency: </label>
                         <select
                             className="form-control"
                             value={worker}
@@ -146,7 +147,7 @@ const NewTask = () => {
                         </select>
                     </div>
                     <div className="form-group">
-                        <label>Coordinator</label>
+                        <label>Coordinator: </label>
                         <input
                             type="text"
                             placeholder="Who is supervising?"
@@ -154,13 +155,15 @@ const NewTask = () => {
                             className="form-control"
                         />
                     </div>
-                    <button type="button" className="btn btn-primary mr-2" onClick={handleShowModal}>
-                        Add Subtask
-                    </button>
-                    <br />
-                    <button type="button" className="btn btn-success" onClick={handleFormSubmit}>
-                        Add Task
-                    </button>
+                    <div className="task-button">
+                        <button type="button" className="btn btn-primary mr-2" onClick={handleShowModal}>
+                            Add Subtask
+                        </button>
+                        <br />
+                        <button type="button" className="btn btn-success" onClick={handleFormSubmit}>
+                            Add Task
+                        </button>
+                    </div>
                 </form>
             </div>
             <div>

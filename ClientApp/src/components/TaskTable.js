@@ -23,7 +23,7 @@ class TaskTable extends Component {
             isChecked: false,
             advancePaid: "",
             dateOfPaid: "",
-            
+            isAdvancePaid: false,
         };
     }
 
@@ -120,11 +120,13 @@ class TaskTable extends Component {
             date_advancePaid: this.state.dateOfPaid
         }
         console.log(advanceFromPopup);
+        this.setState({isAdvancePaid: true});
+        
     }
 
 
     render() {
-        const {activeTask, completeTask, selectedItem, selectedSubtasks, isChecked, advancePaid, dateOfPaid} = this.state;
+        const {activeTask, completeTask, selectedItem, selectedSubtasks, isChecked, advancePaid, dateOfPaid, isAdvancePaid} = this.state;
 
         const now = new Date();
         console.log(now);
@@ -186,18 +188,30 @@ class TaskTable extends Component {
                                                 </>
                                                 :
                                                 <>
-                                                    <p>Advance Paid: <Switch checked={isChecked} onChange={this.handleToggle} /></p>
-                                                    {isChecked ? 
-                                                        <div>
-                                                            <input type='number' placeholder='Advance to be Paid' value={this.state.advancePaid} onChange={(e) => {
-                                                                this.setState({advancePaid : e.target.value});
-                                                            }}/>
-                                                            <input type='date' value={this.state.dateOfPaid} onChange={(e) => {
-                                                                this.setState({dateOfPaid: e.target.value});
-                                                            }} placeholder='Date'/>
-                                                            <button onClick={this.handleSubmit}>Submit</button>
-                                                        </div>
-                                                        : ''}
+                                                    {isAdvancePaid ? 
+                                                        <>
+                                                            <p>Advance paid: ✅</p>
+                                                            <p>Advance amount: {advancePaid}</p>
+                                                            <p>Advance paid date: {dateOfPaid}</p>
+                                                        </>
+                                                        :
+                                                        <>
+                                                            <p>Advance Paid: <Switch checked={isChecked} onChange={this.handleToggle} /></p>
+                                                            {isChecked ? 
+                                                                <div>
+                                                                    <input type='number' placeholder='Advance to be Paid' value={this.state.advancePaid} onChange={(e) => {
+                                                                        this.setState({advancePaid : e.target.value});
+                                                                    }}/>
+                                                                    <input type='date' value={this.state.dateOfPaid} onChange={(e) => {
+                                                                        this.setState({dateOfPaid: e.target.value});
+                                                                    }} placeholder='Date'/>
+                                                                    <button onClick={this.handleSubmit}>Submit</button>
+                                                                </div>
+                                                            : ''}
+                                                        </>
+
+                                                    }
+                                                    
                                                 </> 
                                             }
                                         </> :
