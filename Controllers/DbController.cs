@@ -62,6 +62,14 @@ public class DbController : ControllerBase
         });
         return Ok(workers);
     }
+    
+    //TO GET PAYMENT DETAILS OF WORK ID
+    [HttpGet("getpayments")]
+    public IActionResult GetPayments(string workid)
+    {
+        var work_id = long.Parse(workid);
+        return Ok(_context.Payments.Where(x => x.work == work_id));
+    }
 
     //TO UPDATE ORDER OF SUBTASK
     [Route("updateorder")]

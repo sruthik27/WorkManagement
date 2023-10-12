@@ -23,6 +23,7 @@ class TaskTable extends Component {
             advancePaid: "",
             dateofPaid: new Date(),
             isAdvancePaid: false,
+            dueDateDiff: 0
         };
     }
 
@@ -49,6 +50,13 @@ class TaskTable extends Component {
         let tasks = await fetchedtasks.json();
         // Use the callback function of setState to ensure the state is updated
         this.setState({selectedItem: item, selectedSubtasks: tasks});
+        let currentDate = new Date();
+        let dueDate = new Date(item.due_date);
+        let diffInTime = dueDate.getTime() - currentDate.getTime();
+        let diffInDays = diffInTime / (1000 * 3600 * 24);
+        this.setState({dueDateDiff: diffInDays});
+
+
     }
 
     handleOnDragEnd = (result) => {
@@ -131,15 +139,27 @@ class TaskTable extends Component {
 
         fetch("https://localhost:7286/db/addpayment", requestOptions)
             .then(response => response.text())
-            .then(result => console.log(result))
+            .then(result => {
+                console.log(result);
+                let updatedItem = {...this.state.selectedItem};
+                updatedItem.advance_paid = true;
+                this.setState({selectedItem: updatedItem, isChecked: false});
+            })
             .catch(error => console.log('error', error));
-        this.setState({selectedItem.advance_paid: true});
     }
-        
 
 
     render() {
-        const {activeTask, completeTask, selectedItem, selectedSubtasks, isChecked, advancePaid, dateofPaid, isAdvancePaid} = this.state;
+        const {
+            activeTask,
+            completeTask,
+            selectedItem,
+            selectedSubtasks,
+            isChecked,
+            advancePaid,
+            dateofPaid,
+            isAdvancePaid, dueDateDiff
+        } = this.state;
 
         const now = new Date();
         console.log(now);
@@ -188,6 +208,10 @@ class TaskTable extends Component {
                                     <p>Work Name: {selectedItem.work_name}</p>
                                     <p>Time
                                         Period: {selectedItem.start_date.slice(0, 10)} to {selectedItem.due_date.slice(0, 10)}</p>
+                                    {dueDateDiff < 0 && (
+                                        <p style={{color: 'red'}}>Due
+                                            by {Math.abs(Math.round(dueDateDiff))} {Math.abs(Math.round(dueDateDiff)) === 1 ? 'day' : 'days'}</p>
+                                    )}
                                     <p>Coordinator: {selectedItem.coordinator}</p>
                                     <p>Worker: {selectedItem.worker}</p>
                                     <p>Total Expense: ₹{selectedItem.wage}</p>
@@ -195,13 +219,12 @@ class TaskTable extends Component {
                                         <>
                                             {selectedItem.advance_paid ?
                                                 <>
-                                                    <p>Advance paid: ✅</p>
                                                     <p>Advance amount:</p>
                                                     <p>Advance paid date:</p>
                                                 </>
                                                 :
                                                 <>
-                                                    {selectedItem.advance_paid ? 
+                                                    {selectedItem.advance_paid ?
                                                         <>
                                                             <p>Advance paid: ✅</p>
                                                             <p>Advance amount: {advancePaid}</p>
@@ -209,22 +232,27 @@ class TaskTable extends Component {
                                                         </>
                                                         :
                                                         <>
-                                                            <p>Advance Paid: <Switch checked={isChecked} onChange={this.handleToggle} /></p>
-                                                            {isChecked ? 
+                                                            <p>Advance Paid: <Switch checked={isChecked}
+                                                                                     onChange={this.handleToggle}/></p>
+                                                            {isChecked ?
                                                                 <div>
-                                                                    <input type='number' placeholder='Advance to be Paid' value={this.state.advancePaid} onChange={(e) => {
-                                                                        this.setState({advancePaid : e.target.value});
-                                                                    }}/>
-                                                                    <input type='date' value={this.state.dateofPaid} onChange={(e) => {
-                                                                        this.setState({dateofPaid: e.target.value});
-                                                                    }} placeholder='Date'/>
+                                                                    <input type='number'
+                                                                           placeholder='Advance to be Paid'
+                                                                           value={this.state.advancePaid}
+                                                                           onChange={(e) => {
+                                                                               this.setState({advancePaid: e.target.value});
+                                                                           }}/>
+                                                                    <input type='date' value={this.state.dateofPaid}
+                                                                           onChange={(e) => {
+                                                                               this.setState({dateofPaid: e.target.value});
+                                                                           }} placeholder='Date'/>
                                                                     <button onClick={this.handleSubmit}>Submit</button>
                                                                 </div>
                                                                 : ''
                                                             }
                                                         </>
                                                     }
-                                                </> 
+                                                </>
                                             }
                                         </> :
 
