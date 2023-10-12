@@ -17,6 +17,8 @@ class TaskTable extends Component {
             selectedItem: null,
             selectedSubtasks: [],
             selectedDate: new Date(),
+            selectedAdvance:0,
+            selectedAdvanceDate: "-",
             orderChanged: false,
             editable: this.props.editable,
             isChecked: false,
@@ -45,16 +47,27 @@ class TaskTable extends Component {
     }
 
     handleItemClick = async (item) => {
-        // Set the selected item when a p tag is clicked
+        // Set the selected item details when a p tag is clicked
         let fetchedtasks = await fetch(`/db/gettasks?n=${item.work_id}`);
         let tasks = await fetchedtasks.json();
-        // Use the callback function of setState to ensure the state is updated
-        this.setState({selectedItem: item, selectedSubtasks: tasks});
+
+        let fetchedpayments = await fetch(`/db/getpayments?workid=${item.work_id}`);
+        let payments = await fetchedpayments.json();
+        let adv = payments.find(x=>x.payment_type==='A');
+        let adv_amt = adv.paid_amount;
+        let adv_date = adv.paid_date;
+        console.log(adv_date);
+
         let currentDate = new Date();
         let dueDate = new Date(item.due_date);
         let diffInTime = dueDate.getTime() - currentDate.getTime();
         let diffInDays = diffInTime / (1000 * 3600 * 24);
-        this.setState({dueDateDiff: diffInDays});
+
+        // Use the callback function of setState to ensure the state is updated
+        this.setState({selectedItem: item, selectedSubtasks: tasks,dueDateDiff: diffInDays});
+        if (adv_amt!=null && adv_date!=null) {
+            this.setState({selectedAdvance:adv_amt,selectedAdvanceDate:adv_date});
+}
 
 
     }
@@ -158,11 +171,9 @@ class TaskTable extends Component {
             isChecked,
             advancePaid,
             dateofPaid,
-            isAdvancePaid, dueDateDiff
+            isAdvancePaid, dueDateDiff,selectedAdvance,selectedAdvanceDate
         } = this.state;
 
-        const now = new Date();
-        console.log(now);
         return (
             <>
                 <div className="datepickerwrapper">
@@ -219,18 +230,10 @@ class TaskTable extends Component {
                                         <>
                                             {selectedItem.advance_paid ?
                                                 <>
-                                                    <p>Advance amount:</p>
-                                                    <p>Advance paid date:</p>
+                                                    <p>Advance amount:₹{selectedAdvance}</p>
+                                                    <p>Advance paid date:{selectedAdvanceDate.slice(0, 10)}</p>
                                                 </>
                                                 :
-                                                <>
-                                                    {selectedItem.advance_paid ?
-                                                        <>
-                                                            <p>Advance paid: ✅</p>
-                                                            <p>Advance amount: {advancePaid}</p>
-                                                            <p>Advance paid date: {dateofPaid}</p>
-                                                        </>
-                                                        :
                                                         <>
                                                             <p>Advance Paid: <Switch checked={isChecked}
                                                                                      onChange={this.handleToggle}/></p>
@@ -251,15 +254,12 @@ class TaskTable extends Component {
                                                                 : ''
                                                             }
                                                         </>
-                                                    }
-                                                </>
                                             }
                                         </> :
 
                                         <>
                                             {selectedItem.advance_paid ?
                                                 <>
-                                                    <p>Advance paid: ✅</p>
                                                     <p>Advance amount:</p>
                                                     <p>Advance paid date:</p>
                                                 </>
