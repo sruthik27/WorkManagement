@@ -169,9 +169,7 @@ class TaskTable extends Component {
             selectedItem,
             selectedSubtasks,
             isChecked,
-            advancePaid,
-            dateofPaid,
-            isAdvancePaid, dueDateDiff,selectedAdvance,selectedAdvanceDate
+            dueDateDiff,selectedAdvance,selectedAdvanceDate
         } = this.state;
 
         return (
