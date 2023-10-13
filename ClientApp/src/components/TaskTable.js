@@ -17,15 +17,15 @@ class TaskTable extends Component {
             selectedItem: null,
             selectedSubtasks: [],
             selectedDate: new Date(),
-            selectedAdvance:0,
-            selectedAdvanceDate: "-",
             orderChanged: false,
             editable: this.props.editable,
-            isChecked: false,
-            advancePaid: "",
-            dateofPaid: new Date(),
-            isAdvancePaid: false,
-            dueDateDiff: 0
+            dueDateDiff: 0,
+            advancePaid: 0,
+            dateOfPaid: "-",
+            enteredAdvance:"",
+            enteredDate: new Date(),
+            isChecked: false
+
         };
     }
 
@@ -53,10 +53,14 @@ class TaskTable extends Component {
 
         let fetchedpayments = await fetch(`/db/getpayments?workid=${item.work_id}`);
         let payments = await fetchedpayments.json();
-        let adv = payments.find(x=>x.payment_type==='A');
-        let adv_amt = adv.paid_amount;
-        let adv_date = adv.paid_date;
-        console.log(adv_date);
+        let adv = payments.find(x => x.payment_type === 'A');
+        if (adv !== undefined) {
+            let adv_amt = adv.paid_amount;
+            let adv_date = adv.paid_date;
+            this.setState({advancePaid: adv_amt, dateOfPaid: adv_date})
+        } else {
+            this.setState({advancePaid: 0, dateOfPaid: '-'});
+        }
 
         let currentDate = new Date();
         let dueDate = new Date(item.due_date);
@@ -64,12 +68,7 @@ class TaskTable extends Component {
         let diffInDays = diffInTime / (1000 * 3600 * 24);
 
         // Use the callback function of setState to ensure the state is updated
-        this.setState({selectedItem: item, selectedSubtasks: tasks,dueDateDiff: diffInDays});
-        if (adv_amt!=null && adv_date!=null) {
-            this.setState({selectedAdvance:adv_amt,selectedAdvanceDate:adv_date});
-}
-
-
+        this.setState({selectedItem: item, selectedSubtasks: tasks, dueDateDiff: diffInDays});
     }
 
     handleOnDragEnd = (result) => {
@@ -143,8 +142,8 @@ class TaskTable extends Component {
             },
             body: JSON.stringify({
                 payment_type: 'A',
-                paid_amount: this.state.advancePaid,
-                paid_date: this.state.dateofPaid.toISOString,
+                paid_amount: this.state.enteredAdvance,
+                paid_date: this.state.enteredDate.toISOString(),
                 work: this.state.selectedItem.work_id,
             }),
             redirect: 'follow'
@@ -154,11 +153,10 @@ class TaskTable extends Component {
             .then(response => response.text())
             .then(result => {
                 console.log(result);
-                let updatedItem = {...this.state.selectedItem};
-                updatedItem.advance_paid = true;
-                this.setState({selectedItem: updatedItem, isChecked: false});
+                this.setState({isChecked: false});
             })
             .catch(error => console.log('error', error));
+        this.setState({advancePaid: this.state.enteredAdvance, dateOfPaid: this.state.enteredDate.toISOString()});
     }
 
 
@@ -168,8 +166,7 @@ class TaskTable extends Component {
             completeTask,
             selectedItem,
             selectedSubtasks,
-            isChecked,
-            dueDateDiff,selectedAdvance,selectedAdvanceDate
+            dueDateDiff, advancePaid, dateOfPaid, editable, isChecked
         } = this.state;
 
         return (
@@ -225,51 +222,40 @@ class TaskTable extends Component {
                                     <p>Coordinator: {selectedItem.coordinator}</p>
                                     <p>Worker: {selectedItem.worker}</p>
                                     <p>Total Expense: ₹{selectedItem.wage}</p>
-                                    {this.state.editable ?
+                                    {editable ?
+                                        <>{advancePaid === 0 ?
+                                            <>
+                                                <p>Advance paid?
+                                                    <Switch checked={isChecked} onChange={this.handleToggle}/></p>
+                                                {isChecked ?
+                                                    <div>
+                                                        <input type='number'
+                                                               placeholder='Advance to be Paid'
+                                                               value={this.state.enteredAdvance}
+                                                               onChange={(e) => {
+                                                                   this.setState({enteredAdvance: e.target.value});
+                                                               }}/>
+                                                        <input type='date' value={this.state.enteredDate.toISOString().split('T')[0]}
+                                                               onChange={(e) => {
+                                                                   this.setState({enteredDate:new Date(e.target.value)});
+                                                               }} placeholder='Date'/>
+                                                        <button onClick={this.handleSubmit}>Submit</button>
+                                                    </div>
+                                                    : ''
+                                                }
+                                            </>
+                                            :
+                                            <div>
+                                                <p>Advance paid: ₹{advancePaid}</p>
+                                                <p>Advance paid date: {dateOfPaid.slice(0, 10)}</p>
+                                            </div>}</>
+                                        :
                                         <>
-                                            {selectedItem.advance_paid ?
-                                                <>
-                                                    <p>Advance amount:₹{selectedAdvance}</p>
-                                                    <p>Advance paid date:{selectedAdvanceDate.slice(0, 10)}</p>
-                                                </>
-                                                :
-                                                <>
-                                                    <p>Advance Paid: <Switch checked={isChecked}
-                                                                                onChange={this.handleToggle}/></p>
-                                                    {isChecked ?
-                                                        <div>
-                                                            <input type='number'
-                                                                    placeholder='Advance to be Paid'
-                                                                    value={this.state.advancePaid}
-                                                                    onChange={(e) => {
-                                                                        this.setState({advancePaid: e.target.value});
-                                                                    }}/>
-                                                            <input type='date' value={this.state.dateofPaid}
-                                                                    onChange={(e) => {
-                                                                        this.setState({dateofPaid: e.target.value});
-                                                                    }} placeholder='Date'/>
-                                                            <button onClick={this.handleSubmit}>Submit</button>
-                                                        </div>
-                                                        : ''
-                                                    }
-                                                </>
-                                            }
-                                        </> :
-
-                                        <>
-                                            {selectedItem.advance_paid ?
-                                                <>
-                                                    <p>Advance amount:</p>
-                                                    <p>Advance paid date:</p>
-                                                </>
-                                                :
-                                                <>
-                                                    <p>Advance Paid: ❌</p>
-                                                </>
-                                            }
+                                            <p>Advance paid: ₹{advancePaid}</p>
+                                            <p>Advance paid date: {dateOfPaid.slice(0, 10)}</p>
                                         </>
-
                                     }
+
                                     <p>Sub Tasks: </p>
                                 </div>
                                 <div className='popup-piechart'>
@@ -289,11 +275,12 @@ class TaskTable extends Component {
                                                     <ol {...provided.droppableProps} ref={provided.innerRef}>
                                                         {selectedSubtasks.map((subtask, index) => (
                                                             <Draggable key={subtask.task_id}
-                                                                    draggableId={String(subtask.task_id)} index={index}>
+                                                                       draggableId={String(subtask.task_id)}
+                                                                       index={index}>
                                                                 {(provided) => (
                                                                     <div>
                                                                         <li {...provided.draggableProps} {...provided.dragHandleProps}
-                                                                        ref={provided.innerRef}>
+                                                                            ref={provided.innerRef}>
                                                                             {subtask.task_name}
                                                                         </li>
                                                                         <hr/>
@@ -308,7 +295,7 @@ class TaskTable extends Component {
                                         </DragDropContext>
                                     </div>
                                 </div>
-                                 :
+                                :
                                 <ol>
                                     {selectedSubtasks.map((subtask, index) => <li key={index}>{subtask.task_name}</li>)}
                                 </ol>
