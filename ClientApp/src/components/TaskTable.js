@@ -24,7 +24,8 @@ class TaskTable extends Component {
             dateOfPaid: "-",
             enteredAdvance:"",
             enteredDate: new Date(),
-            isChecked: false
+            isChecked: false,
+            nowPaid:false
 
         };
     }
@@ -159,6 +160,10 @@ class TaskTable extends Component {
         this.setState({advancePaid: this.state.enteredAdvance, dateOfPaid: this.state.enteredDate.toISOString()});
     }
 
+    handleBill = ()=>{
+        this.setState({nowPaid:true});
+    }
+
 
     render() {
         const {
@@ -166,7 +171,7 @@ class TaskTable extends Component {
             completeTask,
             selectedItem,
             selectedSubtasks,
-            dueDateDiff, advancePaid, dateOfPaid, editable, isChecked
+            dueDateDiff, advancePaid, dateOfPaid, editable, isChecked,nowPaid
         } = this.state;
 
         return (
@@ -248,11 +253,14 @@ class TaskTable extends Component {
                                             <div>
                                                 <p>Advance paid: ₹{advancePaid}</p>
                                                 <p>Advance paid date: {dateOfPaid.slice(0, 10)}</p>
-                                            </div>}</>
+                                            </div>}
+                                        {selectedItem.bill_paid||nowPaid ?<p>Bill paid ✅</p>:<p>Bill paid? <Switch onChange={this.handleBill}></Switch></p>}</>
+
                                         :
                                         <>
                                             <p>Advance paid: ₹{advancePaid}</p>
                                             <p>Advance paid date: {dateOfPaid.slice(0, 10)}</p>
+                                            {selectedItem.bill_paid?<p>Bill paid ✅</p>:<p>Bill paid ❌</p>}
                                         </>
                                     }
 
