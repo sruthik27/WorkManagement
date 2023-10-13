@@ -186,7 +186,7 @@ class TaskTable extends Component {
                     </p>
                 </div>
                 <div className="task-table">
-                    <div>
+                    <div className='scroll'>
                         <p className='table-head'>Active Task</p>
                         <ul>
                             {activeTask.map((x, i) => (
@@ -196,7 +196,8 @@ class TaskTable extends Component {
                             ))}
                         </ul>
                     </div>
-                    <div>
+                    <div className='v1'></div>
+                    <div className='scroll'>
                         <p className='table-head'>Completed Task</p>
                         <ul>
                             {completeTask.map((x, i) => (
@@ -234,26 +235,26 @@ class TaskTable extends Component {
                                                     <p>Advance paid date:{selectedAdvanceDate.slice(0, 10)}</p>
                                                 </>
                                                 :
-                                                        <>
-                                                            <p>Advance Paid: <Switch checked={isChecked}
-                                                                                     onChange={this.handleToggle}/></p>
-                                                            {isChecked ?
-                                                                <div>
-                                                                    <input type='number'
-                                                                           placeholder='Advance to be Paid'
-                                                                           value={this.state.advancePaid}
-                                                                           onChange={(e) => {
-                                                                               this.setState({advancePaid: e.target.value});
-                                                                           }}/>
-                                                                    <input type='date' value={this.state.dateofPaid}
-                                                                           onChange={(e) => {
-                                                                               this.setState({dateofPaid: e.target.value});
-                                                                           }} placeholder='Date'/>
-                                                                    <button onClick={this.handleSubmit}>Submit</button>
-                                                                </div>
-                                                                : ''
-                                                            }
-                                                        </>
+                                                <>
+                                                    <p>Advance Paid: <Switch checked={isChecked}
+                                                                                onChange={this.handleToggle}/></p>
+                                                    {isChecked ?
+                                                        <div>
+                                                            <input type='number'
+                                                                    placeholder='Advance to be Paid'
+                                                                    value={this.state.advancePaid}
+                                                                    onChange={(e) => {
+                                                                        this.setState({advancePaid: e.target.value});
+                                                                    }}/>
+                                                            <input type='date' value={this.state.dateofPaid}
+                                                                    onChange={(e) => {
+                                                                        this.setState({dateofPaid: e.target.value});
+                                                                    }} placeholder='Date'/>
+                                                            <button onClick={this.handleSubmit}>Submit</button>
+                                                        </div>
+                                                        : ''
+                                                    }
+                                                </>
                                             }
                                         </> :
 
@@ -282,28 +283,34 @@ class TaskTable extends Component {
                                 </div>
                             </div>
                             {this.state.editable ?
-                                <div className='subtask-table'>
-                                    <DragDropContext onDragEnd={this.handleOnDragEnd}>
-                                        <Droppable droppableId="subtasks">
-                                            {(provided) => (
-                                                <ol {...provided.droppableProps} ref={provided.innerRef}>
-                                                    {selectedSubtasks.map((subtask, index) => (
-                                                        <Draggable key={subtask.task_id}
-                                                                   draggableId={String(subtask.task_id)} index={index}>
-                                                            {(provided) => (
-                                                                <li {...provided.draggableProps} {...provided.dragHandleProps}
-                                                                    ref={provided.innerRef}>
-                                                                    {subtask.task_name}
-                                                                </li>
-                                                            )}
-                                                        </Draggable>
-                                                    ))}
-                                                    {provided.placeholder}
-                                                </ol>
-                                            )}
-                                        </Droppable>
-                                    </DragDropContext>
-                                </div> :
+                                <div className='subtask-div'>
+                                    <div className='subtask-table'>
+                                        <DragDropContext onDragEnd={this.handleOnDragEnd}>
+                                            <Droppable droppableId="subtasks">
+                                                {(provided) => (
+                                                    <ol {...provided.droppableProps} ref={provided.innerRef}>
+                                                        {selectedSubtasks.map((subtask, index) => (
+                                                            <Draggable key={subtask.task_id}
+                                                                    draggableId={String(subtask.task_id)} index={index}>
+                                                                {(provided) => (
+                                                                    <div>
+                                                                        <li {...provided.draggableProps} {...provided.dragHandleProps}
+                                                                        ref={provided.innerRef}>
+                                                                            {subtask.task_name}
+                                                                        </li>
+                                                                        <hr/>
+                                                                    </div>
+                                                                )}
+                                                            </Draggable>
+                                                        ))}
+                                                        {provided.placeholder}
+                                                    </ol>
+                                                )}
+                                            </Droppable>
+                                        </DragDropContext>
+                                    </div>
+                                </div>
+                                 :
                                 <ol>
                                     {selectedSubtasks.map((subtask, index) => <li key={index}>{subtask.task_name}</li>)}
                                 </ol>

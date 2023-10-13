@@ -28,6 +28,13 @@
     line-height: normal;
 }
 
+.subtask-div {
+    padding-left: 3.1vw;
+}
+
 .subtask-table {
     background-color: white;
+    padding: 1px;
+    max-height: 20vh;
+    overflow: auto;
 }
