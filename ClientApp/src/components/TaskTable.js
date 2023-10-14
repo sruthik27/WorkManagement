@@ -22,11 +22,11 @@ class TaskTable extends Component {
             dueDateDiff: 0,
             advancePaid: 0,
             dateOfPaid: "-",
-            enteredAdvance:"",
+            enteredAdvance: "",
             enteredDate: new Date(),
             isChecked: false,
-            nowPaid:false
-
+            nowPaid: false,
+            paidbills: new Map()
         };
     }
 
@@ -108,6 +108,17 @@ class TaskTable extends Component {
             });
             this.setState({orderChanged: false});
         }
+        if (this.state.paidbills.has(this.state.selectedItem.work_id)) {
+            var requestOptions = {
+                method: 'PUT',
+                redirect: 'follow'
+            };
+
+            fetch(`/db/updatebill?workid=${this.state.selectedItem.work_id}`, requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+        }
     }
 
     processData(data) {
@@ -160,8 +171,12 @@ class TaskTable extends Component {
         this.setState({advancePaid: this.state.enteredAdvance, dateOfPaid: this.state.enteredDate.toISOString()});
     }
 
-    handleBill = ()=>{
-        this.setState({nowPaid:true});
+    handleBill = () => {
+        if (this.state.paidbills.has(this.state.selectedItem.work_id)) {
+            this.state.paidbills.delete(this.state.selectedItem.work_id);
+        } else {
+            this.state.paidbills.set(this.state.selectedItem.work_id, true);
+        }
     }
 
 
@@ -171,7 +186,7 @@ class TaskTable extends Component {
             completeTask,
             selectedItem,
             selectedSubtasks,
-            dueDateDiff, advancePaid, dateOfPaid, editable, isChecked,nowPaid
+            dueDateDiff, advancePaid, dateOfPaid, editable, isChecked, paidbills
         } = this.state;
 
         return (
@@ -240,9 +255,10 @@ class TaskTable extends Component {
                                                                onChange={(e) => {
                                                                    this.setState({enteredAdvance: e.target.value});
                                                                }}/>
-                                                        <input type='date' value={this.state.enteredDate.toISOString().split('T')[0]}
+                                                        <input type='date'
+                                                               value={this.state.enteredDate.toISOString().split('T')[0]}
                                                                onChange={(e) => {
-                                                                   this.setState({enteredDate:new Date(e.target.value)});
+                                                                   this.setState({enteredDate: new Date(e.target.value)});
                                                                }} placeholder='Date'/>
                                                         <button onClick={this.handleSubmit}>Submit</button>
                                                     </div>
@@ -254,13 +270,15 @@ class TaskTable extends Component {
                                                 <p>Advance paid: ₹{advancePaid}</p>
                                                 <p>Advance paid date: {dateOfPaid.slice(0, 10)}</p>
                                             </div>}
-                                        {selectedItem.bill_paid||nowPaid ?<p>Bill paid ✅</p>:<p>Bill paid? <Switch onChange={this.handleBill}></Switch></p>}</>
+                                            {selectedItem.bill_paid || paidbills.get(selectedItem.work_id) ?
+                                                <p>Bill paid ✅</p> :
+                                                <p>Bill paid? <Switch onChange={this.handleBill}></Switch></p>}</>
 
                                         :
                                         <>
                                             <p>Advance paid: ₹{advancePaid}</p>
                                             <p>Advance paid date: {dateOfPaid.slice(0, 10)}</p>
-                                            {selectedItem.bill_paid?<p>Bill paid ✅</p>:<p>Bill paid ❌</p>}
+                                            {selectedItem.bill_paid ? <p>Bill paid ✅</p> : <p>Bill paid ❌</p>}
                                         </>
                                     }
 
