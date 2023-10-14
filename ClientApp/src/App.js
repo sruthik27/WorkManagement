@@ -5,6 +5,7 @@ import AdminHome from './components/AdminHome';
 import AdminMain from './components/AdminMain';
 import Coordinator from './components/Coordinator';
 import NewTask from './components/NewTask';
+import WorkReport from './components/WorkReport';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route path='/AdminMain' element={ <AdminMain/> }/>
       <Route path='/coordinator' element={<Coordinator/>}/>
       <Route path='/NewTask' element={<NewTask/>}/>
+      <Route path='/WorkReport' element={<WorkReport/>}/>
     </Routes>
   );
 }

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import TaskTable from './TaskTable';
 import "./AdminMain.css";
-import NewTask from './NewTask';
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Coordinator = () => {
@@ -33,7 +32,7 @@ const Coordinator = () => {
         <TaskTable data={itemData} editable={true}/>
       </div>
       <div className='coordinator-buttons'>
-        <button className='coo-button' >WORK REPORTS</button>
+        <a href={'/WorkReport'}><button className='coo-button' >WORK REPORTS</button></a>
         <a href={'/NewTask'}><button className='coo-button'>CREATE NEW WORK</button></a>
       </div>
     </>
