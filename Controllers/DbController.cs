@@ -90,7 +90,7 @@ public class DbController : ControllerBase
     }
     
     //UPDATE COMPLETION OF TASKS (WORK)
-    [Route(("updatetaskcompletion"))]
+    [Route("updatetaskcompletion")]
     [HttpPut]
     public IActionResult UpdateCompletion(string task_id)
     {
@@ -123,6 +123,18 @@ public class DbController : ControllerBase
         }
 
         return Ok(new { message = "Completion updated successfully" });
+    }
+    
+    //UPDATE BILL PAID
+    [Route("updatebill")]
+    [HttpPut]
+    public IActionResult UpdateBill(string workid)
+    {
+        var work_id = long.Parse(workid);
+        var work = _context.Works.Find(work_id);
+        work.bill_paid = true;
+        _context.SaveChanges();
+        return Ok(new { message = "bill updated successfully" });
     }
 
 
