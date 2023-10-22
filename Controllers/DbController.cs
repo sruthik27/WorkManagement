@@ -93,6 +93,25 @@ public class DbController : ControllerBase
         return Ok(_context.Payments.Where(x => x.work == work_id));
     }
 
+    //TO GET REVIEWS/QUERIES ON A WORK ID
+    [HttpGet("getreviews")]
+    public IActionResult GetReviews(long workid)
+    {
+        return Ok(_context.Queries.Where(x=>x.work==workid));
+    }
+    
+    //TO GET IMAGES OF A GIVEN WORK
+    [HttpGet("getimageurls")]
+    public IActionResult GetImageUrls(string work_id)
+    {
+        var workid = long.Parse(work_id);
+        var image = _context.Images.FirstOrDefault(i => i.work == workid);
+        return Ok(image.links);
+    }
+    
+    
+    //--------------------------------------------------------
+        
     //TO UPDATE ORDER OF SUBTASK
     [Route("updateorder")]
     [HttpPut]
@@ -147,6 +166,26 @@ public class DbController : ControllerBase
         return Ok(new { message = "Completion updated successfully" });
     }
     
+    //ADD NEW IMAGE URL 
+
+    public class ImageItems
+    {
+        public long id { get; set; }
+        public string url { get; set; }
+    }
+    
+    [Route("appendimage")]
+    [HttpPut]
+    public IActionResult AppendImage([FromBody] ImageItems imageitem)
+    {
+        var workid = imageitem.id;
+        var url = imageitem.url;
+        var imagebox = _context.Images.FirstOrDefault(i=>i.work==workid);
+        imagebox.links.Add(url);
+        _context.SaveChanges();
+        return Ok(new { message = "image appened sucessfully" });
+    }
+    
     //UPDATE BILL PAID
     [Route("updatebill")]
     [HttpPut]
@@ -159,6 +198,8 @@ public class DbController : ControllerBase
         return Ok(new { message = "bill updated successfully" });
     }
 
+    
+    //-------------------------------------------------------------------
 
     //ADMIN - COORDINATOR LOGIN VERIFICATION
     [Route("verify")]
@@ -248,7 +289,7 @@ public class DbController : ControllerBase
         return Ok(new { message = "Query added successfully." });
     }
     
-    //ADD NEW WORK ALONG WITH SUBTASKS
+    //ADD NEW WORK ALONG WITH SUBTASKS AND IMAGES ENTRY
     public class WorkWithSubtasks
     {
         public Work Work { get; set; }
@@ -271,6 +312,10 @@ public class DbController : ControllerBase
         var worker = _context.Workers.Find(workpart.worker);
         worker.works_done += 1;
         worker.current_works.Add(workpart.work_id);
+        var new_image_entry = new Image();
+        new_image_entry.links = new List<string>();
+        new_image_entry.work = workpart.work_id;
+        _context.Images.Add(new_image_entry);
         _context.SaveChanges();
         
         List<SubTask> taskspart = newWork.Subtasks;
@@ -368,7 +413,7 @@ public class DbController : ControllerBase
         
         return Ok(new {message = "registration succesffull"});
     }
-
+    
         
 
 }

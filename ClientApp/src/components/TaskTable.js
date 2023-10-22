@@ -5,6 +5,7 @@ import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 import './TaskTable.css';
 import './AdminHome.css';
 import CommentBox from './CommentBox';
+import CommentCard from './CommentCard';
 import Switch from '@mui/material/Switch';
 
 class TaskTable extends Component {
@@ -16,6 +17,7 @@ class TaskTable extends Component {
             completeTask: [],
             selectedItem: null,
             selectedSubtasks: [],
+            selectedComments: [],
             selectedDate: new Date(),
             orderChanged: false,
             editable: this.props.editable,
@@ -63,6 +65,12 @@ class TaskTable extends Component {
             this.setState({advancePaid: 0, dateOfPaid: '-'});
         }
 
+        let fetchedcomments = await fetch(`/db/getreviews?workid=${item.work_id}`);
+        let comments = await fetchedcomments.json();
+        if (comments.length > 0) {
+            this.setState({selectedComments: comments});
+        }
+
         let currentDate = new Date();
         let dueDate = new Date(item.due_date);
         let diffInTime = dueDate.getTime() - currentDate.getTime();
@@ -83,6 +91,7 @@ class TaskTable extends Component {
 
     handleClose = () => {
         this.setState({selectedItem: null});
+        this.setState({selectedComments: []});
         if (this.state.orderChanged) {
             this.state.selectedSubtasks.map((v, i) => {
                 const url = `/db/updateorder?task_id=${v.task_id}&new_order=${i + 1}`;
@@ -320,6 +329,11 @@ class TaskTable extends Component {
                                             </Droppable>
                                         </DragDropContext>
                                     </div>
+                                    <p>Comments/Queries</p>
+                                    {this.state.selectedComments.map((comment, index) =>
+          <CommentCard key={index} comment={comment} />
+        )}
+
                                 </div>
                                 :
                                 <ol>
