@@ -101,12 +101,15 @@ public class DbController : ControllerBase
     }
     
     //TO GET IMAGES OF A GIVEN WORK
-    [HttpGet("getimageurls")]
-    public IActionResult GetImageUrls(string work_id)
+    [HttpGet("getimages")]
+    public IActionResult GetImageUrls()
     {
-        var workid = long.Parse(work_id);
-        var image = _context.Images.FirstOrDefault(i => i.work == workid);
-        return Ok(image.links);
+        var images = _context.Images.Select(x => new
+        {
+            workname=x.WorkReference.work_name,
+            x.links
+        });
+        return Ok(images);
     }
     
     

@@ -170,7 +170,7 @@ class TaskTable extends Component {
             redirect: 'follow'
         };
 
-        fetch("https://localhost:7286/db/addpayment", requestOptions)
+        fetch("/db/addpayment", requestOptions)
             .then(response => response.text())
             .then(result => {
                 console.log(result);
