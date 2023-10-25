@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './AdminHome.css';
 import Footer from "./Vector.png";
-import Ellipse from "./Ellipse 1.svg";
 import routeMappings from "../routeMappings";
 
 const AdminHome = () => {
@@ -110,7 +109,7 @@ const AdminHome = () => {
                             <input className="checkbox" type="checkbox" value={inputCheckbox} onClick={HandleCheckbox}/>
                             <label className = "flabel">Remember me</label>
                         </div>
-                        <div className="Login" ><img className="Login-img" src={Ellipse} alt="Login-Button" onClick={HandleSubmit}/></div>
+                        <div className="Login" ><button className="Login-img" onClick={HandleSubmit}><p className = "login-para">Login</p>< / button ></div>
                         <a className="forgot" href="/ForgotPassword">Forgot password?</a>
                     </div>
                     <p>{inputLoginFail}</p>

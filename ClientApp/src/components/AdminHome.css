@@ -7,7 +7,7 @@ body {
 }
 .Home {
     text-align: center;
-    background: #DFC4FF;
+    background: #FCF0C8;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -16,7 +16,7 @@ body {
 
 .Admin-head {
     margin: 0;
-    color: #259F46;
+    color: #630A10;
     text-shadow: 15px 15px 10px rgba(0, 0, 0, 0.25);
     font-family: Rammetto One;
     font-size: 5vw;
@@ -26,7 +26,7 @@ body {
 }
 
 .Admin-info {
-    color: #45176D;
+    color: #224957;
     text-align: center;
     font-family: Alatsi;
     font-size: 25px;
@@ -70,7 +70,7 @@ body {
 }
 
 .flabel{
-    color: #389600;
+    color: #224957;
     text-align: center;
     font-family: Montserrat;
     font-size: 20px;
@@ -95,9 +95,15 @@ body {
 }
 
 .Login-img {
-    width: 10vw;
+    padding: 35px;
+    border-radius: 50%;
+    background: #630A10;
 }
 
+.login-para {
+    color: whitesmoke;
+    font-size: 20px;
+}
 .Footer-img {
     width: 100%;
     margin-top: 20px;

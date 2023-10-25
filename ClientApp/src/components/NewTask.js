@@ -175,7 +175,7 @@ const NewTask = () => {
                 ))}
             </div>
             {showModal && (
-                <div className="modal" tabIndex="-1" role="dialog" style={{ display: "block" }}>
+                <div className="modal" tabIndex="-1" role="dialog" style={{display: showModal ? "block" : "none"  }}>
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">

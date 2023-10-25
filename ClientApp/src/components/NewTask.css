@@ -1,24 +1,80 @@
 .form {
-    background: #EFCDFF;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin: 0 auto;
+    max-width: 500px;
+    padding: 30px;
+    background-color: #f3f3f3;
+    border-radius: 10px;
 }
 
 .heading {
-    color: #259F46;
     text-align: center;
-    font-family: Rammetto One;
-    font-size: 56px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 47.5px;
+    color: #333;
 }
 
 .form-group {
-    color: blue;
+    margin-bottom: 20px;
+}
+
+.form-control {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
 }
 
 .task-button {
+    text-align: center;
+    padding-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
     display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-dialog {
+    width: 500px;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: auto;
+}
+
+.modal-header,
+.modal-footer {
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.close {
+    cursor: pointer;
+    float: right;
+    font-size: 1.2em;
 }
