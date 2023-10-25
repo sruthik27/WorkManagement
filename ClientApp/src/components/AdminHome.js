@@ -109,7 +109,7 @@ const AdminHome = () => {
                             <input className="checkbox" type="checkbox" value={inputCheckbox} onClick={HandleCheckbox}/>
                             <label className = "flabel">Remember me</label>
                         </div>
-                        <div className="Login" ><button className="Login-img" onClick={HandleSubmit}><p className = "login-para">Login</p>< / button ></div>
+                        <div className="Login" ><button className="Login-img" onClick={HandleSubmit}><p className = "login-para">Login</p></button></div>
                         <a className="forgot" href="/ForgotPassword">Forgot password?</a>
                     </div>
                     <p>{inputLoginFail}</p>

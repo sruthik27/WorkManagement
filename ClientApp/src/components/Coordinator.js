@@ -29,6 +29,7 @@ const Coordinator = () => {
   return (
     <>
       <div className='ahome'>
+        <p className="para">WELCOME BACK</p>
         <TaskTable data={itemData} editable={true}/>
       </div>
       <div className='coordinator-buttons'>

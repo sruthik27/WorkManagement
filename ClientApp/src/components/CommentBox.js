@@ -26,7 +26,7 @@ fetch("/db/addquery", requestOptions)
     }
     return(
         <div className='feedback'>
-            <h2 className='table-head'>Comment: </h2>
+            <h2 className='popup-details1'>Comment: </h2>
             <input className='feedback-input' placeholder='Type Comment here...' value={comment} onChange={(e) => {
                 setComment(e.target.value);
             }}/>

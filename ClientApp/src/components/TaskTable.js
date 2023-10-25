@@ -229,6 +229,7 @@ class TaskTable extends Component {
                                     {x.work_name}
                                 </p>
                             ))}
+                            
                         </ul>
                     </div>
                 </div>
@@ -239,6 +240,7 @@ class TaskTable extends Component {
                             <h1 className="close-btn" onClick={this.handleClose}>x</h1>
                             {/* Display information related to the selectedItem here */}
                             <h2 className='popup-head'>Work Details:</h2>
+                            <hr className='line'/>
                             <div className='popup-info'>
                                 <div className='popup-details1'>
                                     <p>Work Name: {selectedItem.work_name}</p>
@@ -260,16 +262,18 @@ class TaskTable extends Component {
                                                     <div>
                                                         <input type='number'
                                                                placeholder='Advance to be Paid'
+                                                               className='advance-input'
                                                                value={this.state.enteredAdvance}
                                                                onChange={(e) => {
                                                                    this.setState({enteredAdvance: e.target.value});
                                                                }}/>
                                                         <input type='date'
                                                                value={this.state.enteredDate.toISOString().split('T')[0]}
+                                                               className='advance-date-input'
                                                                onChange={(e) => {
                                                                    this.setState({enteredDate: new Date(e.target.value)});
                                                                }} placeholder='Date'/>
-                                                        <button onClick={this.handleSubmit}>Submit</button>
+                                                        <button onClick={this.handleSubmit} className='advance-submit-bitton'>Submit</button>
                                                     </div>
                                                     : ''
                                                 }
@@ -331,8 +335,8 @@ class TaskTable extends Component {
                                     </div>
                                     <p>Comments/Queries</p>
                                     {this.state.selectedComments.map((comment, index) =>
-          <CommentCard key={index} comment={comment} />
-        )}
+                                        <CommentCard key={index} comment={comment} />
+                                    )}
 
                                 </div>
                                 :

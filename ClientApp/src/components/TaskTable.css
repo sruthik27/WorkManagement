@@ -5,22 +5,23 @@
 }
 
 .custom-datepicker {
-    color: #9E00EB;
+    color: black;
     font-family: Alatsi;
     font-size: 20px;
     font-style: normal;
     padding: 5px;
+    border: none;
 }
 
 .datepickerhead {
-    color: #259F46;
+    color: #640000;
     font-family: Alatsi;
     font-size: 25px;
     font-style: normal;
 }
 
 .table-head {
-    color: #259F46;
+    color: #640000;
     font-family: Alatsi;
     font-size: 25px;
     font-style: normal;
@@ -34,7 +35,39 @@
 
 .subtask-table {
     background-color: white;
+    border-radius: 20px;
     padding: 1px;
     max-height: 20vh;
     overflow: auto;
+}
+
+.advance-input {
+    padding: 10px;
+    margin-right: 20px;
+    border: none;
+    border-radius: 6px;
+}
+
+.advance-date-input {
+    padding: 10px;
+    border: none;
+    background: #f4d6a6;
+    margin-right: 20px;
+}
+
+.advance-submit-bitton {
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    background-color: #640000;
+    color: #fff;
+    cursor: pointer;
+}
+
+.advance-date-input:hover {
+    background-color: #5a2d2d;
+}
+
+.advance-date-input:active {
+    background-color: #640000d3;
 }
