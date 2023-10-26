@@ -10,7 +10,10 @@
     font-size: 20px;
     font-style: normal;
     padding: 5px;
-    border: none;
+    border: 1px solid #640000;
+    border-radius: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .datepickerhead {
@@ -50,9 +53,10 @@
 
 .advance-date-input {
     padding: 10px;
-    border: none;
+    border: 1px solid #640000;
     background: #f4d6a6;
     margin-right: 20px;
+    border-radius: 20px;
 }
 
 .advance-submit-bitton {
@@ -64,10 +68,11 @@
     cursor: pointer;
 }
 
-.advance-date-input:hover {
+.advance-submit-bitton:hover {
     background-color: #5a2d2d;
+    transition: 0.7s;
 }
 
-.advance-date-input:active {
+.advance-submit-bitton:active {
     background-color: #640000d3;
 }
