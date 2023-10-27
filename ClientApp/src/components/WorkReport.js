@@ -44,27 +44,31 @@ const WorkReport = () => {
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
-      nextArrow: <SampleNextArrow />,
-  prevArrow: <SamplePrevArrow />
-    };
+        nextArrow: <SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />
+      };
 
     return (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(200px, 1fr))', gap: '130px' }}>
-  {data.map((item, index) => (
-    <div key={index}>
-      <h2>{item.workname}</h2>
-      <Slider {...settings}>
-        {item.links.map((link, i) => (
-          <div key={i}>
-            <a href={link} target="_blank" rel="noopener noreferrer">
-            <img src={link} alt="" style={{height: '250px', objectFit: 'cover' }} />
-            </a>
-            </div>
-        ))}
-      </Slider>
-    </div>
-  ))}
-</div>
+      <>
+        <div className='report-grid'>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(200px, 1fr))', gap: '130px' }}>
+            {data.map((item, index) => (
+              <div key={index}>
+                <h2>{item.workname}</h2>
+                <Slider {...settings}>
+                  {item.links.map((link, i) => (
+                    <div key={i}>
+                      <a href={link} target="_blank" rel="noopener noreferrer">
+                      <img src={link} alt="" style={{height: '250px', objectFit: 'cover' }} />
+                      </a>
+                    </div>
+                  ))}
+                </Slider>
+              </div>
+            ))}
+          </div>
+        </div>
+      </>
     );
 }
 
