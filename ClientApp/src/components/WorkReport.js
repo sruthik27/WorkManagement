@@ -11,7 +11,7 @@ function SampleNextArrow(props) {
   return (
     <div
       className={className}
-      style={{ ...style, display: "block", background: "red" }}
+      style={{ ...style, display: "block", background: "#640000", border: "solid #640000 4px", borderRadius: '5px' }}
       onClick={onClick}
     />
   );
@@ -22,7 +22,7 @@ function SamplePrevArrow(props) {
   return (
     <div
       className={className}
-      style={{ ...style, display: "block", background: "red" }}
+      style={{ ...style, display: "block", background: "#640000", border: "solid #640000 4px", borderRadius: '5px' }}
       onClick={onClick}
     />
   );
@@ -51,16 +51,20 @@ const WorkReport = () => {
     return (
       <>
         <div className='report-grid'>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(200px, 1fr))', gap: '130px' }}>
+          <h1 className='report-title'>Work Reports</h1>
+          <hr className="heading-line"/>
+          <div className='grid-con'>
             {data.map((item, index) => (
               <div key={index}>
-                <h2>{item.workname}</h2>
+                <h2 className='work-name'>Work-Name: {item.workname}</h2>
                 <Slider {...settings}>
                   {item.links.map((link, i) => (
                     <div key={i}>
-                      <a href={link} target="_blank" rel="noopener noreferrer">
-                      <img src={link} alt="" style={{height: '250px', objectFit: 'cover' }} />
-                      </a>
+                      <div className='img-grid'>
+                        <a href={link} target="_blank" rel="noopener noreferrer">
+                        <img className='image-preview' src={link} alt="" />
+                        </a>
+                      </div>
                     </div>
                   ))}
                 </Slider>
