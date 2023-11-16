@@ -26,14 +26,14 @@ const VerificationCodeDisplay = () => {
 
   return (
     <div>
-      <h3>Verification code</h3>
       <div className="verification-code-container">
-        {verificationCode.map((digit, index) => (
- <div key={index} className="digit-box">
-   {digit}
- </div>
-))}
-
+        <div className='verification-div'>
+          {verificationCode.map((digit, index) => (
+            <div key={index} className="digit-box">
+              {digit}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

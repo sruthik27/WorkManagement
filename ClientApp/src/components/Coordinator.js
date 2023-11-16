@@ -27,33 +27,39 @@ const Coordinator = () => {
     }
   };
   const updateVerificationCode = async () => {
- const endpoint = '/db/updatevcode';
+    window.location.reload();
+    const endpoint = '/db/updatevcode';
 
- try {
- const requestBody = {
-  method: 'PUT',
-  headers: {
-   'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({}),
- };
- const response = await fetch(endpoint, requestBody);
- if (response.ok) {
-  console.log('Update successful');
- } else {
-  console.error('Update failed:', response.statusText);
- }
- } catch (error) {
- console.error('An error occurred:', error);
- }
-}
+    try {
+      const requestBody = {
+        method: 'PUT',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      };
+      const response = await fetch(endpoint, requestBody);
+      if (response.ok) {
+        console.log('Update successful');
+      } else {
+        console.error('Update failed:', response.statusText);
+      }
+    } catch (error) {
+    console.error('An error occurred:', error);
+    }
+  }
 
   return (
     <>
       <div className='ahome'>
         <p className="para">WELCOME BACK</p>
-        <VerificationCodeDisplay/>
-        <button className="update-button" onClick={updateVerificationCode}>Update</button>
+        <div style={{display: 'flex'}}>
+          <h3 className='datepickerhead'>Verification code: </h3>
+          <div className='code-div'>
+            <VerificationCodeDisplay/>
+            <button className="update-button" onClick={updateVerificationCode}>Update</button>
+          </div>
+        </div>
         <TaskTable data={itemData} editable={true}/>
       </div>
       <div className='coordinator-buttons'>
