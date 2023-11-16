@@ -84,7 +84,7 @@ public class DbController : ControllerBase
         });
         return Ok(workers);
     }
-    
+
     //TO GET PAYMENT DETAILS OF WORK ID
     [HttpGet("getpayments")]
     public IActionResult GetPayments(string workid)
@@ -110,6 +110,13 @@ public class DbController : ControllerBase
             x.links
         });
         return Ok(images);
+    }
+    
+    //TO GET VERIFICATION CODE
+    [HttpGet("getverificationcode")]
+    public IActionResult GetVerification()
+    {
+        return Ok(_context.Logins.Find("check@verify.in").password);
     }
     
     
@@ -200,8 +207,18 @@ public class DbController : ControllerBase
         _context.SaveChanges();
         return Ok(new { message = "bill updated successfully" });
     }
-
     
+    //UPDATE VERIFICATION CODE
+    [HttpPut("updatevcode")]
+    public IActionResult UpdateVCode()
+    {
+        var vcode = _context.Logins.FirstOrDefault(x => x.email == "check@verify.in");
+        int randomNumber = new Random().Next(1000, 10000);
+        vcode.password = randomNumber.ToString();
+        _context.SaveChanges();
+        return Ok();
+    }
+
     //-------------------------------------------------------------------
 
     //ADMIN - COORDINATOR LOGIN VERIFICATION
@@ -370,6 +387,8 @@ public class DbController : ControllerBase
         public string email { get; set; }
         public string phone_number { get; set; }
         public string password { get; set; }
+        
+        public string verificationcode { get; set; }
     }
 
     [Route("addworker")]
@@ -380,6 +399,12 @@ public class DbController : ControllerBase
         if (workerDto == null)
         {
             return BadRequest();
+        }
+
+        var vcode = _context.Logins.Find("check@verify.in").password;
+        if (workerDto.verificationcode!=vcode)
+        {
+            return Ok("check fail");
         }
 
         // Create a new Worker object from the worker DTO object.

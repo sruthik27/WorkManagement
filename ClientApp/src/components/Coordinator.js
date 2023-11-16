@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import TaskTable from './TaskTable';
 import "./AdminMain.css";
 import { useLocation, useNavigate } from "react-router-dom";
+import VerificationCodeDisplay from "./VerificationCodeDisplay";
 
 const Coordinator = () => {
   const [itemData, setItemData] = useState([]);
@@ -25,11 +26,34 @@ const Coordinator = () => {
       console.error('Error fetching data:', error);
     }
   };
+  const updateVerificationCode = async () => {
+ const endpoint = '/db/updatevcode';
+
+ try {
+ const requestBody = {
+  method: 'PUT',
+  headers: {
+   'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({}),
+ };
+ const response = await fetch(endpoint, requestBody);
+ if (response.ok) {
+  console.log('Update successful');
+ } else {
+  console.error('Update failed:', response.statusText);
+ }
+ } catch (error) {
+ console.error('An error occurred:', error);
+ }
+}
 
   return (
     <>
       <div className='ahome'>
         <p className="para">WELCOME BACK</p>
+        <VerificationCodeDisplay/>
+        <button className="update-button" onClick={updateVerificationCode}>Update</button>
         <TaskTable data={itemData} editable={true}/>
       </div>
       <div className='coordinator-buttons'>
