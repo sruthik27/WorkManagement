@@ -6,10 +6,13 @@
     display: grid;
     justify-content: center;
     align-items: center;
+    background:url( 'TCE_BLUR.png');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .para {
-    color: #640000;
+    color: #FBCE84;
     font-family: Judson;
     font-size: 45px;
     font-style: italic;
@@ -32,6 +35,9 @@
 
 .piechartdiv{
     width: 200px;
+    position: absolute;
+    top: 60px;
+    right: 50px;
 }
 
 .base-item {
@@ -84,7 +90,7 @@
 }
 
 .update-button {
-    padding: 15px 30px 15px 30px;
+    padding: 10px 25px 10px 25px;
     margin-left: 20px;
     border: none;
     font-size: 20px;

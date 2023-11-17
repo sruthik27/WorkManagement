@@ -61,10 +61,10 @@ const Coordinator = () => {
           </div>
         </div>
         <TaskTable data={itemData} editable={true}/>
-      </div>
-      <div className='coordinator-buttons'>
-        <a href={'/WorkReport'}><button className='coo-button' >WORK REPORTS</button></a>
-        <a href={'/NewTask'}><button className='coo-button'>CREATE NEW WORK</button></a>
+        <div className='coordinator-buttons'>
+          <a href={'/WorkReport'}><button className='coo-button' >WORK REPORTS</button></a>
+          <a href={'/NewTask'}><button className='coo-button'>CREATE NEW WORK</button></a>
+        </div>
       </div>
     </>
   )
