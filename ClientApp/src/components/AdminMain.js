@@ -39,7 +39,10 @@ const AdminMain = () => {
     return (
         <>
             <div className="ahome">
-                <p className="para">WELCOME TO THE DASHBOARD!</p>
+                <div>
+                    <p className="para">MDR - Admin Portal</p>
+                    <hr className="heading-line"/>
+                </div>
                 <TaskTable data={itemData} editable={false}/>
                 <div className='base-item'>
                     <div className="piechartdiv">

@@ -92,8 +92,10 @@ const AdminHome = () => {
         <>
             <div className="Home">
                 <div className="Home-Container">
-                    <h1 className="Admin-head">WORK MANAGEMENT PORTAL</h1>
-                    <p className="Admin-info">LOGIN TO MANAGE YOUR WORKERS AND WORKS</p>
+                    <div>
+                        <h1 className="Admin-head">MDR - PORTAL</h1>
+                        <p className="Admin-info">MANAGEMENT DEVELOPMENT RESTORATION</p>
+                    </div>
                     <div className="user-input">
                         <input className="input1" type="email" value={inputEmail} onChange={HandleInputEmail} placeholder="Email"/>
                         <input

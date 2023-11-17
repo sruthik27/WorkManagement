@@ -52,7 +52,10 @@ const Coordinator = () => {
   return (
     <>
       <div className='ahome'>
-        <p className="para">WELCOME BACK</p>
+        <div>
+          <h1 className="para">MDR - Head Portal</h1>
+          <hr className="heading-line"/>
+        </div>
         <div style={{display: 'flex'}}>
           <h3 className='datepickerhead'>Verification code: </h3>
           <div className='code-div'>
