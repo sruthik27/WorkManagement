@@ -228,7 +228,7 @@
     justify-content: center;
     align-items: center;
     position: fixed;
-    background: rgba(0, 0, 0, 0.834);
+    background: #f4d6a6;
     z-index: 1;
 }
 
@@ -236,7 +236,7 @@
     width: 64px;
     height: 64px;
     border: 8px solid;
-    border-color: #3d5af1 transparent #3d5af1 transparent;
+    border-color: #640000 transparent #640000 transparent;
     border-radius: 50%;
     animation: spin-anim 1.2s linear infinite;
 }

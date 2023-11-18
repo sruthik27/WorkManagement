@@ -8,6 +8,7 @@ const Coordinator = () => {
   const [itemData, setItemData] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!location.state || !location.state.fromAdminHome) {
@@ -18,12 +19,16 @@ const Coordinator = () => {
   }, []);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
       const response = await fetch('/db/getworks');
       const data = await response.json();
       setItemData(data);
     } catch (error) {
       console.error('Error fetching data:', error);
+    }
+    finally {
+      setLoading(false);
     }
   };
   const updateVerificationCode = async () => {
@@ -51,24 +56,30 @@ const Coordinator = () => {
 
   return (
     <>
-      <div className='ahome'>
-        <div>
-          <h1 className="para">Welcome to MDR - Head Portal</h1>
-          <hr className="heading-line"/>
+      {loading ? (
+        <div className="loader-container">
+          <div className="spinner"></div>
         </div>
-        <div style={{display: 'flex'}}>
-          <h3 className='datepickerhead'>Verification code: </h3>
-          <div className='code-div'>
-            <VerificationCodeDisplay/>
-            <button className="update-button" onClick={updateVerificationCode}>Update</button>
+       ) : (
+        <div className='ahome'>
+          <div>
+            <h1 className="para">Welcome to MDR - Head Portal</h1>
+            <hr className="heading-line"/>
+          </div>
+          <div style={{display: 'flex'}}>
+            <h3 className='datepickerhead'>Verification code: </h3>
+            <div className='code-div'>
+              <VerificationCodeDisplay/>
+              <button className="update-button" onClick={updateVerificationCode}>Update</button>
+            </div>
+          </div>
+          <TaskTable data={itemData} editable={true}/>
+          <div className='coordinator-buttons'>
+            <a href={'/WorkReport'}><button className='coo-button' >WORK REPORTS</button></a>
+            <a href={'/NewTask'}><button className='coo-button'>CREATE NEW WORK</button></a>
           </div>
         </div>
-        <TaskTable data={itemData} editable={true}/>
-        <div className='coordinator-buttons'>
-          <a href={'/WorkReport'}><button className='coo-button' >WORK REPORTS</button></a>
-          <a href={'/NewTask'}><button className='coo-button'>CREATE NEW WORK</button></a>
-        </div>
-      </div>
+      )}
     </>
   )
 }

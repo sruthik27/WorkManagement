@@ -36,40 +36,39 @@ const AdminMain = () => {
             console.error('Error fetching data:', error);
         }
         finally {
-       setLoading(false);
-   }
+            setLoading(false);
+        }
     };
 
     return (
         <>
-            <div className="ahome">
-                {loading ? (
-           <div className="loader-container">
-               <div className="spinner"></div>
-           </div>
-       ):
-                <div>
-                <div>
-                    <p className="para">Welcome to MDR - Admin Portal</p>
-                    <hr className="heading-line"/>
+            {loading ? (
+                <div className="loader-container">
+                    <div className="spinner"></div>
                 </div>
-                <TaskTable data={itemData} editable={false}/>
-                <div className='base-item'>
-                    <div className="piechartdiv">
-                        <h2 className='table-head'>Progress chart:</h2>
-                        <PieChart
-                            data={[
-                                {title: 'Completed', value: CompletedPercent, color: '#7cd57c'},
-                                {title: 'Active', value: ActivePercent, color: '#ffff68'},
-                            ]} label={({dataEntry}) => dataEntry.title}
-                            labelStyle={{
-                                fontSize: '6px',
-                            }}
-                        />
+             ): (
+                <div className="ahome">
+                    <div>
+                        <p className="para">Welcome to MDR - Admin Portal</p>
+                        <hr className="heading-line"/>
+                    </div>
+                    <TaskTable data={itemData} editable={false}/>
+                    <div className='base-item'>
+                        <div className="piechartdiv">
+                            <h2 className='table-head'>Progress chart:</h2>
+                            <PieChart
+                                data={[
+                                    {title: 'Completed', value: CompletedPercent, color: '#7cd57c'},
+                                    {title: 'Active', value: ActivePercent, color: '#ffff68'},
+                                ]} label={({dataEntry}) => dataEntry.title}
+                                labelStyle={{
+                                    fontSize: '6px',
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>}
-                    </div>
+            )}
         </>
     );
 }
