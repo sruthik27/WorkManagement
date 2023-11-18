@@ -39,8 +39,11 @@ const AdminMain = () => {
     return (
         <>
             <div className="ahome">
+                {/* <div className="loader-container">
+                    <div className="spinner"></div>
+                </div> */}
                 <div>
-                    <p className="para">MDR - Admin Portal</p>
+                    <p className="para">Welcome to MDR - Admin Portal</p>
                     <hr className="heading-line"/>
                 </div>
                 <TaskTable data={itemData} editable={false}/>
@@ -64,3 +67,4 @@ const AdminMain = () => {
 }
 
 export default AdminMain;
+

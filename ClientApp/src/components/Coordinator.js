@@ -53,7 +53,7 @@ const Coordinator = () => {
     <>
       <div className='ahome'>
         <div>
-          <h1 className="para">MDR - Head Portal</h1>
+          <h1 className="para">Welcome to MDR - Head Portal</h1>
           <hr className="heading-line"/>
         </div>
         <div style={{display: 'flex'}}>
