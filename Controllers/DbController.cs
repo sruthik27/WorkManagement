@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkManagement.Db;
 using WorkManagement.Models;
-
-namespace WorkManagement.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using MailKit.Net.Smtp;
+using MailKit;
+using MimeKit;
+namespace WorkManagement.Controllers;
+
 
 [ApiController]
 [Route("[controller]")]
@@ -390,7 +393,7 @@ public class DbController : ControllerBase
         
         public string verificationcode { get; set; }
     }
-
+    
     [Route("addworker")]
     [HttpPost]
     public async Task<ActionResult<Worker>> AddWorker([FromBody] WorkerDto workerDto)
@@ -442,6 +445,40 @@ public class DbController : ControllerBase
         return Ok(new {message = "registration succesffull"});
     }
     
+    //TO REST AND SEND PASSWORD
+    static string GenerateRandomString(int length)
+    {
+        const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        return new string(Enumerable.Repeat(chars, length)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
+    }
+    
+    [HttpPost("resetpass")]
+    public IActionResult ResetPass(string mailid)
+    {
+        var newpass = GenerateRandomString(6);
+        var user = _context.WLogins.FirstOrDefault(x => x.email == mailid);
+        string passwordHash = BCrypt.Net.BCrypt.HashPassword(newpass);
+        user.password = passwordHash;
+        _context.SaveChangesAsync();
+        var email = new MimeMessage();
+        email.From.Add(new MailboxAddress("TCE MDR", "insomniadevs007@gmail.com"));
+        email.To.Add(new MailboxAddress("Worker", mailid));
+        email.Subject = "Mail with resetted password";
+        email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { 
+            Text = $"Your new password is <b>{newpass}</b>"
+        }; 
         
+        using (var smtp = new SmtpClient())
+        {
+       smtp.Connect("smtp.gmail.com", 587, false);
+       smtp.Authenticate("insomniadevs007@gmail.com", "lzhyecgavxzkcgvg");
+       smtp.Send(email);
+       smtp.Disconnect(true);
+        }
+
+        return Ok(new {message = "success"});
+    }
 
 }

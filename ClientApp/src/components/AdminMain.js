@@ -9,7 +9,7 @@ const AdminMain = () => {
     const [itemData, setItemData] = useState([]);
     const [CompletedPercent, setCompletedPercent] = useState(0);
     const [ActivePercent, setActivePercent] = useState(0);
-    const [announcementText, setAnnouncementText] = useState('');
+    const [loading, setLoading] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -22,6 +22,7 @@ const AdminMain = () => {
     }, []);
 
     const fetchData = async () => {
+        setLoading(true);
         try {
             const response = await fetch('/db/getworks'); //need to add "/getWorks" after backend is pushed
             const data = await response.json();
@@ -34,14 +35,20 @@ const AdminMain = () => {
         } catch (error) {
             console.error('Error fetching data:', error);
         }
+        finally {
+       setLoading(false);
+   }
     };
 
     return (
         <>
             <div className="ahome">
-                {/* <div className="loader-container">
-                    <div className="spinner"></div>
-                </div> */}
+                {loading ? (
+           <div className="loader-container">
+               <div className="spinner"></div>
+           </div>
+       ):
+                <div>
                 <div>
                     <p className="para">Welcome to MDR - Admin Portal</p>
                     <hr className="heading-line"/>
@@ -61,7 +68,8 @@ const AdminMain = () => {
                         />
                     </div>
                 </div>
-            </div>
+            </div>}
+                    </div>
         </>
     );
 }

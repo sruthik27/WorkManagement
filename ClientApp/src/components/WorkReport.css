@@ -18,6 +18,7 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(300px, 1fr));
     gap: 75px; 
+    align-items: end;
 }
 
 .work-name {
