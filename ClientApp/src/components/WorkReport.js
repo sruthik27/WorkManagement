@@ -35,7 +35,7 @@ const WorkReport = () => {
     useEffect(() => {
         fetch('/db/getimages')
             .then(response => response.json())
-            .then(data => setData(data));
+            .then(data => setData(data.filter(x=>x.links.length>0)));
     }, []);
 
     const settings = {
@@ -48,6 +48,7 @@ const WorkReport = () => {
         prevArrow: <SamplePrevArrow />
       };
 
+    
     return (
       <>
         <div className='report-grid'>
