@@ -7,6 +7,13 @@
     justify-content: center;
 }
 
+.form-background {
+    padding: 20px;
+    background:url('TCE_BLUR.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
 .form {
     background: #fbce84;
     padding: 30px;

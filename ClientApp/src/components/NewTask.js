@@ -43,7 +43,7 @@ const NewTask = () => {
                 bill_paid: false,
                 coordinator:coordinator
             },
-            subtasks: subtasks
+            subtasks: subtasks,
         };
 
         var jsonData = {
@@ -59,6 +59,15 @@ const NewTask = () => {
             .then(response => response.text())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
+        
+        setWorkName("");
+        setTaskDescription("");
+        setWorkCost("");
+        setWorker("");
+        setCoordinator("");
+        setDueDate(new Date());
+        setStartDate(new Date());
+        setCoordinator("");
     };
 
     const handleSubtaskFormSubmit = () => {
@@ -81,7 +90,7 @@ const NewTask = () => {
 
     return (
         <>
-            <div>
+            <div className="form-background">
                 <div className="form">
                     <div>
                         <div>
@@ -145,7 +154,7 @@ const NewTask = () => {
                                 >
                                     <option value="" disabled>Select Agency</option>
                                     {workers.map((v, i) => (
-                                        <option key={i} value={v.worker_id}>{v.worker_name}</option>
+                                        <option key={i} value={v.worker_id}>{v.worker_name.charAt(0).toUpperCase() + v.worker_name.slice(1)}</option>
                                     ))}
                                 </select>
                             </div>

@@ -11,18 +11,19 @@ const CommentBox = (props) => {
         }
         console.log(jsonData);
         var requestOptions = {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json' // Set the content type to JSON
-  },
-  body: JSON.stringify(jsonData), // Convert JavaScript object to JSON
-  redirect: 'follow'
-};
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // Set the content type to JSON
+            },
+            body: JSON.stringify(jsonData), // Convert JavaScript object to JSON
+            redirect: 'follow'
+        };
 
-fetch("/db/addquery", requestOptions)
-  .then(response => response.text())
-  .then(result => console.log(result))
-  .catch(error => console.log('error', error));
+        fetch("/db/addquery", requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+        setComment("");
     }
     return(
         <div className='feedback'>

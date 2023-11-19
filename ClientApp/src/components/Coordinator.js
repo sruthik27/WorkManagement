@@ -66,17 +66,19 @@ const Coordinator = () => {
             <h1 className="para">Welcome to MDR - Head Portal</h1>
             <hr className="heading-line"/>
           </div>
-          <div style={{display: 'flex'}}>
-            <h3 className='datepickerhead'>Verification code: </h3>
-            <div className='code-div'>
-              <VerificationCodeDisplay/>
-              <button className="update-button" onClick={updateVerificationCode}>Update</button>
+          <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+            <div style={{display: 'flex'}}>
+              <h3 className='datepickerhead'>Verification code: </h3>
+              <div className='code-div'>
+                <VerificationCodeDisplay/>
+                <button className="update-button" onClick={updateVerificationCode}>Update</button>
+              </div>
             </div>
-          </div>
-          <TaskTable data={itemData} editable={true}/>
-          <div className='coordinator-buttons'>
-            <a href={'/WorkReport'}><button className='coo-button' >WORK REPORTS</button></a>
-            <a href={'/NewTask'}><button className='coo-button'>CREATE NEW WORK</button></a>
+            <TaskTable data={itemData} editable={true}/>
+            <div className='coordinator-buttons'>
+              <a href={'/WorkReport'}><button className='coo-button' >WORK REPORTS</button></a>
+              <a href={'/NewTask'}><button className='coo-button'>CREATE NEW WORK</button></a>
+            </div>
           </div>
         </div>
       )}
