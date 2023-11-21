@@ -76,3 +76,27 @@
 .advance-submit-bitton:active {
     background-color: #640000d3;
 }
+
+/* Add this CSS in your stylesheet or create a new stylesheet */
+.popup-enter {
+opacity: 0;
+transform: scale(0.9);
+}
+
+.popup-enter-active {
+opacity: 1;
+transform: scale(1);
+transition: opacity 0.3s, transform 0.3s;
+}
+
+.popup-exit {
+opacity: 1;
+transform: scale(1);
+}
+
+.popup-exit-active {
+opacity: 0;
+transform: scale(0.9);
+transition: opacity 0.3s, transform 0.3s;
+}
+  
