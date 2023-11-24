@@ -7,7 +7,30 @@ import './AdminHome.css';
 import CommentBox from './CommentBox';
 import CommentCard from './CommentCard';
 import Switch from '@mui/material/Switch';
-import { CSSTransition } from 'react-transition-group';
+import {Puff} from 'react-loader-spinner';
+
+class PuffLoader extends React.Component {
+ componentDidMount() {
+   console.log('Rendering Puff');
+ }
+ componentDidUpdate() {
+  console.log('Rerendering Puff');
+ }
+
+ render() {
+   return (
+     <Puff
+       height="80"
+       width="80"
+       radius={1}
+       color="#640000"
+       ariaLabel="puff-loading"
+       visible={true}
+     />
+   );
+ }
+}
+
 class TaskTable extends Component {
     constructor(props) {
         super(props);
@@ -29,7 +52,7 @@ class TaskTable extends Component {
             isChecked: false,
             nowPaid: false,
             paidbills: new Map(),
-            isLoading: false
+            isLoading: false,
         };
     }
 
@@ -38,6 +61,7 @@ class TaskTable extends Component {
         if (this.props.data.length > 0) {
             this.processData(this.props.data);
         }
+        console.log('Rendering Puff');
     }
 
     // Add componentDidUpdate to handle updates to props.data
@@ -51,44 +75,43 @@ class TaskTable extends Component {
     }
 
     handleItemClick = async (item) => {
-        // Set the selected item details when a p tag is clicked
-        this.setState({ isLoading: true });// Set isLoading to true when initiating fetch
-        try {
-            let fetchedtasks = await fetch(`/db/gettasks?n=${item.work_id}`);
-            let tasks = await fetchedtasks.json();
+    // Set the selected item details when a p tag is clicked
+    this.setState({ selectedItem: true,isLoading: true}, async () => {
+        console.log(this.state.isLoading); // This will log the updated state
 
-            let fetchedpayments = await fetch(`/db/getpayments?workid=${item.work_id}`);
-            let payments = await fetchedpayments.json();
-            let adv = payments.find(x => x.payment_type === 'A');
-            if (adv !== undefined) {
-                let adv_amt = adv.paid_amount;
-                let adv_date = adv.paid_date;
-                this.setState({advancePaid: adv_amt, dateOfPaid: adv_date})
-            } else {
-                this.setState({advancePaid: 0, dateOfPaid: '-'});
-            }
+        let fetchedtasks = await fetch(`/db/gettasks?n=${item.work_id}`);
+        let tasks = await fetchedtasks.json();
 
-            let fetchedcomments = await fetch(`/db/getreviews?workid=${item.work_id}`);
-            let comments = await fetchedcomments.json();
-            if (comments.length > 0) {
-                this.setState({selectedComments: comments});
-            }
-
-            let currentDate = new Date();
-            let dueDate = new Date(item.due_date);
-            let diffInTime = dueDate.getTime() - currentDate.getTime();
-            let diffInDays = diffInTime / (1000 * 3600 * 24);
-
-            // Use the callback function of setState to ensure the state is updated
-            this.setState({selectedItem: item, selectedSubtasks: tasks, dueDateDiff: diffInDays});
-        } catch (error) {
-            console.error("Error fetching data:", error);
-            //this.setState({ isLoading: false }); // Set isLoading to false on fetch error
+        let fetchedpayments = await fetch(`/db/getpayments?workid=${item.work_id}`);
+        let payments = await fetchedpayments.json();
+        let adv = payments.find(x => x.payment_type === 'A');
+        if (adv !== undefined) {
+            let adv_amt = adv.paid_amount;
+            let adv_date = adv.paid_date;
+            this.setState({ advancePaid: adv_amt, dateOfPaid: adv_date });
+        } else {
+            this.setState({ advancePaid: 0, dateOfPaid: '-' });
         }
-        finally {
-            this.setState({ isLoading: false }); // Set isLoading to false on fetch error
+
+        let fetchedcomments = await fetch(`/db/getreviews?workid=${item.work_id}`);
+        let comments = await fetchedcomments.json();
+        if (comments.length > 0) {
+            this.setState({ selectedComments: comments });
         }
-    }
+
+        let currentDate = new Date();
+        let dueDate = new Date(item.due_date);
+        let diffInTime = dueDate.getTime() - currentDate.getTime();
+        let diffInDays = diffInTime / (1000 * 3600 * 24);
+
+        // Use the callback function of setState to ensure the state is updated
+        this.setState({ selectedItem: item, selectedSubtasks: tasks, dueDateDiff: diffInDays }, () => {
+            this.setState({ isLoading: false }, () => {
+                console.log(this.state.isLoading); // This will log the updated state
+            });
+        });
+    });
+}
 
     handleOnDragEnd = (result) => {
         if (!result.destination) return;
@@ -205,8 +228,7 @@ class TaskTable extends Component {
             completeTask,
             selectedItem,
             selectedSubtasks,
-            dueDateDiff, advancePaid, dateOfPaid, editable, isChecked, paidbills,
-            isLoading
+            dueDateDiff, advancePaid, dateOfPaid, editable, isChecked, paidbills,isLoading
         } = this.state;
 
         return (
@@ -244,136 +266,125 @@ class TaskTable extends Component {
                         </ul>
                     </div>
                 </div>
-                <CSSTransition
-                    in={selectedItem !== null}
-                    timeout={1000}
-                    classNames="popup"
-                    //unmountOnExit
-                >
-                    <PopUp trigger={selectedItem !== null}>
-                        {/* Pass the selectedItem as a prop to the PopUp */}
-                        {isLoading ? (
-                            <div className="loader-container">
-                                <div className="spinner"></div>
-                                {console.log("Loading....")}
-                            </div>
-                        ) : (
-                            selectedItem && (
-                                <div>
-                                    <h1 className="close-btn" onClick={this.handleClose}>x</h1>
-                                    {/* Display information related to the selectedItem here */}
-                                    <h2 className='popup-head'>Work Details:</h2>
-                                    <hr className='line'/>
-                                    <div className='popup-info'>
-                                        <div className='popup-details1'>
-                                            <p>Work Name: {selectedItem.work_name}</p>
-                                            <p>Time
-                                                Period: {selectedItem.start_date.slice(0, 10)} to {selectedItem.due_date.slice(0, 10)}</p>
-                                            {dueDateDiff < 0 && (
-                                                <p style={{color: 'red'}}>Due
-                                                    by {Math.abs(Math.round(dueDateDiff))} {Math.abs(Math.round(dueDateDiff)) === 1 ? 'day' : 'days'}</p>
-                                            )}
-                                            <p>Coordinator: {selectedItem.coordinator}</p>
-                                            <p>Worker: {selectedItem.worker}</p>
-                                            <p>Total Expense: ₹{selectedItem.wage}</p>
-                                            {editable ?
-                                                <>{advancePaid === 0 ?
-                                                    <>
-                                                        <p>Advance paid?
-                                                            <Switch checked={isChecked} onChange={this.handleToggle}/></p>
-                                                        {isChecked ?
-                                                            <div>
-                                                                <input type='number'
-                                                                    placeholder='Advance to be Paid'
-                                                                    className='advance-input'
-                                                                    value={this.state.enteredAdvance}
-                                                                    onChange={(e) => {
-                                                                        this.setState({enteredAdvance: e.target.value});
-                                                                    }}/>
-                                                                <input type='date'
-                                                                    value={this.state.enteredDate.toISOString().split('T')[0]}
-                                                                    className='advance-date-input'
-                                                                    onChange={(e) => {
-                                                                        this.setState({enteredDate: new Date(e.target.value)});
-                                                                    }} placeholder='Date'/>
-                                                                <button onClick={this.handleSubmit} className='advance-submit-bitton'>Submit</button>
-                                                            </div>
-                                                            : ''
-                                                        }
-                                                    </>
-                                                    :
+                <PopUp trigger={selectedItem !== null}>
+                    {/* Pass the selectedItem as a prop to the PopUp */}
+                    {isLoading ?
+                        <div className="overlay">
+                            <div className="puff-loader"><PuffLoader /></div>
+                        </div>: (
+                    selectedItem && (
+                        <div>
+                            <h1 className="close-btn" onClick={this.handleClose}>x</h1>
+                            {/* Display information related to the selectedItem here */}
+                            <h2 className='popup-head'>Work Details:</h2>
+                            <hr className='line'/>
+                            <div className='popup-info'>
+                                <div className='popup-details1'>
+                                    <p>Work Name: {selectedItem.work_name}</p>
+                                    <p>Time
+                                        Period: {selectedItem.start_date.slice(0, 10)} to {selectedItem.due_date.slice(0, 10)}</p>
+                                    {dueDateDiff < 0 && (
+                                        <p style={{color: 'red'}}>Due
+                                            by {Math.abs(Math.round(dueDateDiff))} {Math.abs(Math.round(dueDateDiff)) === 1 ? 'day' : 'days'}</p>
+                                    )}
+                                    <p>Coordinator: {selectedItem.coordinator}</p>
+                                    <p>Worker: {selectedItem.worker}</p>
+                                    <p>Total Expense: ₹{selectedItem.wage}</p>
+                                    {editable ?
+                                        <>{advancePaid === 0 ?
+                                            <>
+                                                <p>Advance paid?
+                                                    <Switch checked={isChecked} onChange={this.handleToggle}/></p>
+                                                {isChecked ?
                                                     <div>
-                                                        <p>Advance paid: ₹{advancePaid}</p>
-                                                        <p>Advance paid date: {dateOfPaid.slice(0, 10)}</p>
-                                                    </div>}
-                                                    {selectedItem.bill_paid || paidbills.get(selectedItem.work_id) ?
-                                                        <p>Bill paid ✅</p> :
-                                                        <p>Bill paid? <Switch onChange={this.handleBill}></Switch></p>}</>
-    
-                                                :
-                                                <>
-                                                    <p>Advance paid: ₹{advancePaid}</p>
-                                                    <p>Advance paid date: {dateOfPaid.slice(0, 10)}</p>
-                                                    {selectedItem.bill_paid ? <p>Bill paid ✅</p> : <p>Bill paid ❌</p>}
-                                                </>
-                                            }
-    
-                                            <p>Sub Tasks: </p>
-                                        </div>
-                                        <div className='popup-piechart'>
-                                            <p>Work Progress: </p>
-                                            <PieChart
-                                                percentage={selectedItem.total_subtasks !== 0 ? (selectedItem.completed_subtasks / selectedItem.total_subtasks) * 100 : 0}
-                                            />
-                                            {this.state.editable ? <p>{""}</p> : <CommentBox workid={selectedItem.work_id}/>}
-                                        </div>
-                                    </div>
-                                    {this.state.editable ?
-                                        <div className='subtask-div'>
-                                            <div className='subtask-table'>
-                                                <DragDropContext onDragEnd={this.handleOnDragEnd}>
-                                                    <Droppable droppableId="subtasks">
-                                                        {(provided) => (
-                                                            <ol {...provided.droppableProps} ref={provided.innerRef}>
-                                                                {selectedSubtasks.map((subtask, index) => (
-                                                                    <Draggable key={subtask.task_id}
-                                                                            draggableId={String(subtask.task_id)}
-                                                                            index={index}>
-                                                                        {(provided) => (
-                                                                            <div>
-                                                                                <li {...provided.draggableProps} {...provided.dragHandleProps}
-                                                                                    ref={provided.innerRef}>
-                                                                                    {subtask.task_name}
-                                                                                </li>
-                                                                                <hr/>
-                                                                            </div>
-                                                                        )}
-                                                                    </Draggable>
-                                                                ))}
-                                                                {provided.placeholder}
-                                                            </ol>
-                                                        )}
-                                                    </Droppable>
-                                                </DragDropContext>
-                                            </div>
-                                            <p>Comments/Queries</p>
-                                            {this.state.selectedComments.map((comment, index) =>
-                                                <CommentCard key={index} comment={comment} />
-                                            )}
-    
-                                        </div>
+                                                        <input type='number'
+                                                               placeholder='Advance to be Paid'
+                                                               className='advance-input'
+                                                               value={this.state.enteredAdvance}
+                                                               onChange={(e) => {
+                                                                   this.setState({enteredAdvance: e.target.value});
+                                                               }}/>
+                                                        <input type='date'
+                                                               value={this.state.enteredDate.toISOString().split('T')[0]}
+                                                               className='advance-date-input'
+                                                               onChange={(e) => {
+                                                                   this.setState({enteredDate: new Date(e.target.value)});
+                                                               }} placeholder='Date'/>
+                                                        <button onClick={this.handleSubmit} className='advance-submit-bitton'>Submit</button>
+                                                    </div>
+                                                    : ''
+                                                }
+                                            </>
+                                            :
+                                            <div>
+                                                <p>Advance paid: ₹{advancePaid}</p>
+                                                <p>Advance paid date: {dateOfPaid.slice(0, 10)}</p>
+                                            </div>}
+                                            {selectedItem.bill_paid || paidbills.get(selectedItem.work_id) ?
+                                                <p>Bill paid ✅</p> :
+                                                <p>Bill paid? <Switch onChange={this.handleBill}></Switch></p>}</>
+
                                         :
-                                        <ol>
-                                            {selectedSubtasks.map((subtask, index) => <li key={index}>{subtask.task_name}</li>)}
-                                        </ol>
+                                        <>
+                                            <p>Advance paid: ₹{advancePaid}</p>
+                                            <p>Advance paid date: {dateOfPaid.slice(0, 10)}</p>
+                                            {selectedItem.bill_paid ? <p>Bill paid ✅</p> : <p>Bill paid ❌</p>}
+                                        </>
                                     }
-    
+
+                                    <p>Sub Tasks: </p>
                                 </div>
-                            )
-                            )
-                        }
-                    </PopUp>
-                </CSSTransition>
+                                <div className='popup-piechart'>
+                                    <p>Work Progress: </p>
+                                    <PieChart
+                                        percentage={selectedItem.total_subtasks !== 0 ? (selectedItem.completed_subtasks / selectedItem.total_subtasks) * 100 : 0}
+                                    />
+                                    {this.state.editable ? <p>{""}</p> : <CommentBox workid={selectedItem.work_id}/>}
+                                </div>
+                            </div>
+                            {this.state.editable ?
+                                <div className='subtask-div'>
+                                    <div className='subtask-table'>
+                                        <DragDropContext onDragEnd={this.handleOnDragEnd}>
+                                            <Droppable droppableId="subtasks">
+                                                {(provided) => (
+                                                    <ol {...provided.droppableProps} ref={provided.innerRef}>
+                                                        {selectedSubtasks.map((subtask, index) => (
+                                                            <Draggable key={subtask.task_id}
+                                                                       draggableId={String(subtask.task_id)}
+                                                                       index={index}>
+                                                                {(provided) => (
+                                                                    <div>
+                                                                        <li {...provided.draggableProps} {...provided.dragHandleProps}
+                                                                            ref={provided.innerRef}>
+                                                                            {subtask.task_name}
+                                                                        </li>
+                                                                        <hr/>
+                                                                    </div>
+                                                                )}
+                                                            </Draggable>
+                                                        ))}
+                                                        {provided.placeholder}
+                                                    </ol>
+                                                )}
+                                            </Droppable>
+                                        </DragDropContext>
+                                    </div>
+                                    <p>Comments/Queries</p>
+                                    {this.state.selectedComments.map((comment, index) =>
+                                        <CommentCard key={index} comment={comment} />
+                                    )}
+
+                                </div>
+                                :
+                                <ol>
+                                    {selectedSubtasks.map((subtask, index) => <li key={index}>{subtask.task_name}</li>)}
+                                </ol>
+                            }
+
+                        </div>
+                    ))}
+                </PopUp>
             </>
         );
     }

@@ -2,6 +2,7 @@
 
 .datepickerwrapper {
     margin-bottom: 2vw;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
 .custom-datepicker {
@@ -21,6 +22,7 @@
     font-family: Alatsi;
     font-size: 25px;
     font-style: normal;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
 .table-head {
@@ -77,26 +79,29 @@
     background-color: #640000d3;
 }
 
-/* Add this CSS in your stylesheet or create a new stylesheet */
-.popup-enter {
-opacity: 0;
-transform: scale(0.9);
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 60vw;
+  max-height: 81vh;
+  background: #f4d6a6;/* semi-transparent white background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  border-radius: 7px;
+  overflow: auto;
+  margin: 250px;
+  padding: 100px 12px 100px 12px;
+  margin-left: 248px;
+  border: solid 1px #640000; /* Ensure it's above other content */
 }
 
-.popup-enter-active {
-opacity: 1;
-transform: scale(1);
-transition: opacity 0.3s, transform 0.3s;
+/* Styles for the PuffLoader */
+.puff-loader {
+  /* You may need to adjust these styles based on your specific needs */
+  width: 80px;
+  height: 80px;
 }
-
-.popup-exit {
-opacity: 1;
-transform: scale(1);
-}
-
-.popup-exit-active {
-opacity: 0;
-transform: scale(0.9);
-transition: opacity 0.3s, transform 0.3s;
-}
-  
