@@ -9,11 +9,13 @@
     font-weight: 400;
     border: solid 1px #640000;
     border-radius: 5px;
-    background-color: white;
+    background-color: #fbce84;
+    color: #640000;
+    cursor: pointer;
 }
 .digit-box:hover {
-    background-color: #fbce84;
-    color: #333;
+    background-color: #640000;
+    color: #fbce84;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
