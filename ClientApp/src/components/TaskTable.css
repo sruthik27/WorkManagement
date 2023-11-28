@@ -94,7 +94,6 @@
   justify-content: center;
   z-index: 999;
   border-radius: 7px;
-  padding: 100px 12px 100px 12px;
   border: solid 1px #640000; /* Ensure it's above other content */
 }
 
