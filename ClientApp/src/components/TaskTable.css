@@ -81,23 +81,20 @@
     background-color: #640000d3;
 }
 
+
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  max-width: 60vw;
-  max-height: 81vh;
+    height: 100%;
   background: #f4d6a6;/* semi-transparent white background */
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 999;
   border-radius: 7px;
-  overflow: auto;
-  margin: 250px;
   padding: 100px 12px 100px 12px;
-  margin-left: 248px;
   border: solid 1px #640000; /* Ensure it's above other content */
 }
 
