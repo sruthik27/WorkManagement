@@ -55,7 +55,10 @@
 }
 
 .scroll {
+    width: 200px;
+    height: 210px;
     overflow: auto;
+    /* border: 1px solid #000000; */
 }
 
 .table-head {
@@ -213,6 +216,7 @@
 
 /* ::-webkit-scrollbar {
     width: 0.5em;
+    background-color: #000;
 } */
 
 .line {

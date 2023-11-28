@@ -243,27 +243,30 @@ class TaskTable extends Component {
                     </p>
                 </div>
                 <div className="task-table">
-                    <div className='scroll'>
+                    <div>
                         <p className='table-head'>Active Task</p>
-                        <ul>
-                            {activeTask.map((x, i) => (
-                                <p className='table_content' key={i} onClick={() => this.handleItemClick(x)}>
-                                    {x.work_name}
-                                </p>
-                            ))}
-                        </ul>
+                        <div className='scroll'>
+                            <ul>
+                                {activeTask.map((x, i) => (
+                                    <p className='table_content' key={i} onClick={() => this.handleItemClick(x)}>
+                                        {x.work_name}
+                                    </p>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                     <div className='v1'></div>
-                    <div className='scroll'>
+                    <div>
                         <p className='table-head'>Completed Task</p>
-                        <ul>
-                            {completeTask.map((x, i) => (
-                                <p className='table_content' key={i} onClick={() => this.handleItemClick(x)}>
-                                    {x.work_name}
-                                </p>
-                            ))}
-                            
-                        </ul>
+                        <div className='scroll'>
+                            <ul>
+                                {completeTask.map((x, i) => (
+                                    <p className='table_content' key={i} onClick={() => this.handleItemClick(x)}>
+                                        {x.work_name}
+                                    </p>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <PopUp trigger={selectedItem !== null}>
