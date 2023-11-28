@@ -64,10 +64,10 @@ const NewTask = () => {
         setTaskDescription("");
         setWorkCost("");
         setWorker("");
-        setCoordinator("");
         setDueDate(new Date());
         setStartDate(new Date());
         setCoordinator("");
+        window.history.back();
     };
 
     const handleSubtaskFormSubmit = () => {
