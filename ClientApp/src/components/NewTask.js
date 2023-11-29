@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import './NewTask.css';
+import Slider from '@mui/material/Slider';
+import { event } from "jquery";
 
 const NewTask = () => {
     const [workName, setWorkName] = useState("");
@@ -15,6 +17,7 @@ const NewTask = () => {
     const [noOfSubtasks, setNoOfSubtasks] = useState(1);
     const [subtasks, setSubtasks] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [valueText, setValueText] = useState("");
 
     const fetchWorkerNames = () => {
         fetch('/db/getworkers')
@@ -75,9 +78,10 @@ const NewTask = () => {
             task_name: subtaskDescription,
             due_date: subtaskDueDate.toISOString(),
             completed: false,
-            order_no: noOfSubtasks
+            order_no: noOfSubtasks,
+            task_weightage: valueText
         };
-
+        console.log(newSubtask);
         setSubtasks([...subtasks, newSubtask]);
         setNoOfSubtasks(x => x + 1);
         setSubtaskDescription("");
@@ -219,6 +223,21 @@ const NewTask = () => {
                                                             setSubtaskDueDate(new Date(event.target.value))
                                                         }
                                                         className="form-control"
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Task Weightage: </label>
+                                                    <Slider
+                                                        aria-label="Temperature"
+                                                        defaultValue={1}
+                                                        onChange={(event) => 
+                                                            setValueText(event.target.value)
+                                                        }
+                                                        valueLabelDisplay="auto"
+                                                        step={1}
+                                                        marks
+                                                        min={1}
+                                                        max={5}
                                                     />
                                                 </div>
                                             </form>
