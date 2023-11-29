@@ -59,6 +59,7 @@ const AdminHome = () => {
     const HandleForgotPasswordSubmit = () => {
         if (isEmail(inputForgotPassword)) {
             setEmailCheck(true);
+            setisEmailCheck(false);
         } else {
             setisEmailCheck(true);
         }
