@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './NewTask.css';
 import Slider from '@mui/material/Slider';
-import { event } from "jquery";
 
 const NewTask = () => {
     const [workName, setWorkName] = useState("");
@@ -13,6 +12,7 @@ const NewTask = () => {
     const [workers, setWorkers] = useState([]);
     const [coordinator, setCoordinator] = useState("");
     const [subtaskDescription, setSubtaskDescription] = useState("");
+    const [weightOfTask, setWeightOfTask] = useState(0);
     const [subtaskDueDate, setSubtaskDueDate] = useState(new Date());
     const [noOfSubtasks, setNoOfSubtasks] = useState(1);
     const [subtasks, setSubtasks] = useState([]);
@@ -38,7 +38,7 @@ const NewTask = () => {
                 work_status: 'A',
                 start_date: startDate.toISOString(),
                 due_date: dueDate.toISOString(),
-                total_subtasks: subtasks.length,
+                total_subtasks: weightOfTask,
                 completed_subtasks: 0,
                 wage: workCost,
                 worker: worker,
@@ -70,7 +70,6 @@ const NewTask = () => {
         setDueDate(new Date());
         setStartDate(new Date());
         setCoordinator("");
-        window.history.back();
     };
 
     const handleSubtaskFormSubmit = () => {
@@ -79,13 +78,15 @@ const NewTask = () => {
             due_date: subtaskDueDate.toISOString(),
             completed: false,
             order_no: noOfSubtasks,
-            task_weightage: valueText
+            weightage: valueText
         };
         console.log(newSubtask);
         setSubtasks([...subtasks, newSubtask]);
         setNoOfSubtasks(x => x + 1);
+        setWeightOfTask(x=>x+valueText)
         setSubtaskDescription("");
         setSubtaskDueDate(new Date());
+        setValueText(1);
         handleCloseModal();
     };
 
@@ -177,7 +178,7 @@ const NewTask = () => {
                                         <h1 className="subtask-des-head">Sub Task {index + 1}</h1>
                                         <p className="subtask-des-des">Description: {subtask.task_name}</p>
                                         <p className="subtask-des-des">Due Date: {new Date(subtask.due_date).toDateString()}</p>
-                                        <p className="subtask-des-des">Task Weightage: {subtask.task_weightage}</p>
+                                        <p className="subtask-des-des">Task Weightage: {subtask.weightage}</p>
                                     </div>
                                 ))}
                             </div>
@@ -188,9 +189,9 @@ const NewTask = () => {
                             Add Subtask
                         </button>
                         <br />
-                        <button type="button" className="btn" onClick={handleFormSubmit}>
+                        <a href = 'Coordinator'><button type="button" className="btn" onClick={handleFormSubmit}>
                             Add Task
-                        </button>
+                        </button></a>
                     </div>
                     {showModal && (
                         <div tabIndex="-1" role="dialog" style={{display: showModal ? "block" : "none"  }}>

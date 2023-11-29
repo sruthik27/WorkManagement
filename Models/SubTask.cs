@@ -25,6 +25,9 @@ public class SubTask
     
     [Column("task_name")] 
     public string? task_name { get; set; }
+    
+    [Column("weightage")]
+    public int? weightage { get; set; }
 
     // Navigation property to represent the foreign key relationship
     [JsonIgnore]

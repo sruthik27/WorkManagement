@@ -158,7 +158,7 @@ public class DbController : ControllerBase
         task.completed = true;
         var workId = task.work_id;
         var work = _context.Works.Find(workId);
-        work.completed_subtasks += 1;
+        work.completed_subtasks += task.weightage;
         _context.SaveChanges();
 
         // Check if all tasks for the same work_id are completed

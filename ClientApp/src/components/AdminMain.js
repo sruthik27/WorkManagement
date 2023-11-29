@@ -5,6 +5,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {PieChart} from 'react-minimal-pie-chart';
 
 
+
 const AdminMain = () => {
     const [itemData, setItemData] = useState([]);
     const [CompletedPercent, setCompletedPercent] = useState(0);
@@ -12,6 +13,7 @@ const AdminMain = () => {
     const [loading, setLoading] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
+    const [refreshKey, setRefreshKey] = useState(0);
 
     useEffect(() => {
         if (!location.state || !location.state.fromAdminHome) {
