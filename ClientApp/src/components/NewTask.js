@@ -177,6 +177,7 @@ const NewTask = () => {
                                         <h1 className="subtask-des-head">Sub Task {index + 1}</h1>
                                         <p className="subtask-des-des">Description: {subtask.task_name}</p>
                                         <p className="subtask-des-des">Due Date: {new Date(subtask.due_date).toDateString()}</p>
+                                        <p className="subtask-des-des">Task Weightage: {subtask.task_weightage}</p>
                                     </div>
                                 ))}
                             </div>
