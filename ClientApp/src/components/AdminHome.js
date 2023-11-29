@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import './AdminHome.css';
 import Footer from "./Vector.png";
 import routeMappings from "../routeMappings";
+import PopUp from "./PopUp";
+
 
 const AdminHome = () => {
 
@@ -24,6 +26,10 @@ const AdminHome = () => {
     const [inputPassword, setInputPassword] = useState("");
     const [inputCheckbox, setInputCheckbox] = useState(false);
     const [inputLoginFail, setInputLoginFail] = useState("");
+    const [forgotPassword, setForgotPassword] = useState(false);
+    const [inputForgotPassword, setInputForgotPassword] = useState("");
+    const [emailCheck, setEmailCheck] = useState(false)
+    const [isEmailCheck, setisEmailCheck] = useState(false)
 
     const HandleInputEmail = (e) => {
         setInputEmail(e.target.value);
@@ -31,6 +37,32 @@ const AdminHome = () => {
 
     const HandleInputPassword = (e) => {
         setInputPassword(e.target.value);
+    }
+
+    const HandleInputForgotPassword = (e) => {
+        setInputForgotPassword(e.target.value);
+    }
+
+    const HandleForgotPassword = () => {
+        setForgotPassword(true);
+    }
+
+    const HandleClose = () => {
+        setForgotPassword(false);
+    }
+
+    function isEmail(input) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(input);
+    }
+
+    const HandleForgotPasswordSubmit = () => {
+        if (isEmail(inputForgotPassword)) {
+            setEmailCheck(true);
+        } else {
+            setisEmailCheck(true);
+        }
+        console.log(inputForgotPassword);
     }
 
     const setRememberMeCookie = (who) => {
@@ -112,7 +144,34 @@ const AdminHome = () => {
                             <label className = "flabel">Remember me</label>
                         </div>
                         <div className="Login" ><button className="Login-img" onClick={HandleSubmit}><p className = "login-para">Login</p></button></div>
-                        
+                        <div>
+                            <p className="flabel" onClick={HandleForgotPassword}>Forgot Password</p>
+                        </div>
+                    </div>
+                    <div>
+                        <PopUp trigger = {forgotPassword}>
+                            {forgotPassword ? (
+                                <div>
+                                    <h1 onClick={HandleClose} className="close-btn">x</h1>
+                                    <div>
+                                        <h1 className="forgot-password-head">Forgot Password: </h1>
+                                        <hr className="heading-line"/>
+                                        <div className="forgot-password">
+                                            <input 
+                                                className="input2" 
+                                                placeholder="Enter your Email id"
+                                                value={inputForgotPassword}
+                                                onChange={HandleInputForgotPassword}
+                                                type={"email"}
+                                            />
+                                            {emailCheck ? <p className="verify-para">Check Your Email!</p> : ""}
+                                            {isEmailCheck ? <p className="verify-para">Invalid or Error in Email id</p> : ""}
+                                            <button className="forgot-password-button" onClick={HandleForgotPasswordSubmit}>Enter</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ): "" }
+                        </PopUp>
                     </div>
                     <p>{inputLoginFail}</p>
                     <div>
