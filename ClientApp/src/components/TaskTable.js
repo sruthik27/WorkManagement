@@ -8,6 +8,8 @@ import CommentBox from './CommentBox';
 import CommentCard from './CommentCard';
 import Switch from '@mui/material/Switch';
 import {Puff} from 'react-loader-spinner';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 class PuffLoader extends React.Component {
  componentDidMount() {
@@ -221,6 +223,13 @@ class TaskTable extends Component {
         }
     }
 
+    handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    // Add some text
+    doc.text('Workbox id: '+this.state.selectedItem.work_id, 10, 10);
+    // Save the PDF with a name
+    doc.save('HelloWorld.pdf');
+  };
 
     render() {
         const {
@@ -269,7 +278,7 @@ class TaskTable extends Component {
                         </div>
                     </div>
                 </div>
-                <PopUp trigger={selectedItem !== null}>
+                <PopUp trigger={selectedItem !== null} id={"popup"}>
                     {/* Pass the selectedItem as a prop to the PopUp */}
                     {isLoading ?
                         <div className="overlay">

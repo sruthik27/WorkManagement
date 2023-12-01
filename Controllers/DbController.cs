@@ -73,7 +73,7 @@ public class DbController : ControllerBase
     [HttpGet("gettasks")]
     public IActionResult GetTasks(string n)
     {
-        return Ok(_context.Tasks.Where(x=>x.work_id==long.Parse(n)).OrderBy(t=>t.order_no).Select(y=>new{task_id = y.task_id.ToString(),work_id=y.work_id.ToString(),y.order_no,y.completed,y.due_date,y.task_name}));
+        return Ok(_context.Tasks.Where(x=>x.work_id==long.Parse(n)).OrderBy(t=>t.order_no).Select(y=>new{task_id = y.task_id.ToString(),work_id=y.work_id.ToString(),y.order_no,y.completed,y.due_date,y.task_name,y.weightage}));
     }
     
 
@@ -454,6 +454,44 @@ public class DbController : ControllerBase
             .Select(s => s[random.Next(s.Length)]).ToArray());
     }
     
+    //reset pass for admin/coordinator
+
+    public class ResetDto
+    {
+        public string email { get; set; }
+        public string oldpass { get; set; }
+        public string newpass { get; set; }
+    }
+    
+    [HttpPost("resetpass1")]
+    public IActionResult SetNewPass([FromBody] ResetDto resetDto)
+    {
+        var email = resetDto.email;
+        var oldpass = resetDto.oldpass;
+        var newpass = resetDto.newpass;
+        string newPassHash = BCrypt.Net.BCrypt.HashPassword(newpass);
+        var existingLogin = _context.Logins.FirstOrDefault(l => l.email == email);
+        if (existingLogin == null)
+        {
+            // Email not found in the database, return false
+            return Ok(new { success = false });
+        }
+        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(oldpass, existingLogin.password);
+        // Compare the provided password with the stored password
+        if (isPasswordValid)
+        {
+            existingLogin.password = newPassHash;
+            _context.SaveChanges();
+            return Ok(new { success = "true" });
+        }
+        else
+        {
+            return Ok(new { success = "false" });
+        }
+        
+    }
+    
+    //reset pass for workers
     [HttpPost("resetpass")]
     public IActionResult ResetPass(string mailid)
     {

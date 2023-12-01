@@ -146,7 +146,7 @@ const AdminHome = () => {
                         </div>
                         <div className="Login" ><button className="Login-img" onClick={HandleSubmit}><p className = "login-para">Login</p></button></div>
                         <div>
-                            <p className="flabel" onClick={HandleForgotPassword}>Forgot Password</p>
+                            <p className="flabel" onClick={HandleForgotPassword}>Reset Password</p>
                         </div>
                     </div>
                     <div>
