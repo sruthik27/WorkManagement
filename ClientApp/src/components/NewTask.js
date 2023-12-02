@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import './NewTask.css';
 import Slider from '@mui/material/Slider';
+import routeMappings from "../routeMappings";
 
 const NewTask = () => {
     const [workName, setWorkName] = useState("");
-    const [workCost, setWorkCost] = useState("");
+    const [workCost, setWorkCost] = useState(0);
     const [worker, setWorker] = useState("");
     const [startDate, setStartDate] = useState(new Date());
     const [dueDate, setDueDate] = useState(new Date());
@@ -17,7 +18,7 @@ const NewTask = () => {
     const [noOfSubtasks, setNoOfSubtasks] = useState(1);
     const [subtasks, setSubtasks] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [valueText, setValueText] = useState("");
+    const [valueText, setValueText] = useState(1);
 
     const fetchWorkerNames = () => {
         fetch('/db/getworkers')
@@ -30,7 +31,7 @@ const NewTask = () => {
         fetchWorkerNames();
     }, []);
 
-    const handleFormSubmit = () => {
+    const handleFormSubmit = async () => {
         const newWork = {
             work: {
                 work_name: workName,
@@ -44,7 +45,7 @@ const NewTask = () => {
                 worker: worker,
                 advance_paid: false,
                 bill_paid: false,
-                coordinator:coordinator
+                coordinator: coordinator
             },
             subtasks: subtasks,
         };
@@ -58,11 +59,11 @@ const NewTask = () => {
             redirect: 'follow'
         };
 
-        fetch("/db/addwork", jsonData)
+        await fetch("/db/addwork", jsonData)
             .then(response => response.text())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
-        
+
         setWorkName("");
         setTaskDescription("");
         setWorkCost("");
@@ -70,6 +71,8 @@ const NewTask = () => {
         setDueDate(new Date());
         setStartDate(new Date());
         setCoordinator("");
+
+        navigate(routeMappings["bHWtcH10="], {state: {fromAdminHome: true}});
     };
 
     const handleSubtaskFormSubmit = () => {
@@ -189,9 +192,9 @@ const NewTask = () => {
                             Add Subtask
                         </button>
                         <br />
-                        <a href = 'Coordinator'><button type="button" className="btn" onClick={handleFormSubmit}>
-                            Add Task
-                        </button></a>
+                        <button type="button" className="btn" onClick={handleFormSubmit}>
+                            Add Work
+                        </button>
                     </div>
                     {showModal && (
                         <div tabIndex="-1" role="dialog" style={{display: showModal ? "block" : "none"  }}>
