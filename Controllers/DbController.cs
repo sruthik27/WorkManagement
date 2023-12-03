@@ -221,6 +221,18 @@ public class DbController : ControllerBase
         _context.SaveChanges();
         return Ok();
     }
+    
+    //reset pass for workers
+    [HttpPut("resetpass")]
+    public IActionResult ResetPass([FromBody] ResetDto resetDto)
+    {
+        var newpass = resetDto.newpass;
+        var user = _context.WLogins.FirstOrDefault(x => x.email == resetDto.email);
+        string passwordHash = BCrypt.Net.BCrypt.HashPassword(newpass);
+        user.password = passwordHash;
+        _context.SaveChangesAsync();
+        return Ok(new {message = "success"});
+    }
 
     //-------------------------------------------------------------------
 
@@ -469,18 +481,16 @@ public class DbController : ControllerBase
         var email = resetDto.email;
         var oldpass = resetDto.oldpass;
         var newpass = resetDto.newpass;
-        string newPassHash = BCrypt.Net.BCrypt.HashPassword(newpass);
         var existingLogin = _context.Logins.FirstOrDefault(l => l.email == email);
         if (existingLogin == null)
         {
             // Email not found in the database, return false
-            return Ok(new { success = false });
+            return NotFound(new { message = "Data not found" });
         }
-        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(oldpass, existingLogin.password);
         // Compare the provided password with the stored password
-        if (isPasswordValid)
+        if (oldpass==existingLogin.password)
         {
-            existingLogin.password = newPassHash;
+            existingLogin.password = newpass;
             _context.SaveChanges();
             return Ok(new { success = "true" });
         }
@@ -489,34 +499,6 @@ public class DbController : ControllerBase
             return Ok(new { success = "false" });
         }
         
-    }
-    
-    //reset pass for workers
-    [HttpPost("resetpass")]
-    public IActionResult ResetPass(string mailid)
-    {
-        var newpass = GenerateRandomString(6);
-        var user = _context.WLogins.FirstOrDefault(x => x.email == mailid);
-        string passwordHash = BCrypt.Net.BCrypt.HashPassword(newpass);
-        user.password = passwordHash;
-        _context.SaveChangesAsync();
-        var email = new MimeMessage();
-        email.From.Add(new MailboxAddress("TCE MDR", "insomniadevs007@gmail.com"));
-        email.To.Add(new MailboxAddress("Worker", mailid));
-        email.Subject = "Mail with resetted password";
-        email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { 
-            Text = $"Your new password is <b>{newpass}</b>"
-        }; 
-        
-        using (var smtp = new SmtpClient())
-        {
-       smtp.Connect("smtp.gmail.com", 587, false);
-       smtp.Authenticate("insomniadevs007@gmail.com", "lzhyecgavxzkcgvg");
-       smtp.Send(email);
-       smtp.Disconnect(true);
-        }
-
-        return Ok(new {message = "success"});
     }
 
 }

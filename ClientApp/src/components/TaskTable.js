@@ -83,6 +83,7 @@ class TaskTable extends Component {
 
         let fetchedtasks = await fetch(`/db/gettasks?n=${item.work_id}`);
         let tasks = await fetchedtasks.json();
+        console.log(tasks);
 
         let fetchedpayments = await fetch(`/db/getpayments?workid=${item.work_id}`);
         let payments = await fetchedpayments.json();

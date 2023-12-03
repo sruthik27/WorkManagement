@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import './NewTask.css';
 import Slider from '@mui/material/Slider';
 import routeMappings from "../routeMappings";
+import { useNavigate } from 'react-router-dom';
 
 const NewTask = () => {
     const [workName, setWorkName] = useState("");
@@ -19,7 +20,8 @@ const NewTask = () => {
     const [subtasks, setSubtasks] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [valueText, setValueText] = useState(1);
-
+    const navigate = useNavigate();
+    
     const fetchWorkerNames = () => {
         fetch('/db/getworkers')
             .then(response => response.json())
