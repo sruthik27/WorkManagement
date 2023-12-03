@@ -245,6 +245,7 @@ const NewTask = () => {
                                                         marks
                                                         min={1}
                                                         max={5}
+                                                        style={{color: "#640000"}}
                                                     />
                                                 </div>
                                             </form>

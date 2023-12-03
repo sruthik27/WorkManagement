@@ -83,7 +83,6 @@ class TaskTable extends Component {
 
         let fetchedtasks = await fetch(`/db/gettasks?n=${item.work_id}`);
         let tasks = await fetchedtasks.json();
-        console.log(tasks);
 
         let fetchedpayments = await fetch(`/db/getpayments?workid=${item.work_id}`);
         let payments = await fetchedpayments.json();
@@ -224,13 +223,47 @@ class TaskTable extends Component {
         }
     }
 
-    handleDownloadPDF = () => {
-    const doc = new jsPDF();
-    // Add some text
-    doc.text('Workbox id: '+this.state.selectedItem.work_id, 10, 10);
-    // Save the PDF with a name
-    doc.save('HelloWorld.pdf');
-  };
+    generatePDF = () => {
+        const elementToCapture = document.getElementById('elementId');
+        const currentDate = new Date();
+        
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth() + 1;
+        const day = currentDate.getDate();
+
+        const formattedMonth = month < 10 ? `0${month}` : month;
+        const formattedDay = day < 10 ? `0${day}` : day;
+        const formattedDate = `${formattedMonth}/${formattedDay}/${year}`;
+
+        html2canvas(elementToCapture)
+            .then(canvas =>{
+                const doc = new jsPDF({
+                    orientation: "portrait",
+                    unit: "mm",
+                    format: "a4",
+                });
+                doc.setFontSize(14);
+                // Add some text
+                doc.text('Work Name: '+this.state.selectedItem.work_name, 20, 30);
+                doc.text('Work Description: '+this.state.selectedItem.work_description, 20, 40);
+                doc.text('Cost Of Work: '+this.state.selectedItem.wage, 20, 50);
+                doc.text('Advance Paid: '+(this.state.selectedItem.advancePaid ? "YES" : "NO"), 20, 60);
+                doc.text('Bill Paid: '+(this.state.selectedItem.bill_paid ? "YES" : "NO"), 20, 70);
+                doc.text('Start Date: '+this.state.selectedItem.start_date.slice(0, 10), 20, 80);
+                doc.text('Due Date: '+this.state.selectedItem.due_date.slice(0, 10), 20, 90);
+                doc.text('Work Status: '+(this.state.selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"), 20, 100);
+                doc.text('Coordinator: '+this.state.selectedItem.coordinator, 20, 110);
+                doc.text('Worker: '+this.state.selectedItem.worker, 20, 120);
+                doc.text('Total SubTask: '+this.state.subtask.length, 20, 130);
+                doc.text('Downloaded on '+formattedDate, 20, 140);
+                // Save the PDF with a name
+                doc.save(this.state.selectedItem.work_name + '.PDF');
+            })
+            .catch(error => {
+                // Handle errors if any
+                console.error('Error generating PDF:', error);
+            });
+    };
 
     render() {
         const {
@@ -240,6 +273,8 @@ class TaskTable extends Component {
             selectedSubtasks,
             dueDateDiff, advancePaid, dateOfPaid, editable, isChecked, paidbills,isLoading
         } = this.state;
+
+        const star = "⭐";
 
         return (
             <>
@@ -286,7 +321,8 @@ class TaskTable extends Component {
                             <div className="puff-loader"><PuffLoader /></div>
                         </div>: (
                     selectedItem && (
-                        <div>
+                        <div id='elementId'>
+                            {console.log(selectedItem)}
                             <h1 className="close-btn" onClick={this.handleClose}>x</h1>
                             {/* Display information related to the selectedItem here */}
                             <h2 className='popup-head'>Work Details:</h2>
@@ -370,7 +406,14 @@ class TaskTable extends Component {
                                                                     <div>
                                                                         <li {...provided.draggableProps} {...provided.dragHandleProps}
                                                                             ref={provided.innerRef}>
-                                                                            {subtask.task_name}
+                                                                                <div className='sub-star'>
+                                                                                    <div>
+                                                                                        {subtask.task_name}
+                                                                                    </div>
+                                                                                    <div className='star'>
+                                                                                        {star.repeat(subtask.weightage)}
+                                                                                    </div>
+                                                                                </div>
                                                                         </li>
                                                                         <hr/>
                                                                     </div>
@@ -394,7 +437,7 @@ class TaskTable extends Component {
                                     {selectedSubtasks.map((subtask, index) => <li key={index}>{subtask.task_name}</li>)}
                                 </ol>
                             }
-
+                            <button onClick={this.generatePDF}>Generate PDF</button>
                         </div>
                     ))}
                 </PopUp>
