@@ -86,8 +86,8 @@
     position: relative;
     padding: 2rem;
     width: 40%;
-    max-width: 30vw;
-    max-height: 50vh;
+    max-width: 37vw;
+    max-height: 63vh;
     background: #f4d6a6;
     border-radius: 20px;
     overflow: auto;
@@ -134,4 +134,8 @@
 }
 .subtask-des-des {
     font-size: 16px;
+}
+
+..css-187mznn-MuiSlider-root {
+    color: #640000;
 }

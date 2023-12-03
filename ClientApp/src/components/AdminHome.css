@@ -138,10 +138,12 @@ body {
 .forgot-password-button {
     border-radius: 10px;
     background: #F5BB5C;
-    padding: 1vw 4vw 1vw 4vw;
+    padding: 1vw 3vw 1vw 3vw;
     border: none;
     cursor: pointer;
     color: #640000;
+    font-size: 20px;
+    margin-top: 20px;
 }
 
 .forgot-password-button:hover {

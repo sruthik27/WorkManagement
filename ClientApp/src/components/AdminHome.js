@@ -30,6 +30,9 @@ const AdminHome = () => {
     const [inputForgotPassword, setInputForgotPassword] = useState("");
     const [emailCheck, setEmailCheck] = useState(false)
     const [isEmailCheck, setisEmailCheck] = useState(false)
+    const [inputResetPassword, setInputResetPassword] = useState("");
+    const [inputConfirmPassword, setInputConfirmPassword] = useState("");
+    const [misMatch, setMisMatch] = useState(false);
 
     const HandleInputEmail = (e) => {
         setInputEmail(e.target.value);
@@ -37,6 +40,14 @@ const AdminHome = () => {
 
     const HandleInputPassword = (e) => {
         setInputPassword(e.target.value);
+    }
+
+    const HandleInputResetPassword = (e) => {
+        setInputResetPassword(e.target.value);
+    }
+
+    const HandleInputConfirmPassword = (e) => {
+        setInputConfirmPassword(e.target.value);
     }
 
     const HandleInputForgotPassword = (e) => {
@@ -49,6 +60,8 @@ const AdminHome = () => {
 
     const HandleClose = () => {
         setForgotPassword(false);
+        setEmailCheck(false);
+        setisEmailCheck(false);
     }
 
     function isEmail(input) {
@@ -63,7 +76,20 @@ const AdminHome = () => {
         } else {
             setisEmailCheck(true);
         }
+        if (inputResetPassword !== inputConfirmPassword) {
+            setMisMatch(true);
+        } else {
+            setMisMatch(false);
+        }
+
         console.log(inputForgotPassword);
+        console.log(inputResetPassword);
+        console.log(inputConfirmPassword);
+        setInputConfirmPassword("");
+        setInputResetPassword("");
+        setInputForgotPassword("");
+        
+        
     }
 
     const setRememberMeCookie = (who) => {
@@ -155,7 +181,7 @@ const AdminHome = () => {
                                 <div>
                                     <h1 onClick={HandleClose} className="close-btn">x</h1>
                                     <div>
-                                        <h1 className="forgot-password-head">Forgot Password: </h1>
+                                        <h1 className="forgot-password-head">Reset Password: </h1>
                                         <hr className="heading-line"/>
                                         <div className="forgot-password">
                                             <input 
@@ -165,9 +191,24 @@ const AdminHome = () => {
                                                 onChange={HandleInputForgotPassword}
                                                 type={"email"}
                                             />
+                                            <input
+                                                className="input2"
+                                                type={"password"}
+                                                value={inputResetPassword}
+                                                onChange={HandleInputResetPassword}
+                                                placeholder="New Password"                        
+                                            />
+                                            <input
+                                                className="input2"
+                                                type={"password"}
+                                                value={inputConfirmPassword}
+                                                onChange={HandleInputConfirmPassword}
+                                                placeholder="Confirm Password"                        
+                                            />
                                             {emailCheck ? <p className="verify-para">Check Your Email!</p> : ""}
                                             {isEmailCheck ? <p className="verify-para">Invalid or Error in Email id</p> : ""}
-                                            <button className="forgot-password-button" onClick={HandleForgotPasswordSubmit}>Enter</button>
+                                            {misMatch ? <p className="verify-para">Password is Mismatched Check Your Password</p> : ""}
+                                            <button className="forgot-password-button" onClick={HandleForgotPasswordSubmit}>Change</button>
                                         </div>
                                     </div>
                                 </div>
