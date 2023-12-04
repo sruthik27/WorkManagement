@@ -7,7 +7,7 @@ body {
 }
 .Home {
     text-align: center;
-    background: #FBCE84;
+    background: #FFF9DF;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -137,7 +137,7 @@ body {
 
 .forgot-password-button {
     border-radius: 10px;
-    background: #F5BB5C;
+    background: #FFF9DF;
     padding: 1vw 3vw 1vw 3vw;
     border: none;
     cursor: pointer;
@@ -148,12 +148,12 @@ body {
 
 .forgot-password-button:hover {
     background: #640000;
-    color: #F5BB5C;
+    color: #FFF9DF;
 }
 
 .forgot-password-button:active {
     color: #640000;
-    background: #F5BB5C;
+    background: #FFF9DF;
 }
 
 .verify-para {

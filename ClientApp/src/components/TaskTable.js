@@ -10,6 +10,7 @@ import Switch from '@mui/material/Switch';
 import {Puff} from 'react-loader-spinner';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import Print from "./print.svg";
 
 class PuffLoader extends React.Component {
  componentDidMount() {
@@ -254,7 +255,7 @@ class TaskTable extends Component {
                 doc.text('Work Status: '+(this.state.selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"), 20, 100);
                 doc.text('Coordinator: '+this.state.selectedItem.coordinator, 20, 110);
                 doc.text('Worker: '+this.state.selectedItem.worker, 20, 120);
-                doc.text('Total SubTask: '+this.state.subtask.length, 20, 130);
+                doc.text('Total SubTask: '+this.state.selectedSubtasks.length, 20, 130);
                 doc.text('Downloaded on '+formattedDate, 20, 140);
                 // Save the PDF with a name
                 doc.save(this.state.selectedItem.work_name + '.PDF');
@@ -389,6 +390,7 @@ class TaskTable extends Component {
                                         percentage={selectedItem.total_subtasks !== 0 ? (selectedItem.completed_subtasks / selectedItem.total_subtasks) * 100 : 0}
                                     />
                                     {this.state.editable ? <p>{""}</p> : <CommentBox workid={selectedItem.work_id}/>}
+                                    <button className='print-button' onClick={this.generatePDF}><img src={Print} alt='print'/></button>
                                 </div>
                             </div>
                             {this.state.editable ?
@@ -437,7 +439,6 @@ class TaskTable extends Component {
                                     {selectedSubtasks.map((subtask, index) => <li key={index}>{subtask.task_name}</li>)}
                                 </ol>
                             }
-                            <button onClick={this.generatePDF}>Generate PDF</button>
                         </div>
                     ))}
                 </PopUp>

@@ -15,7 +15,7 @@
 }
 
 .form {
-    background: #fbce84;
+    background: #FFF9DF;
     padding: 30px;
     border-radius: 20px;
     margin: 30px;
@@ -88,7 +88,7 @@
     width: 40%;
     max-width: 37vw;
     max-height: 63vh;
-    background: #f4d6a6;
+    background: #FFF9DF;
     border-radius: 20px;
     overflow: auto;
 }
