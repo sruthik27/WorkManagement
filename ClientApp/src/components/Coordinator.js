@@ -71,9 +71,11 @@ const Coordinator = () => {
               <h3 className='datepickerhead'>Verification code: </h3>
               <div className='code-div'>
                 <VerificationCodeDisplay/>
-                <button className="update-button" onClick={updateVerificationCode}>Update</button>
+                <button className="update-button" onClick={updateVerificationCode}>Refresh</button>
               </div>
             </div>
+            <p style={{margin:0,fontSize:16}}>(code required for new workers to register)</p>
+            
             <TaskTable data={itemData} editable={true}/>
             <div className='coordinator-buttons'>
               <a href={'/WorkReport'}><button className='coo-button' >WORK REPORTS</button></a>

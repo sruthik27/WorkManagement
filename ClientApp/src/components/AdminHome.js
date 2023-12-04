@@ -28,6 +28,7 @@ const AdminHome = () => {
     const [inputLoginFail, setInputLoginFail] = useState("");
     const [forgotPassword, setForgotPassword] = useState(false);
     const [inputForgotPassword, setInputForgotPassword] = useState("");
+    const [oldPassword,setOldPassword] = useState("");
     const [emailCheck, setEmailCheck] = useState(false)
     const [isEmailCheck, setisEmailCheck] = useState(false)
     const [inputResetPassword, setInputResetPassword] = useState("");
@@ -69,7 +70,7 @@ const AdminHome = () => {
         return emailRegex.test(input);
     }
 
-    const HandleForgotPasswordSubmit = () => {
+    const HandleForgotPasswordSubmit = async () => {
         if (isEmail(inputForgotPassword)) {
             setEmailCheck(true);
             setisEmailCheck(false);
@@ -81,15 +82,33 @@ const AdminHome = () => {
         } else {
             setMisMatch(false);
         }
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
 
-        console.log(inputForgotPassword);
-        console.log(inputResetPassword);
-        console.log(inputConfirmPassword);
+        var raw = JSON.stringify({
+            "email": inputForgotPassword,
+            "newpass": inputResetPassword,
+            "oldpass": oldPassword,
+        });
+
+        var requestOptions = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        await fetch("/db/resetpass1", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+
         setInputConfirmPassword("");
         setInputResetPassword("");
+        setOldPassword("")
         setInputForgotPassword("");
-        
-        
+
+
     }
 
     const setRememberMeCookie = (who) => {
@@ -194,6 +213,15 @@ const AdminHome = () => {
                                             <input
                                                 className="input2"
                                                 type={"password"}
+                                                placeholder="Enter old password"
+                                                value={oldPassword}
+                                                onChange={(e) => {
+                                                    setOldPassword(e.target.value);
+                                                }}
+                                            />
+                                            <input
+                                                className="input2"
+                                                type={"password"}
                                                 value={inputResetPassword}
                                                 onChange={HandleInputResetPassword}
                                                 placeholder="New Password"                        
@@ -203,9 +231,9 @@ const AdminHome = () => {
                                                 type={"password"}
                                                 value={inputConfirmPassword}
                                                 onChange={HandleInputConfirmPassword}
-                                                placeholder="Confirm Password"                        
+                                                placeholder="Confirm new Password"                        
                                             />
-                                            {emailCheck ? <p className="verify-para">Check Your Email!</p> : ""}
+                                            {emailCheck ? <p className="verify-para">Password changed!</p> : ""}
                                             {isEmailCheck ? <p className="verify-para">Invalid or Error in Email id</p> : ""}
                                             {misMatch ? <p className="verify-para">Password is Mismatched Check Your Password</p> : ""}
                                             <button className="forgot-password-button" onClick={HandleForgotPasswordSubmit}>Change</button>

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const NewTask = () => {
     const [workName, setWorkName] = useState("");
-    const [workCost, setWorkCost] = useState(0);
+    const [workCost, setWorkCost] = useState("");
     const [worker, setWorker] = useState("");
     const [startDate, setStartDate] = useState(new Date());
     const [dueDate, setDueDate] = useState(new Date());

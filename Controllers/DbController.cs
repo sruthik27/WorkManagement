@@ -222,6 +222,42 @@ public class DbController : ControllerBase
         return Ok();
     }
     
+    //TO RESET PASSWORD
+    
+    //reset pass for admin/coordinator
+    public class ResetDto
+    {
+        public string email { get; set; }
+        public string oldpass { get; set; }
+        public string newpass { get; set; }
+    }
+    
+    [HttpPut("resetpass1")]
+    public IActionResult SetNewPass([FromBody] ResetDto resetDto)
+    {
+        var email = resetDto.email;
+        var oldpass = resetDto.oldpass;
+        var newpass = resetDto.newpass;
+        var existingLogin = _context.Logins.FirstOrDefault(l => l.email == email);
+        if (existingLogin == null)
+        {
+            // Email not found in the database, return false
+            return NotFound(new { message = "Data not found" });
+        }
+        // Compare the provided password with the stored password
+        if (oldpass==existingLogin.password)
+        {
+            existingLogin.password = newpass;
+            _context.SaveChanges();
+            return Ok(new { success = "true" });
+        }
+        else
+        {
+            return Ok(new { success = "false" });
+        }
+        
+    }
+    
     //reset pass for workers
     [HttpPut("resetpass")]
     public IActionResult ResetPass([FromBody] ResetDto resetDto)
@@ -457,48 +493,6 @@ public class DbController : ControllerBase
         return Ok(new {message = "registration succesffull"});
     }
     
-    //TO REST AND SEND PASSWORD
-    static string GenerateRandomString(int length)
-    {
-        const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-        Random random = new Random();
-        return new string(Enumerable.Repeat(chars, length)
-            .Select(s => s[random.Next(s.Length)]).ToArray());
-    }
     
-    //reset pass for admin/coordinator
-
-    public class ResetDto
-    {
-        public string email { get; set; }
-        public string oldpass { get; set; }
-        public string newpass { get; set; }
-    }
-    
-    [HttpPost("resetpass1")]
-    public IActionResult SetNewPass([FromBody] ResetDto resetDto)
-    {
-        var email = resetDto.email;
-        var oldpass = resetDto.oldpass;
-        var newpass = resetDto.newpass;
-        var existingLogin = _context.Logins.FirstOrDefault(l => l.email == email);
-        if (existingLogin == null)
-        {
-            // Email not found in the database, return false
-            return NotFound(new { message = "Data not found" });
-        }
-        // Compare the provided password with the stored password
-        if (oldpass==existingLogin.password)
-        {
-            existingLogin.password = newpass;
-            _context.SaveChanges();
-            return Ok(new { success = "true" });
-        }
-        else
-        {
-            return Ok(new { success = "false" });
-        }
-        
-    }
 
 }
