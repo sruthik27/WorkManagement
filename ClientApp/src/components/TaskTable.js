@@ -334,7 +334,7 @@ class TaskTable extends Component {
                                     <p>Time
                                         Period: {selectedItem.start_date.slice(0, 10)} to {selectedItem.due_date.slice(0, 10)}</p>
                                     {dueDateDiff < 0 && (
-                                        <p style={{color: 'red'}}>Due
+                                        <p style={{color: 'red'}}>Overdue
                                             by {Math.abs(Math.round(dueDateDiff))} {Math.abs(Math.round(dueDateDiff)) === 1 ? 'day' : 'days'}</p>
                                     )}
                                     <p>Coordinator: {selectedItem.coordinator}</p>

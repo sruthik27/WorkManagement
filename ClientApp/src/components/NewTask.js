@@ -20,6 +20,7 @@ const NewTask = () => {
     const [subtasks, setSubtasks] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [valueText, setValueText] = useState(1);
+    const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
     
     const fetchWorkerNames = () => {
@@ -33,7 +34,45 @@ const NewTask = () => {
         fetchWorkerNames();
     }, []);
 
+    const validateForm = () => {
+        if (workName === "") {
+            setErrorMessage("Work Name is required");
+            return;
+        }
+
+        if (workCost === "" || isNaN(workCost) ||workCost === 0) {
+            setErrorMessage("Work Cost is required and must be a number");
+            return;
+        }
+
+        if (worker === "") {
+            setErrorMessage("Worker is required");
+        }
+
+        if (startDate === "") {
+           setErrorMessage("Start Date is required");
+        }
+
+        if (dueDate === "") {
+            setErrorMessage("Due Date is required");
+        }
+        
+        if (coordinator === "") {
+            setErrorMessage("Coordinator is required");
+        }
+        
+        if(subtasks.length===0){
+            setErrorMessage("Add atleast one subtask");
+        }
+        return null;
+    };
+
+
     const handleFormSubmit = async () => {
+        validateForm();
+        if (errorMessage !== "") {
+            return;
+        }
         const newWork = {
             work: {
                 work_name: workName,
@@ -198,6 +237,7 @@ const NewTask = () => {
                             Add Work
                         </button>
                     </div>
+                    {errorMessage && <p className="error">{errorMessage}</p>}
                     {showModal && (
                         <div tabIndex="-1" role="dialog" style={{display: showModal ? "block" : "none"  }}>
                             <div role="document">

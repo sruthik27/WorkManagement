@@ -22,6 +22,37 @@ public class DbController : ControllerBase
         _context = context;
     }
     
+    //TO GET TOP 3 WORKS
+    [HttpGet("getnearworks")]
+    public IActionResult GetNearWorks()
+    {
+        var currentDate = DateTime.UtcNow;
+        var works = _context.Works
+            .AsNoTracking()
+            .Where(work => work.work_status != 'C' && work.due_date >= currentDate)
+            .OrderBy(work => work.due_date)
+            .Take(3)
+            .Select(work => new
+            {
+                work_id = work.work_id.ToString(),
+                work.work_name,
+                work.work_description,
+                work.work_status,
+                work.start_date,
+                work.due_date,
+                work.total_subtasks,
+                work.completed_subtasks,
+                work.wage,
+                worker = work.WorkerNavigation.worker_name,
+                work.advance_paid,
+                work.bill_paid,
+                work.coordinator
+            });
+
+        return Ok(works);
+    }
+
+    //TO GET ALL WORKS
     [HttpGet("getworks")]
     public IActionResult GetWorks()
     {
@@ -76,14 +107,16 @@ public class DbController : ControllerBase
         return Ok(_context.Tasks.Where(x=>x.work_id==long.Parse(n)).OrderBy(t=>t.order_no).Select(y=>new{task_id = y.task_id.ToString(),work_id=y.work_id.ToString(),y.order_no,y.completed,y.due_date,y.task_name,y.weightage}));
     }
     
-
+    //get workers data
     [HttpGet("getworkers")]
     public IActionResult GetWorkers()
     {
         var workers = _context.Workers.AsNoTracking().Select(w => new
         {
             worker_id = w.worker_id.ToString(),
-            w.worker_name
+            w.worker_name,
+            w.email,
+            w.phone_number
         });
         return Ok(workers);
     }

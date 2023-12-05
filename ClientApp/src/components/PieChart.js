@@ -28,7 +28,7 @@ class PieChart extends Component {
                     text={`${percentage.toFixed(2)}%`}
                     styles={buildStyles({
                         textColor: '#000',
-                        pathColor: '#ff5722',
+                        pathColor: percentage===100?'#4bfd54':'ff5722',
                         trailColor: '#d6d6d6',
                     })}
                 />
