@@ -394,7 +394,7 @@ public class DbController : ControllerBase
                 return Ok(new { redirectTo = "AdminMain",where='A' });
             }
             if (existingLogin.designation=='C')
-                return Ok(new { redirectTo = "coordinator",where='C'});
+                return Ok(new { redirectTo = "HeadPortal",where='C'});
             return Ok(new { redirectTo = "worker" });
         }
         else

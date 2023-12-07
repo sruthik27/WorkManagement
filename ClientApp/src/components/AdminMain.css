@@ -97,7 +97,7 @@
 .update-button {
     padding: 10px 25px 10px 25px;
     margin-left: 20px;
-    border: none;
+    border: 1px solid #640000;
     font-size: 20px;
     font-family: 'Alatsi';
     color: #640000;
@@ -120,6 +120,7 @@
 .send-button:hover {
     background-color: #640000;
     color: #FFF9DF;
+    transition: 0.15s;
 }
 
 .send-button:active {
@@ -194,24 +195,24 @@
 }
 
 .coo-button {
-    border-radius: 10px;
-    background: #FFF9DF;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.30);
-    padding: 1vw 4vw 1vw 4vw;
+    background-color: #640000;
+    color: #FDE8C5;
     border: none;
-    cursor: pointer;
-    color: #640000;
-    margin-left: 30px;
+    padding: 5px 15px 5px 15px;
+    border-radius: 20px;
 }
 
 .coo-button:hover {
-    background: #640000;
-    color: #FFF9DF;
+    background-color: #FDE8C5;
+    color: #640000;
+    border: 1px solid #640000;
+    transition: 0.15s;
 }
 
 .coo-button:active {
-    background-color: #FFF9DF;
-    color: #640000;
+    background-color: #640000;
+    color: #FDE8C5;
+    transition: 0.15s;
 }
 
 /* ::-webkit-scrollbar {
@@ -258,3 +259,4 @@
         transform: rotate(360deg);
     }
 }
+

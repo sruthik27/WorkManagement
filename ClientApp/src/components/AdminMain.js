@@ -61,7 +61,7 @@ const AdminMain = () => {
                             <PieChart
                                 data={[
                                     {title: 'Completed', value: CompletedPercent, color: '#7cd57c'},
-                                    {title: 'Active', value: ActivePercent, color: '#ffff68'},
+                                    {title: 'Active', value: ActivePercent, color: '#FFF9DF'},
                                 ]} label={({dataEntry}) => dataEntry.title}
                                 labelStyle={{
                                     fontSize: '6px',

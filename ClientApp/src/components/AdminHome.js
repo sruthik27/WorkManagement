@@ -18,7 +18,7 @@ const AdminHome = () => {
             navigate(routeMappings["aGVsbG9="],{ state: { fromAdminHome: true } });
         }
         else if (rememberMe.includes("rememberCMe")) {
-            navigate(routeMappings["bHWtcH10="],{ state: { fromAdminHome: true } });
+            navigate(routeMappings["Csjdjovn="],{ state: { fromAdminHome: true } });
         }
     }, [navigate]);
 
@@ -171,8 +171,9 @@ const AdminHome = () => {
             <div className="Home">
                 <div className="Home-Container">
                     <div>
-                        <h1 className="Admin-head">MDR - PORTAL</h1>
-                        <p className="Admin-info">MANAGEMENT DEVELOPMENT RESTORATION</p>
+                        <h1 className="Admin-head1">Thiagarajar College of Engineering</h1>
+                        <h3 className="Admin-head">Department of Modernization,Development and Restoration (DMDR)</h3>
+                        <p className="Admin-info">PROJECT MANAGEMENT PORTAL</p>
                     </div>
                     <div className="user-input">
                         <input className="input1" type="email" value={inputEmail} onChange={HandleInputEmail} placeholder="Email"/>

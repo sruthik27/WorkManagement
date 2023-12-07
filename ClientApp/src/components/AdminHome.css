@@ -18,8 +18,19 @@ body {
     margin: 0;
     color: #630A10;
     text-shadow: 15px 15px 10px rgba(0, 0, 0, 0.25);
-    font-family: Rammetto One;
-    font-size: 5vw;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 3vw;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.Admin-head1 {
+    margin: 0;
+    color: #630A10;
+    text-shadow: 15px 15px 10px rgba(0, 0, 0, 0.25);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 4vw;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -107,11 +118,12 @@ body {
 .login-para {
     color: whitesmoke;
     font-size: 20px;
+    margin-top: 10px;
 }
 .Footer-img {
     width: 100%;
     margin-top: 20px;
-    height: 170px;
+    height: 180px;
 }
 
 .input2 {
@@ -139,7 +151,7 @@ body {
     border-radius: 10px;
     background: #FFF9DF;
     padding: 1vw 3vw 1vw 3vw;
-    border: none;
+    border: 1px solid #640000;
     cursor: pointer;
     color: #640000;
     font-size: 20px;
