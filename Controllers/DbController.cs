@@ -4,6 +4,7 @@ using WorkManagement.Models;
 using Microsoft.AspNetCore.Mvc;
 using MailKit.Net.Smtp;
 using MailKit;
+using MailKit.Security;
 using MimeKit;
 namespace WorkManagement.Controllers;
 
@@ -157,6 +158,68 @@ public class DbController : ControllerBase
     
     
     //--------------------------------------------------------
+    
+    //TO CHANGE PASSWORD FOR ADMIN/COORDINATOR
+    [HttpPut("resetpassword")]
+    public void SendPasswordResetEmail()
+    {
+        // Create email message
+        var emailMessage = new MimeMessage();
+        emailMessage.From.Add(new MailboxAddress("TCE DMDR", "insomniadevs007@gmail.com"));
+        emailMessage.To.Add(new MailboxAddress("M.r sruthik", "sruthik2016@gmail.com"));
+        emailMessage.Subject = "Password Reset";
+        emailMessage.Body = new TextPart("html") { Text = @"
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Password Reset</title>
+  <style>
+      body {
+          font-family: Arial, sans-serif;
+      }
+      .container {
+          width: 600px;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #f9f9f9;
+          border-radius: 5px;
+      }
+      .button {
+          display: inline-block;
+          background-color: #007BFF;
+          color: #ffffff;
+          padding: 10px 20px;
+          text-decoration: none;
+          border-radius: 5px;
+          font-size: 16px;
+          margin-top: 20px;
+      }
+        .ii a[href] {
+         color: #fff;
+      }
+  </style>
+</head>
+<body>
+  <div class=""container"">
+                <h2>Password Reset</h2>
+                <p>Hello,</p>
+                <p>We received a request to reset your password. Click the button below to reset it.</p>
+                <a href=""https://tceworkmanagement.azurewebsites.net/"" class=""button"">Reset Password</a>
+                <p>If you did not request a password reset, please ignore this email or reply to let us know.</p>
+                <b>Delete this email after resetting for security purposes<b>
+                </div>
+                </body>
+                </html>
+"};
+
+        // Send email
+        using var smtp = new SmtpClient();
+        smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+        smtp.Authenticate("insomniadevs007@gmail.com", "lzhyecgavxzkcgvg");
+        smtp.Send(emailMessage);
+        smtp.Disconnect(true);
+    }
+
         
     //TO UPDATE ORDER OF SUBTASK
     [Route("updateorder")]
