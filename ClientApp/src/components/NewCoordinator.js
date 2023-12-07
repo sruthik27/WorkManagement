@@ -49,7 +49,7 @@ const NewCoordinator = () => {
                                     <h2 className='active-title-h2' >December-2023</h2>
                                 </div>
                                 <div>
-                                <ProgressBar striped variant="warning" now={70} />
+                                <ProgressBar striped variant="warning" animated now={70} />
                                 </div>
                             </div>
                             <div className='active-inner-div'>
@@ -58,7 +58,7 @@ const NewCoordinator = () => {
                                     <h2 className='active-title-h2' >December-2023</h2>
                                 </div>
                                 <div>
-                                    <ProgressBar striped variant="warning" now={60} />
+                                    <ProgressBar striped variant="warning" animated now={60} />
                                 </div>
                             </div>
                             <div className='active-inner-div'>
@@ -67,7 +67,7 @@ const NewCoordinator = () => {
                                     <h2 className='active-title-h2' >December-2023</h2>
                                 </div>
                                 <div>
-                                <ProgressBar striped variant="warning" now={45} />
+                                <ProgressBar striped variant="warning" animated now={45} />
                                 </div>
                             </div>
                             <button className='view-all-btn' onClick={HandleForward}>VIEW ALL &gt;</button>
