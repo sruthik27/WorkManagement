@@ -387,7 +387,7 @@ class TaskTable extends Component {
                                 <div className='popup-piechart'>
                                     <p>Work Progress: </p>
                                     <PieChart
-                                        percentage={selectedItem.total_subtasks !== 0 ? (selectedItem.completed_subtasks / selectedItem.total_subtasks) * 100 : 0}
+                                        percentage={selectedItem.total_subtasks !== 0 ? selectedItem.completed_subtasks : 0}
                                     />
                                     {this.state.editable ? <p>{""}</p> : <CommentBox workid={selectedItem.work_id}/>}
                                     <button className='print-button' onClick={this.generatePDF}><img src={Print} alt='print'/></button>
@@ -411,9 +411,6 @@ class TaskTable extends Component {
                                                                                 <div className='sub-star'>
                                                                                     <div>
                                                                                         {subtask.task_name}
-                                                                                    </div>
-                                                                                    <div className='star'>
-                                                                                        {star.repeat(subtask.weightage)}
                                                                                     </div>
                                                                                 </div>
                                                                         </li>

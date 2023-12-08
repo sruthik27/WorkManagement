@@ -120,7 +120,7 @@ const NewCoordinator = () => {
                                     </div>
                                     <div style={{margin: '20px'}}>
                                         <ProgressBar striped variant="warning" animated
-                                                     now={(x.completed_subtasks / x.total_subtasks) * 100}/>
+                                                     now={x.completed_subtasks}/>
                                     </div>
                                 </div>
                             ))}
