@@ -1,10 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Alatsi&family=Lexend+Deca:wght@300&family=Montserrat:wght@100;400&display=swap');
+
 .ahome1 {
     display: grid;
     align-items: center;
     background:url( 'TCE_BLUR.png');
     background-size: cover;
     background-repeat: no-repeat;
-    padding-bottom: 25px;
+    padding: 25px;
+    padding-right: 0;
 }
 
 .head-div {
@@ -14,33 +17,35 @@
 
 .container-div {
     display: flex;
-    justify-content: space-around;
+    column-gap: 7vw;
 }
 
 .active-div {
     background-color: #FDE8C5;
-    width: 650px;
-    height: 535px;
+    width: 500px;
+    height: 550px;
     display: flex;
     flex-direction: column;
     align-items: center;
     row-gap: 20px;
     padding: 20px;
-    border-radius: 50px
+    border-radius: 50px;
 }
 
 .active-inner-div {
     background-color: white;
-    padding: 20px;
-    width: 530px;
+    padding: 6px;
+    width: 420px;
     border: 5px solid #640000;
     border-radius: 20px;
+    padding-bottom: 0;
 }
 
 .active-title-h2 {
-    width: 250px;
-    font-family: Arial, Helvetica, sans-serif;
+    width: 200px;
+    font-family: Montserrat;
     font-size: 20px;
+    margin: 0;
 }
 
 .work-container-div {
@@ -52,13 +57,14 @@
 .Active-head-div {
     display: flex;
     column-gap: 25px;
+    margin: 3px;
     margin-bottom: 10px;
 }
 
 .create-work-div {
     background-color: #FDE8C5;
     width: 300px;
-    height: 235px;
+    height: 250px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -106,15 +112,91 @@
 }
 
 .title-div {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Montserrat;
     font-size: 2rem;
     color: #640000;
+}
+
+.date-div {
+    color: white;
+    border: 3px solid white;
+    box-shadow: 1px 1px 5px #443737;
+    background: black;
+    border-radius: 7px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.manage-agencie-div {
+    display: flex;
+    align-items: center;
+    background-color: #FDE8C5;
+    font-family: Montserrat;
+    font-size: 30px;
+    border-radius: 30px 0 0 30px;
+    margin-top: 20px;
+}
+
+.mange-agen-sym-p {
+    margin: 0;
+    font-size: 90px;
+    color: #ffc107;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.mang-agen-p {
+    margin: 0;
+    margin-left: 15px;
+    color: #640000;
+}
+
+.piechart-div {
+    width: 230px;
+}
+
+.notification-head {
+    position: fixed;
+    top: 0;
+    left: 45%;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: flex-start;
+    animation-name: calc();
+    animation-duration: 0.5s;
+    animation-delay: 10s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes notification-head {
+    0% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+.notification-inner {
+    position: relative;
+    padding: 2rem;
+    width: 100%;
+    max-width: 55vw;
+    max-height: 81vh;
+    background: #FFF9DF;
+    border-radius: 7px;
+    overflow: auto;
 }
 
 .workers-table {
  width: 100%;
  border-collapse: collapse;
- font-family: Arial, sans-serif;
+ font-family: Montserrat;
  margin-top: 20px;
 }
 

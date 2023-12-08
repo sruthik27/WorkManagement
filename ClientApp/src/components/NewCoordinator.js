@@ -7,6 +7,8 @@ import "./NewCoordinator.css";
 import CreateButton from "./create_btn.gif";
 import WorkImg from "./work_img.gif";
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import Flag from "./flag_icon.svg";
+import {PieChart} from 'react-minimal-pie-chart';
 
 const NewCoordinator = () => {
 
@@ -15,6 +17,9 @@ const NewCoordinator = () => {
     const [loading, setLoading] = useState(false);
     const [topworks,setTopworks] = useState([]);
     const [workers,setWorkers] = useState([]);
+    const [CompletedPercent, setCompletedPercent] = useState(0);
+    const [ActivePercent, setActivePercent] = useState(0);
+    const [notification, setNotification] = useState(false);
 
     useEffect(() => {
         if (!location.state || !location.state.fromAdminHome) {
@@ -27,31 +32,45 @@ const NewCoordinator = () => {
     }, []);
 
     const fetchData  = async() => {
-    try {
-      const response = await fetch('/db/getnearworks');
-      const data = await response.json();
-      setTopworks(data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-    finally {
-      setLoading(false);
-    }
+        try {
+        const response = await fetch('/db/getnearworks');
+        const data = await response.json();
+        setTopworks(data);
+        const NoOfTotalTasks = 10;//data.length;
+        const NoOfCompletedTasks = 5;//data.filter(x => x.work_status === 'C').length;
+        const NoOfActiveTasks = 5;//data.filter(x => x.work_status === 'A').length;
+        setCompletedPercent(NoOfCompletedTasks / NoOfTotalTasks * 100);
+        setActivePercent(NoOfActiveTasks / NoOfTotalTasks * 100);
+
+        } catch (error) {
+        console.error('Error fetching data:', error);
+        }
+        finally {
+        setLoading(false);
+        }
     }
 
     const getWorkers  = async() => {
-    try {
-      const response = await fetch('/db/getworkers');
-      const data = await response.json();
-      console.log(data);
-      setWorkers(data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
+        try {
+        const response = await fetch('/db/getworkers');
+        const data = await response.json();
+        console.log(data);
+        setWorkers(data);
+        } catch (error) {
+        console.error('Error fetching data:', error);
+        }
     }
 
     const HandleForward = () => {
         navigate(routeMappings["bHWtcH10="],{ state: { fromAdminHome: true } });
+    }
+
+    const HandleNotification = () => {
+        setNotification(true);
+    }
+
+    const HandleNotificationClose = () => {
+        setNotification(false);
     }
 
     return (
@@ -75,10 +94,13 @@ const NewCoordinator = () => {
                                 <div key={i} className='active-inner-div'>
                                 <div className='Active-head-div'>
                                     <h2 className='active-title-h2'>{x.work_name}</h2>
-                                    <h2 className='active-title-h2' >{new Date(x.due_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</h2>
+                                    <div className='date-div'>
+                                        <img style={{width: '22px', marginRight: '10px'}} src={ Flag }/>
+                                        <h2 className='active-title-h2' >{new Date(x.due_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</h2>
+                                    </div>
                                 </div>
-                                <div>
-                                <ProgressBar striped variant="warning" animated now={(x.completed_subtasks/x.total_subtasks)*100} />
+                                <div style={{margin: '20px'}}>
+                                    <ProgressBar striped variant="warning" animated now={(x.completed_subtasks/x.total_subtasks)*100} />
                                 </div>
                             </div>
                             ))}
@@ -95,29 +117,56 @@ const NewCoordinator = () => {
                             </div>
                         </div>
                         <div>
-                            <h1>Need work</h1>
+                            <div className="piechart-div">
+                                <h2 className='table-head'>Progress chart:</h2>
+                                <PieChart
+                                    data={[
+                                        {title: 'Completed', value: CompletedPercent, color: '#7cd57c'},
+                                        {title: 'Active', value: ActivePercent, color: '#FFF9DF'},
+                                    ]} label={({dataEntry}) => dataEntry.title}
+                                    labelStyle={{
+                                        fontSize: '6px',
+                                    }}
+                                />
+                            </div>
+                            <div className='manage-agencie-div'>
+                                <p className='mange-agen-sym-p' onClick={HandleNotification}>&lt;</p>
+                                <p className='mang-agen-p'>MANAGE AGENCIES</p>
+                            </div>
                         </div>
                     </div>
-                    <table className="workers-table">
-  <thead>
-    <tr>
-      <th>Worker Name</th>
-      <th>Email</th>
-      <th>Phone Number</th>
-      <th>Assign Work</th>
-    </tr>
-  </thead>
-  <tbody>
-    {workers.map((worker) => (
-      <tr key={worker.worker_id}>
-        <td>{worker.worker_name}</td>
-        <td><a href={`mailto:${worker.email}`}>{worker.email}</a></td>
-        <td>{worker.phone_number}</td>
-        <td><button>Assign</button></td>
-      </tr>
-    ))}
-  </tbody>
- </table>
+                    <div>
+                        {notification ? (
+                            <div className="notification-head">
+                                <div className="notification-inner">
+                                    <div>
+                                        <h1 onClick={HandleNotificationClose}>x</h1>
+                                        <table className="workers-table">
+                                            <thead>
+                                                <tr>
+                                                <th>Worker Name</th>
+                                                <th>Email</th>
+                                                <th>Phone Number</th>
+                                                <th>Assign Work</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {workers.map((worker) => (
+                                                <tr key={worker.worker_id}>
+                                                    <td>{worker.worker_name}</td>
+                                                    <td><a href={`mailto:${worker.email}`}>{worker.email}</a></td>
+                                                    <td>{worker.phone_number}</td>
+                                                    <td><button>Assign</button></td>
+                                                </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : ""}
+                        
+                    </div>
                 </div>
             )}
         </>

@@ -13,8 +13,8 @@ const AdminMain = () => {
     const [loading, setLoading] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
-    const [refreshKey, setRefreshKey] = useState(0);
 
+    
     useEffect(() => {
         if (!location.state || !location.state.fromAdminHome) {
             navigate('/');
