@@ -49,8 +49,12 @@ public class DbController : ControllerBase
                 work.bill_paid,
                 work.coordinator
             });
-
-        return Ok(works);
+        var completed = _context.Works.Count(x => x.work_status == 'C');
+        var percentages = new List<int>{completed,_context.Works.Count()-completed};
+        return Ok(new
+        {
+            worksData=works,percentData=percentages
+        });
     }
 
     //TO GET ALL WORKS

@@ -156,41 +156,48 @@
     width: 230px;
 }
 
-.notification-head {
-    position: fixed;
-    top: 0;
-    left: 45%;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.25);
-    display: flex;
-    justify-content: flex-start;
-    animation-name: calc();
-    animation-duration: 0.5s;
-    animation-delay: 10s;
-    animation-fill-mode: forwards;
+.slide-pane__content{
+    background-color: #ffffff;
+}
+.custom-overlay{
+
 }
 
-@keyframes notification-head {
-    0% {
-      opacity: 0;
-      transform: scale(0.5);
-    }
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
+.code-div {
+    display: flex;
+    align-items: center;
+}
+
+.update-button {
+    padding: 10px 25px 10px 25px;
+    margin-left: 20px;
+    border: 1px solid #640000;
+    font-size: 20px;
+    font-family: 'Alatsi';
+    color: #640000;
+    background: #FFF9DF;
+    border-radius: 40px;
+    cursor: pointer;
+}
+
+.update-button:hover {
+    background-color: #640000;
+    color: #FFF9DF;
+    transition: 0.4s;
+}
+
+.update-button:active {
+    color: #640000;
+    background: #FFF9DF;
+}
 
 .notification-inner {
-    position: relative;
     padding: 2rem;
     width: 100%;
     max-width: 55vw;
     max-height: 81vh;
     background: #FFF9DF;
     border-radius: 7px;
-    overflow: auto;
 }
 
 .workers-table {
