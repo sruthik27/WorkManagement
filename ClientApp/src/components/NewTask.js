@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import './NewTask.css';
 import Slider from '@mui/material/Slider';
 import routeMappings from "../routeMappings";
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 const NewTask = () => {
     const [workName, setWorkName] = useState("");
@@ -22,7 +22,7 @@ const NewTask = () => {
     const [valueText, setValueText] = useState(1);
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
-    
+
     const fetchWorkerNames = () => {
         fetch('/db/getworkers')
             .then(response => response.json())
@@ -40,7 +40,7 @@ const NewTask = () => {
             return;
         }
 
-        if (workCost === "" || isNaN(workCost) ||workCost === 0) {
+        if (workCost === "" || isNaN(workCost) || workCost === 0) {
             setErrorMessage("Work Cost is required and must be a number");
             return;
         }
@@ -50,18 +50,18 @@ const NewTask = () => {
         }
 
         if (startDate === "") {
-           setErrorMessage("Start Date is required");
+            setErrorMessage("Start Date is required");
         }
 
         if (dueDate === "") {
             setErrorMessage("Due Date is required");
         }
-        
+
         if (coordinator === "") {
             setErrorMessage("Coordinator is required");
         }
-        
-        if(subtasks.length===0){
+
+        if (subtasks.length === 0) {
             setErrorMessage("Add atleast one subtask");
         }
         return null;
@@ -70,6 +70,14 @@ const NewTask = () => {
 
     const handleFormSubmit = async () => {
         validateForm();
+        // Calculate the total weightage of the subtasks
+    const totalWeightage = subtasks.reduce((total, subtask) => total + subtask.weightage, 0);
+
+    // If the total weightage is not 100, show an alert and return early
+    if (totalWeightage !== 100) {
+        alert("The total weightage of the subtasks does not add up to 100. Please check the subtask weightages.");
+        return;
+    }
         if (errorMessage !== "") {
             return;
         }
@@ -116,18 +124,56 @@ const NewTask = () => {
         navigate(routeMappings["bHWtcH10="], {state: {fromAdminHome: true}});
     };
 
+    const handleSliderChange = (index) => (event, newValue) => {
+  setSubtasks((prevSubtasks) => {
+    const newSubtasks = [...prevSubtasks];
+    newSubtasks[index].weightage = newValue;
+    newSubtasks[index].isSet = true;
+
+    let remainingWeightage = 100 - newSubtasks.filter(subtask => subtask.isSet).reduce((total, subtask) => total + subtask.weightage, 0);
+    const unsetSubtasks = newSubtasks.filter((_, i) => i !== index && !newSubtasks[i].isSet);
+    const totalUnsetWeightage = unsetSubtasks.reduce((total, subtask) => total + subtask.weightage, 0);
+
+    // Distribute the remaining weightage among unset subtasks proportionally
+    unsetSubtasks.forEach(subtask => {
+       if (totalUnsetWeightage === 0) {
+         subtask.weightage = Math.floor(remainingWeightage / unsetSubtasks.length / 5) * 5;
+       } else {
+         subtask.weightage = Math.floor((subtask.weightage / totalUnsetWeightage) * remainingWeightage / 5) * 5;
+       }
+       remainingWeightage -= subtask.weightage;
+    });
+
+    // If there's any remaining weightage left due to rounding down, add it to the first unset subtask
+    if (remainingWeightage > 0 && unsetSubtasks.length > 0) {
+      let i = 0;
+      while (remainingWeightage > 0 && i < unsetSubtasks.length) {
+        unsetSubtasks[i].weightage += 5;
+        remainingWeightage -= 5;
+        i++;
+      }
+    }
+
+    return newSubtasks;
+  });
+};
+
+
+
+
     const handleSubtaskFormSubmit = () => {
         const newSubtask = {
             task_name: subtaskDescription,
             due_date: subtaskDueDate.toISOString(),
             completed: false,
             order_no: noOfSubtasks,
-            weightage: valueText
+            weightage: valueText,
+            isSet: false
         };
         console.log(newSubtask);
         setSubtasks([...subtasks, newSubtask]);
         setNoOfSubtasks(x => x + 1);
-        setWeightOfTask(x=>x+valueText)
+        setWeightOfTask(x => x + valueText)
         setSubtaskDescription("");
         setSubtaskDueDate(new Date());
         setValueText(1);
@@ -203,7 +249,8 @@ const NewTask = () => {
                                 >
                                     <option value="" disabled>Select Agency</option>
                                     {workers.map((v, i) => (
-                                        <option key={i} value={v.worker_id}>{v.worker_name.charAt(0).toUpperCase() + v.worker_name.slice(1)}</option>
+                                        <option key={i}
+                                                value={v.worker_id}>{v.worker_name.charAt(0).toUpperCase() + v.worker_name.slice(1)}</option>
                                     ))}
                                 </select>
                             </div>
@@ -221,8 +268,24 @@ const NewTask = () => {
                                     <div className="subtask-des" key={index}>
                                         <h1 className="subtask-des-head">Sub Task {index + 1}</h1>
                                         <p className="subtask-des-des">Description: {subtask.task_name}</p>
-                                        <p className="subtask-des-des">Due Date: {new Date(subtask.due_date).toDateString()}</p>
-                                        <p className="subtask-des-des">Task Weightage: {subtask.weightage}</p>
+                                        <p className="subtask-des-des">Due
+                                            Date: {new Date(subtask.due_date).toDateString()}</p>
+                                        <div className="form-group">
+  <label>Task Weightage: </label>
+  <Slider
+    aria-label="Temperature"
+    defaultValue={1}
+    valueLabelDisplay="auto"
+    step={5}
+    marks
+    min={0}
+    max={100}
+    style={{color: "#640000"}}
+    onChange={handleSliderChange(index)}
+    value={subtask.weightage}
+  />
+</div>
+
                                     </div>
                                 ))}
                             </div>
@@ -232,14 +295,14 @@ const NewTask = () => {
                         <button type="button" className="btn" onClick={handleShowModal}>
                             Add Subtask
                         </button>
-                        <br />
+                        <br/>
                         <button type="button" className="btn" onClick={handleFormSubmit}>
                             Add Work
                         </button>
                     </div>
                     {errorMessage && <p className="error">{errorMessage}</p>}
                     {showModal && (
-                        <div tabIndex="-1" role="dialog" style={{display: showModal ? "block" : "none"  }}>
+                        <div tabIndex="-1" role="dialog" style={{display: showModal ? "block" : "none"}}>
                             <div role="document">
                                 <div className="modal-content">
                                     <div className="modal-inner">
@@ -272,22 +335,6 @@ const NewTask = () => {
                                                         className="form-control"
                                                     />
                                                 </div>
-                                                <div className="form-group">
-                                                    <label>Task Weightage: </label>
-                                                    <Slider
-                                                        aria-label="Temperature"
-                                                        defaultValue={1}
-                                                        onChange={(event) => 
-                                                            setValueText(event.target.value)
-                                                        }
-                                                        valueLabelDisplay="auto"
-                                                        step={1}
-                                                        marks
-                                                        min={1}
-                                                        max={5}
-                                                        style={{color: "#640000"}}
-                                                    />
-                                                </div>
                                             </form>
                                         </div>
                                         <div className="modal-footer">
@@ -305,8 +352,8 @@ const NewTask = () => {
                     )}
                 </div>
             </div>
-            
-            
+
+
         </>
     );
 }
