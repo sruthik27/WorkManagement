@@ -13,14 +13,42 @@ const NewCoordinator = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [loading, setLoading] = useState(false);
+    const [topworks,setTopworks] = useState([]);
+    const [workers,setWorkers] = useState([]);
 
     useEffect(() => {
         if (!location.state || !location.state.fromAdminHome) {
             navigate('/');
         } else {
-            //fetchData();
+            setLoading(true);
+            fetchData();
+            getWorkers();
         }
     }, []);
+
+    const fetchData  = async() => {
+    try {
+      const response = await fetch('/db/getnearworks');
+      const data = await response.json();
+      setTopworks(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    finally {
+      setLoading(false);
+    }
+    }
+
+    const getWorkers  = async() => {
+    try {
+      const response = await fetch('/db/getworkers');
+      const data = await response.json();
+      console.log(data);
+      setWorkers(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    }
 
     const HandleForward = () => {
         navigate(routeMappings["bHWtcH10="],{ state: { fromAdminHome: true } });
@@ -43,33 +71,17 @@ const NewCoordinator = () => {
                     <div className='container-div'>
                         <div className='active-div'>
                             <h1 className='title-div'>Active Projects</h1>
-                            <div className='active-inner-div'>
+                            {topworks.map((x, i) => (
+                                <div key={i} className='active-inner-div'>
                                 <div className='Active-head-div'>
-                                    <h2 className='active-title-h2'>work 1</h2>
-                                    <h2 className='active-title-h2' >December-2023</h2>
+                                    <h2 className='active-title-h2'>{x.work_name}</h2>
+                                    <h2 className='active-title-h2' >{new Date(x.due_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</h2>
                                 </div>
                                 <div>
-                                <ProgressBar striped variant="warning" animated now={70} />
+                                <ProgressBar striped variant="warning" animated now={(x.completed_subtasks/x.total_subtasks)*100} />
                                 </div>
                             </div>
-                            <div className='active-inner-div'>
-                                <div className='Active-head-div'>
-                                    <h2 className='active-title-h2'>work 2</h2>
-                                    <h2 className='active-title-h2' >December-2023</h2>
-                                </div>
-                                <div>
-                                    <ProgressBar striped variant="warning" animated now={60} />
-                                </div>
-                            </div>
-                            <div className='active-inner-div'>
-                                <div className='Active-head-div'>
-                                    <h2 className='active-title-h2'>work 3</h2>
-                                    <h2 className='active-title-h2' >December-2023</h2>
-                                </div>
-                                <div>
-                                <ProgressBar striped variant="warning" animated now={45} />
-                                </div>
-                            </div>
+                            ))}
                             <button className='view-all-btn' onClick={HandleForward}>VIEW ALL &gt;</button>
                         </div>
                         <div className='work-container-div'>
@@ -86,6 +98,26 @@ const NewCoordinator = () => {
                             <h1>Need work</h1>
                         </div>
                     </div>
+                    <table className="workers-table">
+  <thead>
+    <tr>
+      <th>Worker Name</th>
+      <th>Email</th>
+      <th>Phone Number</th>
+      <th>Assign Work</th>
+    </tr>
+  </thead>
+  <tbody>
+    {workers.map((worker) => (
+      <tr key={worker.worker_id}>
+        <td>{worker.worker_name}</td>
+        <td><a href={`mailto:${worker.email}`}>{worker.email}</a></td>
+        <td>{worker.phone_number}</td>
+        <td><button>Assign</button></td>
+      </tr>
+    ))}
+  </tbody>
+ </table>
                 </div>
             )}
         </>

@@ -30,7 +30,7 @@ public class DbController : ControllerBase
         var currentDate = DateTime.UtcNow;
         var works = _context.Works
             .AsNoTracking()
-            .Where(work => work.work_status != 'C' && work.due_date >= currentDate)
+            .Where(work => work.due_date >= currentDate)
             .OrderBy(work => work.due_date)
             .Take(3)
             .Select(work => new

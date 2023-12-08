@@ -32,7 +32,6 @@ const Coordinator = () => {
     }
   };
   const updateVerificationCode = async () => {
-    window.location.reload();
     const endpoint = '/db/updatevcode';
 
     try {
@@ -52,6 +51,7 @@ const Coordinator = () => {
     } catch (error) {
     console.error('An error occurred:', error);
     }
+    window.location.reload();
   }
 
   return (
