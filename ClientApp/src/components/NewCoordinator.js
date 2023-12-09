@@ -168,7 +168,7 @@ const NewCoordinator = () => {
                                             alt="delete-sign"/>}
                             isOpen={isPaneOpen}
                             title="Manage Agencies"
-                            subtitle='View or change the verification code for registers and manage the agencies registered'
+                            subtitle='view or change the verification code for registers and manage the agencies registered'
                             onRequestClose={() => {
                                 setIsPaneOpen(false);
                             }}
