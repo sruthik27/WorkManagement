@@ -44,13 +44,7 @@ const Coordinator = () => {
             <h1 className="para">Welcome to MDR - Head Portal</h1>
             <hr className="heading-line"/>
           </div>
-          <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
-            <TaskTable data={itemData} editable={true}/>
-            <div className='coordinator-buttons'>
-              <a href={'/WorkReport'}><button className='coo-button' >WORK REPORTS</button></a>
-              <a href={'/NewTask'}><button className='coo-button'>CREATE NEW WORK</button></a>
-            </div>
-          </div>
+          <TaskTable data={itemData} editable={true}/>
         </div>
       )}
     </>

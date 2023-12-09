@@ -46,6 +46,7 @@
     font-family: Montserrat;
     font-size: 20px;
     margin: 0;
+    max-width: 140px;
 }
 
 .work-container-div {
@@ -56,7 +57,8 @@
 
 .Active-head-div {
     display: flex;
-    column-gap: 25px;
+    align-items: center;
+    column-gap: 50px;
     margin: 3px;
     margin-bottom: 10px;
 }
@@ -156,99 +158,102 @@
     width: 230px;
 }
 
+.verfication-div {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.datepickerhead-h3 {
+    color: #640000;
+    font-family: Alatsi;
+    font-size: 35px;
+    font-style: normal;
+    margin: 0;
+}
+
 .slide-pane__content{
     background-color: #ffffff;
 }
-.custom-overlay{
+/* .custom-overlay{
 
+} */
+
+.code-head-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .code-div {
     display: flex;
     align-items: center;
-}
-
-.update-button {
-    padding: 10px 25px 10px 25px;
-    margin-left: 20px;
-    border: 1px solid #640000;
-    font-size: 20px;
-    font-family: 'Alatsi';
-    color: #640000;
-    background: #FFF9DF;
-    border-radius: 40px;
-    cursor: pointer;
-}
-
-.update-button:hover {
-    background-color: #640000;
-    color: #FFF9DF;
-    transition: 0.4s;
-}
-
-.update-button:active {
-    color: #640000;
-    background: #FFF9DF;
+    row-gap: 15px;
 }
 
 .notification-inner {
-    padding: 2rem;
+    padding: 1rem;
     width: 100%;
     max-width: 55vw;
     max-height: 81vh;
     background: #FFF9DF;
     border-radius: 7px;
+    margin-top: 15px;
 }
 
 .workers-table {
- width: 100%;
- border-collapse: collapse;
- font-family: Montserrat;
- margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Montserrat;
+    margin-top: 15px;
 }
 
 .workers-table th, .workers-table td {
- border: 1px solid #ddd;
- padding: 10px;
- text-align: left;
+    border: 1px solid #640000;
+    padding: 10px;
+    text-align: left;
 }
 
 .workers-table th {
- background-color: #4CAF50;
- color: white;
+    color: #640000;
+    font-size: 15px;
 }
 
 .workers-table tr {
- background-color: #f2f2f2;
+    background-color: #f2f2f2;
 }
 
 .workers-table tr:hover {
- background-color: #ddd;
+    background-color: #ddd;
 }
 
 .workers-table a {
- color: #4CAF50;
- text-decoration: none;
+    color: #640000;
+    text-decoration: underline;
 }
 
 .workers-table button {
- background-color: #4CAF50;
- color: white;
- padding: 10px 20px;
- border: none;
- cursor: pointer;
- text-align: center;
- text-decoration: none;
- display: inline-block;
- font-size: 16px;
- margin: 4px 2px;
- transition-duration: 0.4s;
- border-radius: 12px;
+    background-color: #640000;
+    color: white;
+    padding: 5px 10px;
+    border: 1px solid;
+    cursor: pointer;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    border-radius: 20px;
+    cursor: pointer;
 }
 
 .workers-table button:hover {
- background-color: white;
- color: black;
- border: 2px solid #4CAF50;
+    background-color: #FDE8C5;
+    border: 1px solid #640000;
+    transition: 0.15s;
+    color: #640000;
+}
+
+.workers-table button:active {
+    background-color: #640000;
+    color: white;
 }
 

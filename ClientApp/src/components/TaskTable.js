@@ -315,7 +315,7 @@ class TaskTable extends Component {
                         </div>
                     </div>
                 </div>
-                <PopUp trigger={selectedItem !== null} id={"popup"}>
+                <PopUp trigger={selectedItem !== null}>
                     {/* Pass the selectedItem as a prop to the PopUp */}
                     {isLoading ?
                         <div className="overlay">
@@ -445,4 +445,4 @@ class TaskTable extends Component {
 
 }
 
-export default TaskTable;
+export default {TaskTable, PuffLoader};

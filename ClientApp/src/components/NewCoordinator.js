@@ -4,6 +4,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import routeMappings from "../routeMappings";
 import "./AdminMain.css";
 import "./NewCoordinator.css";
+import "./TaskTable.css";
 import CreateButton from "./create_btn.gif";
 import WorkImg from "./work_img.gif";
 import ProgressBar from 'react-bootstrap/ProgressBar';
@@ -12,6 +13,30 @@ import {PieChart} from 'react-minimal-pie-chart';
 import SlidingPane from "react-sliding-pane";
 import "react-sliding-pane/dist/react-sliding-pane.css";
 import VerificationCodeDisplay from "./VerificationCodeDisplay";
+import PopUp from './PopUp';
+import {Puff} from 'react-loader-spinner';
+
+class PuffLoader extends React.Component {
+    componentDidMount() {
+      console.log('Rendering Puff');
+    }
+    componentDidUpdate() {
+     console.log('Rerendering Puff');
+    }
+   
+    render() {
+      return (
+        <Puff
+          height="80"
+          width="80"
+          radius={1}
+          color="#640000"
+          ariaLabel="puff-loading"
+          visible={true}
+        />
+      );
+    }
+}
 
 
 const NewCoordinator = () => {
@@ -19,11 +44,14 @@ const NewCoordinator = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [loading, setLoading] = useState(false);
+    const [isloading, setisLoading] = useState(false);
     const [topworks, setTopworks] = useState([]);
     const [workers, setWorkers] = useState([]);
     const [CompletedPercent, setCompletedPercent] = useState(0);
     const [ActivePercent, setActivePercent] = useState(0);
     const [isPaneOpen, setIsPaneOpen] = useState(false);
+    const [activeData, setActiveData] = useState([]);
+    const [selectedItem, setSelectedItem] = useState(null);
 
 
     useEffect(() => {
@@ -40,7 +68,8 @@ const NewCoordinator = () => {
         try {
             const response = await fetch('/db/getnearworks');
             const data = await response.json();
-            console.log(data);
+            setActiveData(data.worksData);
+            console.log(activeData);
             setTopworks(data["worksData"]);
             setCompletedPercent(data["percentData"][0]);
             setActivePercent(data["percentData"][1])
@@ -60,6 +89,12 @@ const NewCoordinator = () => {
         } catch (error) {
             console.error('Error fetching data:', error);
         }
+    }
+
+    const HandleSelectedItem = (item) => {
+        console.log(item);
+        // setisLoading(true);
+        setSelectedItem(true);
     }
 
     const updateVerificationCode = async () => {
@@ -109,7 +144,9 @@ const NewCoordinator = () => {
                             {topworks.map((x, i) => (
                                 <div key={i} className='active-inner-div'>
                                     <div className='Active-head-div'>
-                                        <h2 className='active-title-h2'>{x.work_name}</h2>
+                                        <h2 className='active-title-h2' onClick={() => {
+                                            HandleSelectedItem(x)
+                                        }}>{x.work_name}</h2>
                                         <div className='date-div'>
                                             <img style={{width: '22px', marginRight: '10px'}} src={Flag}/>
                                             <h2 className='active-title-h2'>{new Date(x.due_date).toLocaleDateString('en-US', {
@@ -126,6 +163,19 @@ const NewCoordinator = () => {
                             ))}
                             <button className='view-all-btn' onClick={HandleForward}>VIEW ALL &gt;</button>
                         </div>
+                        <PopUp trigger={selectedItem !== null}>
+                            { isloading ? (
+                                <div className="overlay">
+                                    <div className="puff-loader"><PuffLoader /></div>
+                                </div>
+                            ) : (
+                                selectedItem && (
+                                    <div>
+                                        <h1>{selectedItem.work_name}</h1>
+                                    </div>
+                                )
+                            )}
+                        </PopUp>
                         <div className='work-container-div'>
                             <div className='create-work-div'>
                                 <h1 className='title-div'>Create Work</h1>
@@ -163,7 +213,7 @@ const NewCoordinator = () => {
                             className="notification-head"
                             overlayClassName="custom-overlay"
                             width={700}
-                            closeIcon={<img width="50" height="50"
+                            closeIcon={<img width="25" height="25"
                                             src="https://img.icons8.com/plasticine/100/delete-sign.png"
                                             alt="delete-sign"/>}
                             isOpen={isPaneOpen}
@@ -173,36 +223,39 @@ const NewCoordinator = () => {
                                 setIsPaneOpen(false);
                             }}
                         >
-                            <div style={{display: 'flex'}}>
-                                    <h3 className='datepickerhead'>Verification code: </h3>
-                                    <div className='code-div'>
-                                        <VerificationCodeDisplay/>
-                                        <button className="update-button" onClick={updateVerificationCode}>Refresh
-                                        </button>
-                                    </div>
+                            <div className='verfication-div'>
+                                <div className='code-head-div'>
+                                    <h3 className='datepickerhead-h3'>Verification code: </h3>
+                                    <p style={{margin: '0', color: '#640000'}}>(code for agency to register)</p>
                                 </div>
+                                <div className='code-div'>
+                                    <VerificationCodeDisplay/>
+                                    <button className="update-button" onClick={updateVerificationCode}>Refresh
+                                    </button>
+                                </div>
+                            </div>
                             <div className="notification-inner">
                                 <div>
                                     <table className="workers-table">
                                         <thead>
-                                        <tr>
-                                            <th>Worker Name</th>
-                                            <th>Email</th>
-                                            <th>Phone Number</th>
-                                            <th>Assign Work</th>
-                                        </tr>
+                                            <tr>
+                                                <th>Worker Name</th>
+                                                <th>Email</th>
+                                                <th>Phone Number</th>
+                                                <th>Assign Work</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        {workers.map((worker) => (
-                                            <tr key={worker.worker_id}>
-                                                <td>{worker.worker_name}</td>
-                                                <td><a href={`mailto:${worker.email}`}>{worker.email}</a></td>
-                                                <td>{worker.phone_number}</td>
-                                                <td>
-                                                    <button>Assign</button>
-                                                </td>
-                                            </tr>
-                                        ))}
+                                            {workers.map((worker) => (
+                                                <tr key={worker.worker_id}>
+                                                    <td>{worker.worker_name}</td>
+                                                    <td><a href={`mailto:${worker.email}`}>{worker.email}</a></td>
+                                                    <td>{worker.phone_number}</td>
+                                                    <td>
+                                                        <button>Assign</button>
+                                                    </td>
+                                                </tr>
+                                            ))}
                                         </tbody>
                                     </table>
                                 </div>

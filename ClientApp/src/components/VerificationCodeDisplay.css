@@ -2,13 +2,13 @@
     display: flex;
 }
 .digit-box {
-    padding: 5px;
+    padding: 10px;
     font-size: 20px;
     margin: 5px;
     font-family: Alatsi;
     font-weight: 400;
     border: solid 1px #640000;
-    border-radius: 5px;
+    border-radius: 7px;
     background-color: #fff9df;
     color: #640000;
     cursor: pointer;

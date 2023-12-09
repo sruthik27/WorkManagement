@@ -9,6 +9,7 @@
     background:url( 'TCE_BLUR.png');
     background-size: cover;
     background-repeat: no-repeat;
+    
 }
 
 .para {
@@ -94,13 +95,12 @@
 }
 
 .update-button {
-    padding: 10px 25px 10px 25px;
-    margin-left: 20px;
+    padding: 5px 25px 5px 25px;
     border: 1px solid #640000;
     font-size: 20px;
     font-family: 'Alatsi';
-    color: #640000;
-    background: #FFF9DF;
+    color: #fde8c5;
+    background: #640000;
     border-radius: 40px;
     cursor: pointer;
 }
@@ -228,6 +228,8 @@
 .code-div {
     display: flex;
     align-items: center;
+    flex-direction: column;
+    row-gap: 10px;
 }
 
 .loader-container {
