@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PopUp from "./PopUp";
-import PieChart from './PieChart';
+import ProgressChart from './ProgressChart';
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 import './TaskTable.css';
 import './AdminHome.css';
@@ -386,7 +386,7 @@ class TaskTable extends Component {
                                 </div>
                                 <div className='popup-piechart'>
                                     <p>Work Progress: </p>
-                                    <PieChart
+                                    <ProgressChart
                                         percentage={selectedItem.total_subtasks !== 0 ? selectedItem.completed_subtasks : 0}
                                     />
                                     {this.state.editable ? <p>{""}</p> : <CommentBox workid={selectedItem.work_id}/>}

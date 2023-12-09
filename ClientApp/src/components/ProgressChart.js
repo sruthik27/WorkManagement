@@ -3,7 +3,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-class PieChart extends Component {
+class ProgressChart extends Component {
     constructor(props) {
         super(props);
 
@@ -37,4 +37,4 @@ class PieChart extends Component {
     }
 }
 
-export default PieChart;
+export default ProgressChart;
