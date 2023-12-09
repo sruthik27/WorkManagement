@@ -445,4 +445,4 @@ class TaskTable extends Component {
 
 }
 
-export default {TaskTable, PuffLoader};
+export default TaskTable;
