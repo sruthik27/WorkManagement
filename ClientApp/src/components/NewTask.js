@@ -3,6 +3,7 @@ import './NewTask.css';
 import Slider from '@mui/material/Slider';
 import routeMappings from "../routeMappings";
 import {useNavigate} from 'react-router-dom';
+import Delete from './trash_icon.png';
 
 const NewTask = () => {
     const [workName, setWorkName] = useState("");
@@ -264,7 +265,10 @@ const NewTask = () => {
                             <div>
                                 {subtasks.map((subtask, index) => (
                                     <div className="subtask-des" key={index}>
-                                        <h1 className="subtask-des-head">Sub Task {index + 1}</h1>
+                                        <div className="subtask-head-div">
+                                            <h1 className="subtask-des-head">Sub Task {index + 1}</h1>
+                                            <img className="subtask-delete-btn" src={Delete} onClick={() => handleDeleteSubtask(index)}/>
+                                        </div>
                                         <p className="subtask-des-des">Description: {subtask.task_name}</p>
                                         <p className="subtask-des-des">Due
                                             Date: {new Date(subtask.due_date).toDateString()}</p>
@@ -283,7 +287,6 @@ const NewTask = () => {
                                                 value={subtask.weightage}
                                             />
                                         </div>
-                                        <button onClick={() => handleDeleteSubtask(index)}>Delete</button>
                                     </div>
                                 ))}
                             </div>
@@ -302,55 +305,55 @@ const NewTask = () => {
                 </div>
 
             </div>
-{showModal && (
-                        <div tabIndex="-1" role="dialog" style={{display: showModal ? "block" : "none"}}>
-                            <div role="document">
-                                <div className="modalcontent">
-                                    <div className="modal-inner">
-                                        <div className="modal-header">
-                                            <h5 className="modal-title">Add Subtask {noOfSubtasks}</h5>
-                                            <hr className="heading-line"/>
-                                        </div>
-                                        <div className="modal-body">
-                                            <form>
-                                                <div className="form-group">
-                                                    <label>Description: </label>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Enter subtask description"
-                                                        value={subtaskDescription}
-                                                        onChange={(event) =>
-                                                            setSubtaskDescription(event.target.value)
-                                                        }
-                                                        className="form-control"
-                                                    />
-                                                </div>
-                                                <div className="form-group">
-                                                    <label>Due Date: </label>
-                                                    <input
-                                                        type="date"
-                                                        value={subtaskDueDate.toISOString().split("T")[0]}
-                                                        onChange={(event) =>
-                                                            setSubtaskDueDate(new Date(event.target.value))
-                                                        }
-                                                        className="form-control"
-                                                    />
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div className="modal-footer">
-                                            <button type="button" className="btn" onClick={handleSubtaskFormSubmit}>
-                                                Save Subtask
-                                            </button>
-                                            <button type="button" className="btn" onClick={handleCloseModal}>
-                                                Close
-                                            </button>
-                                        </div>
+                {showModal && (
+                    <div tabIndex="-1" role="dialog" style={{display: showModal ? "block" : "none"}}>
+                        <div role="document">
+                            <div className="modalcontent">
+                                <div className="modal-inner">
+                                    <div className="modal-header">
+                                        <h5 className="modal-title">Add Subtask {noOfSubtasks}</h5>
+                                        <hr className="heading-line"/>
+                                    </div>
+                                    <div className="modal-body">
+                                        <form>
+                                            <div className="form-group">
+                                                <label>Description: </label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Enter subtask description"
+                                                    value={subtaskDescription}
+                                                    onChange={(event) =>
+                                                        setSubtaskDescription(event.target.value)
+                                                    }
+                                                    className="form-control"
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Due Date: </label>
+                                                <input
+                                                    type="date"
+                                                    value={subtaskDueDate.toISOString().split("T")[0]}
+                                                    onChange={(event) =>
+                                                        setSubtaskDueDate(new Date(event.target.value))
+                                                    }
+                                                    className="form-control"
+                                                />
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn" onClick={handleSubtaskFormSubmit}>
+                                            Save Subtask
+                                        </button>
+                                        <button type="button" className="btn" onClick={handleCloseModal}>
+                                            Close
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    )}
+                    </div>
+                )}
 
         </>
     );

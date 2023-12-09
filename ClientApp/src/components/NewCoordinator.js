@@ -93,8 +93,12 @@ const NewCoordinator = () => {
 
     const HandleSelectedItem = (item) => {
         console.log(item);
-        // setisLoading(true);
-        setSelectedItem(true);
+        //setisLoading(true);
+        setSelectedItem(item);
+    }
+
+    const HandlePopupClose = () => {
+        setSelectedItem(null);
     }
 
     const updateVerificationCode = async () => {
@@ -171,6 +175,7 @@ const NewCoordinator = () => {
                             ) : (
                                 selectedItem && (
                                     <div>
+                                        <h1 onClick={HandlePopupClose}>X</h1>
                                         <h1>{selectedItem.work_name}</h1>
                                     </div>
                                 )
