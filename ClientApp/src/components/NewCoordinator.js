@@ -81,12 +81,12 @@ const NewCoordinator = () => {
             fetchData();
             getWorkers();
             const isOpen = localStorage.getItem('IsPaneOpen');
-    if (isOpen === 'true') {
-        // Set your state variable accordingly
-        setIsPaneOpen(true);
-        // Optionally, clear the state from localStorage if needed
-        localStorage.removeItem('IsPaneOpen');
-    }
+            if (isOpen === 'true') {
+                // Set your state variable accordingly
+                setIsPaneOpen(true);
+                // Optionally, clear the state from localStorage if needed
+                localStorage.removeItem('IsPaneOpen');
+            }
         }
     }, []);
 
@@ -309,6 +309,11 @@ const NewCoordinator = () => {
         navigate(routeMappings["bHWtcH10="], {state: {fromAdminHome: true}});
     }
 
+    const handleAssignClick = (workerId) => {
+  navigate('/NewTask', { state: { worker_id: workerId } });
+};
+
+
 
     return (
         <>
@@ -483,11 +488,11 @@ const NewCoordinator = () => {
                                     ]}
                                 />
                                 <div className='piechart-lable-div'>
-                                    <buttom className='piechart-colour-info-active'> </buttom>
+                                    <buttom className='piechart-colour-info-active'></buttom>
                                     <p className='piechart-colour-char-active'>Active</p>
                                 </div>
                                 <div className='piechart-lable-div'>
-                                    <buttom className='piechart-colour-info-completed'> </buttom>
+                                    <buttom className='piechart-colour-info-completed'></buttom>
                                     <p className='piechart-colour-char-active'>Completed</p>
                                 </div>
                             </div>
@@ -541,11 +546,10 @@ const NewCoordinator = () => {
                                                 <td><a href={`mailto:${worker.email}`}>{worker.email}</a></td>
                                                 <td>{worker.phone_number}</td>
                                                 <td>
-                                                    {console.log(worker)}
-                                                    <Link to={{pathname: '/NewTask'}}><button >Assign</button></Link>
+                                                    <button onClick={() => handleAssignClick(worker.worker_id)}>Assign</button>
                                                 </td>
                                             </tr>
-                                            
+
                                         ))}
                                         </tbody>
                                     </table>

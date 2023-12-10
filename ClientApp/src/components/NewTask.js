@@ -6,7 +6,8 @@ import {useLocation, useNavigate} from 'react-router-dom';
 import Delete from './trash_icon.png';
 
 const NewTask = (props) => {
-    const [workName, setWorkName] = useState("");
+    const location = useLocation();
+    const [workName, setWorkName] =  useState("");
     const [workCost, setWorkCost] = useState("");
     const [worker, setWorker] = useState("");
     const [startDate, setStartDate] = useState(new Date());
@@ -22,8 +23,6 @@ const NewTask = (props) => {
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
 
-    const location = useLocation();
-    console.log(props.workerName);
 
     const fetchWorkerNames = () => {
         fetch('/db/getworkers')
@@ -32,9 +31,12 @@ const NewTask = (props) => {
             .catch(error => console.error('Error:', error));
     }
 
-    useEffect(() => {
+    useEffect( () => {
         fetchWorkerNames();
-    }, []);
+        if (location.state && location.state.worker_id) {
+            setWorker(location.state.worker_id);
+        }
+    }, [location]);
 
     const validateForm = () => {
         if (workName === "") {
