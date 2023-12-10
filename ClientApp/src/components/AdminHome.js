@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './AdminHome.css';
+import "./AdminMain.css";
 import Footer from "./Vector.png";
 import routeMappings from "../routeMappings";
 import PopUp from "./PopUp";
@@ -34,7 +35,9 @@ const AdminHome = () => {
     const [inputResetPassword, setInputResetPassword] = useState("");
     const [inputConfirmPassword, setInputConfirmPassword] = useState("");
     const [misMatch, setMisMatch] = useState(false);
-
+    const [isLogin, setIsLogin] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+ 
     const HandleInputEmail = (e) => {
         setInputEmail(e.target.value);
     }
@@ -166,90 +169,123 @@ const AdminHome = () => {
                 // Handle any errors that occur during the HTTP request
             });
     };
+
+    const HandleLoginPrinci = (e) => {
+        setIsLogin(true);
+        console.log(e.target.value);
+        
+    }
+    const HandleLoginHead = (e) => {
+        setIsLogin(true);
+        console.log(e.target.value);
+    }
+
     return (
         <>
-            <div className="Home">
-                <div className="Home-Container">
-                    <div>
-                        <h1 className="Admin-head1">Thiagarajar College of Engineering</h1>
-                        <h3 className="Admin-head">Department of Modernization,Development and Restoration (DMDR)</h3>
-                        <p className="Admin-info">PROJECT MANAGEMENT PORTAL</p>
-                    </div>
-                    <div className="user-input">
-                        <input className="input1" type="email" value={inputEmail} onChange={HandleInputEmail} placeholder="Email"/>
-                        <input
-                            className="input1"
-                            type={"password"}
-                            value={inputPassword}
-                            onChange={HandleInputPassword}
-                            placeholder="Password"                        
-                        />
-                    </div>
-                    <div className="Login-container">
+            {isLoading ? (
+                <div className="loader-container">
+                    <div className="spinner"></div>
+                </div>
+            ) : (
+                <div className="Home">
+                    <div className="Home-Container">
                         <div>
-                            <input className="checkbox" type="checkbox" value={inputCheckbox} onClick={HandleCheckbox}/>
-                            <label className = "flabel">Remember me</label>
+                            <h1 className="Admin-head1">Thiagarajar College of Engineering</h1>
+                            <h3 className="Admin-head">Department of Modernization,Development and Restoration (DMDR)</h3>
+                            <p className="Admin-info">PROJECT MANAGEMENT PORTAL</p>
                         </div>
-                        <div className="Login" ><button className="Login-img" onClick={HandleSubmit}><p className = "login-para">Login</p></button></div>
-                        <div>
-                            <p className="flabel" onClick={HandleForgotPassword}>Reset Password</p>
+                        <div className="radio-box-div">
+                            <div className="radio-box-input">
+                                <input type="radio" id="Princi" name="Login" onClick={HandleLoginPrinci} value="P"/>
+                                <label className="radio-box-label" for='Princi'>Login As DMDR Principal</label>
+                            </div>
+                            <div className="radio-box-input">
+                                <input type="radio" id="Head" name="Login" onClick={HandleLoginHead} value="H"/>
+                                <label className="radio-box-label" for='Head'>Login As DMDR Head</label>
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <PopUp trigger = {forgotPassword}>
-                            {forgotPassword ? (
-                                <div>
-                                    <h1 onClick={HandleClose} className="close-btn">x</h1>
+                        {isLogin ? (
+                            <div>
+                                <div className="user-input">
+                                    <input className="input1" type="email" value={inputEmail} onChange={HandleInputEmail} placeholder="Email"/>
+                                    <input
+                                        className="input1"
+                                        type={"password"}
+                                        value={inputPassword}
+                                        onChange={HandleInputPassword}
+                                        placeholder="Password"                        
+                                    />
+                                </div>
+                                <div className="Login-container">
                                     <div>
-                                        <h1 className="forgot-password-head">Reset Password: </h1>
-                                        <hr className="heading-line"/>
-                                        <div className="forgot-password">
-                                            <input 
-                                                className="input2" 
-                                                placeholder="Enter your Email id"
-                                                value={inputForgotPassword}
-                                                onChange={HandleInputForgotPassword}
-                                                type={"email"}
-                                            />
-                                            <input
-                                                className="input2"
-                                                type={"password"}
-                                                placeholder="Enter old password"
-                                                value={oldPassword}
-                                                onChange={(e) => {
-                                                    setOldPassword(e.target.value);
-                                                }}
-                                            />
-                                            <input
-                                                className="input2"
-                                                type={"password"}
-                                                value={inputResetPassword}
-                                                onChange={HandleInputResetPassword}
-                                                placeholder="New Password"                        
-                                            />
-                                            <input
-                                                className="input2"
-                                                type={"password"}
-                                                value={inputConfirmPassword}
-                                                onChange={HandleInputConfirmPassword}
-                                                placeholder="Confirm new Password"                        
-                                            />
-                                            {emailCheck ? <p className="verify-para">Password changed!</p> : ""}
-                                            {isEmailCheck ? <p className="verify-para">Invalid or Error in Email id</p> : ""}
-                                            {misMatch ? <p className="verify-para">Password is Mismatched Check Your Password</p> : ""}
-                                            <button className="forgot-password-button" onClick={HandleForgotPasswordSubmit}>Change</button>
-                                        </div>
+                                        <input className="checkbox" type="checkbox" value={inputCheckbox} onClick={HandleCheckbox}/>
+                                        <label className = "flabel">Remember me</label>
+                                    </div>
+                                    <div className="Login" ><button className="Login-img" onClick={HandleSubmit}><p className = "login-para">Login</p></button></div>
+                                    <div>
+                                        <p className="flabel" onClick={HandleForgotPassword}>Reset Password</p>
                                     </div>
                                 </div>
-                            ): "" }
-                        </PopUp>
-                    </div>
-                    <p>{inputLoginFail}</p>
-                    <div>
-                        <img className="Footer-img" src={ Footer } alt="AdminHomeFooter"/>
+                                <div>
+                                    <PopUp trigger = {forgotPassword}>
+                                        {forgotPassword ? (
+                                            <div>
+                                                <h1 onClick={HandleClose} className="close-btn">x</h1>
+                                                <div>
+                                                    <h1 className="forgot-password-head">Reset Password: </h1>
+                                                    <hr className="heading-line"/>
+                                                    <div className="forgot-password">
+                                                        <input 
+                                                            className="input2" 
+                                                            placeholder="Enter your Email id"
+                                                            value={inputForgotPassword}
+                                                            onChange={HandleInputForgotPassword}
+                                                            type={"email"}
+                                                        />
+                                                        <input
+                                                            className="input2"
+                                                            type={"password"}
+                                                            placeholder="Enter old password"
+                                                            value={oldPassword}
+                                                            onChange={(e) => {
+                                                                setOldPassword(e.target.value);
+                                                            }}
+                                                        />
+                                                        <input
+                                                            className="input2"
+                                                            type={"password"}
+                                                            value={inputResetPassword}
+                                                            onChange={HandleInputResetPassword}
+                                                            placeholder="New Password"                        
+                                                        />
+                                                        <input
+                                                            className="input2"
+                                                            type={"password"}
+                                                            value={inputConfirmPassword}
+                                                            onChange={HandleInputConfirmPassword}
+                                                            placeholder="Confirm new Password"                        
+                                                        />
+                                                        {emailCheck ? <p className="verify-para">Password changed!</p> : ""}
+                                                        {isEmailCheck ? <p className="verify-para">Invalid or Error in Email id</p> : ""}
+                                                        {misMatch ? <p className="verify-para">Password is Mismatched Check Your Password</p> : ""}
+                                                        <button className="forgot-password-button" onClick={HandleForgotPasswordSubmit}>Change</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ): "" }
+                                    </PopUp>
+                                </div>
+                                <p>{inputLoginFail}</p>
+                            </div>
+                        ) : " "}
+                        {isLogin ? "": (
+                            <div>
+                                <img className="Footer-img" src={ Footer } alt="AdminHomeFooter"/>
+                            </div>
+                        )}
                     </div>
                 </div>
-            </div>
+            )}
         </>
     )
 }
