@@ -2,10 +2,10 @@ import React, {useState, useEffect} from "react";
 import './NewTask.css';
 import Slider from '@mui/material/Slider';
 import routeMappings from "../routeMappings";
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import Delete from './trash_icon.png';
 
-const NewTask = () => {
+const NewTask = (props) => {
     const [workName, setWorkName] = useState("");
     const [workCost, setWorkCost] = useState("");
     const [worker, setWorker] = useState("");
@@ -21,6 +21,9 @@ const NewTask = () => {
     const [showModal, setShowModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
+
+    const location = useLocation();
+    console.log(props.workerName);
 
     const fetchWorkerNames = () => {
         fetch('/db/getworkers')
@@ -171,7 +174,6 @@ const NewTask = () => {
             weightage: 0,
             isSet: false
         };
-        console.log(newSubtask);
         setSubtasks([...subtasks, newSubtask]);
         setNoOfSubtasks(x => x + 1);
         setSubtaskDescription("");
@@ -196,7 +198,7 @@ const NewTask = () => {
                                 <label>Work Name: </label>
                                 <input
                                     type="text"
-                                    className="form-control"
+                                    className="formcontrol"
                                     placeholder="Type Work Name"
                                     value={workName}
                                     onChange={event => setWorkName(event.target.value)}
@@ -206,7 +208,7 @@ const NewTask = () => {
                                 <label>Work Cost: </label>
                                 <input
                                     type="number"
-                                    className="form-control"
+                                    className="formcontrol"
                                     placeholder="Type Work Cost"
                                     value={workCost}
                                     onChange={event => setWorkCost(event.target.value)}
@@ -218,7 +220,7 @@ const NewTask = () => {
                                     type="date"
                                     value={startDate.toISOString().split('T')[0]}
                                     onChange={(event) => setStartDate(new Date(event.target.value))}
-                                    className="form-control"
+                                    className="formcontrol"
                                 />
                             </div>
                             <div className="form-group">
@@ -227,7 +229,7 @@ const NewTask = () => {
                                     type="date"
                                     value={dueDate.toISOString().split('T')[0]}
                                     onChange={(event) => setDueDate(new Date(event.target.value))}
-                                    className="form-control"
+                                    className="formcontrol"
                                 />
                             </div>
                             <div className="form-group">
@@ -236,13 +238,13 @@ const NewTask = () => {
                                     type="text"
                                     placeholder="Type task description"
                                     onChange={(event) => setTaskDescription(event.target.value)}
-                                    className="form-control"
+                                    className="formcontrol"
                                 />
                             </div>
                             <div className="form-group">
                                 <label>Agency: </label>
                                 <select
-                                    className="form-control"
+                                    className="formcontrol"
                                     value={worker}
                                     onChange={(event) => setWorker(event.target.value)}
                                 >
@@ -259,7 +261,7 @@ const NewTask = () => {
                                     type="text"
                                     placeholder="Who is supervising?"
                                     onChange={(event) => setCoordinator(event.target.value)}
-                                    className="form-control"
+                                    className="formcontrol"
                                 />
                             </div>
                             <div>
@@ -293,11 +295,11 @@ const NewTask = () => {
                         </form>
                     </div>
                     <div className="task-button">
-                        <button type="button" className="btn" onClick={handleShowModal}>
+                        <button type="button" className="add-button" onClick={handleShowModal}>
                             Add Subtask
                         </button>
                         <br/>
-                        <button type="button" className="btn" onClick={handleFormSubmit}>
+                        <button type="button" className="add-button" onClick={handleFormSubmit}>
                             SUBMIT
                         </button>
                     </div>
@@ -325,7 +327,7 @@ const NewTask = () => {
                                                     onChange={(event) =>
                                                         setSubtaskDescription(event.target.value)
                                                     }
-                                                    className="form-control"
+                                                    className="formcontrol"
                                                 />
                                             </div>
                                             <div className="form-group">
@@ -336,16 +338,16 @@ const NewTask = () => {
                                                     onChange={(event) =>
                                                         setSubtaskDueDate(new Date(event.target.value))
                                                     }
-                                                    className="form-control"
+                                                    className="formcontrol"
                                                 />
                                             </div>
                                         </form>
                                     </div>
-                                    <div className="modal-footer">
-                                        <button type="button" className="btn" onClick={handleSubtaskFormSubmit}>
+                                    <div className="modalfooter">
+                                        <button type="button" className="add-button" onClick={handleSubtaskFormSubmit}>
                                             Save Subtask
                                         </button>
-                                        <button type="button" className="btn" onClick={handleCloseModal}>
+                                        <button type="button" className="add-button" onClick={handleCloseModal}>
                                             Close
                                         </button>
                                     </div>

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate, Link} from "react-router-dom";
 import routeMappings from "../routeMappings";
 import "./AdminMain.css";
 import "./NewCoordinator.css";
@@ -22,6 +22,7 @@ import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import CommentCard from "./CommentCard";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import NewTask from './NewTask';
 
 class PuffLoader extends React.Component {
     componentDidMount() {
@@ -472,18 +473,23 @@ const NewCoordinator = () => {
                                 </a>
                             </div>
                         </div>
-                        <div>
+                        <div className='piechart-mange-div'>
                             <div className="piechart-div">
-                                <h2 className='table-head'>Progress chart:</h2>
+                                <h2 className='title-div1'>Progress chart:</h2>
                                 <PieChart
                                     data={[
                                         {title: 'Completed', value: CompletedPercent, color: '#7cd57c'},
-                                        {title: 'Active', value: ActivePercent, color: '#FFF9DF'},
-                                    ]} label={({dataEntry}) => dataEntry.title}
-                                    labelStyle={{
-                                        fontSize: '6px',
-                                    }}
+                                        {title: 'Active', value: ActivePercent, color: '#640000'},
+                                    ]}
                                 />
+                                <div className='piechart-lable-div'>
+                                    <buttom className='piechart-colour-info-active'> </buttom>
+                                    <p className='piechart-colour-char-active'>Active</p>
+                                </div>
+                                <div className='piechart-lable-div'>
+                                    <buttom className='piechart-colour-info-completed'> </buttom>
+                                    <p className='piechart-colour-char-active'>Completed</p>
+                                </div>
                             </div>
                             <div className='manage-agencie-div' onClick={() => setIsPaneOpen(true)}>
                                 <p className='mange-agen-sym-p'>&lt;</p>
@@ -535,9 +541,11 @@ const NewCoordinator = () => {
                                                 <td><a href={`mailto:${worker.email}`}>{worker.email}</a></td>
                                                 <td>{worker.phone_number}</td>
                                                 <td>
-                                                    <button>Assign</button>
+                                                    {console.log(worker)}
+                                                    <Link to={{pathname: '/NewTask'}}><button >Assign</button></Link>
                                                 </td>
                                             </tr>
+                                            
                                         ))}
                                         </tbody>
                                     </table>
