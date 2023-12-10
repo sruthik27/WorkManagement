@@ -36,6 +36,7 @@ public class DbController : ControllerBase
             .Select(work => new
             {
                 work_id = work.work_id.ToString(),
+                worker_names = string.Join(", ",_context.Workers.Where(x=>work.workers.Contains((x.worker_id))).Select(y=>y.worker_name)),
                 work.work_name,
                 work.work_description,
                 work.work_status,
@@ -44,7 +45,6 @@ public class DbController : ControllerBase
                 work.total_subtasks,
                 work.completed_subtasks,
                 work.wage,
-                worker = work.WorkerNavigation.worker_name,
                 work.advance_paid,
                 work.bill_paid,
                 work.coordinator
@@ -63,11 +63,11 @@ public class DbController : ControllerBase
     {
         
         var works = _context.Works
-            .Include(work => work.WorkerNavigation)// Eager load the worker data
             .AsNoTracking()
             .Select(work => new
             {
                 work_id = work.work_id.ToString(),
+                worker_names = string.Join(", ",_context.Workers.Where(x=>work.workers.Contains((x.worker_id))).Select(y=>y.worker_name)),
                 work.work_name,
                 work.work_description,
                 work.work_status,
@@ -76,7 +76,6 @@ public class DbController : ControllerBase
                 work.total_subtasks,
                 work.completed_subtasks,
                 work.wage,
-                worker = work.WorkerNavigation.worker_name,
                 work.advance_paid,
                 work.bill_paid,
                 work.coordinator
@@ -88,7 +87,7 @@ public class DbController : ControllerBase
     [HttpGet("getworksbyid")]
     public IActionResult GetWorksById(long workerid)
     {
-        var works = _context.Works.Where(w => w.worker == workerid).Select(work => new
+        var works = _context.Works.Where(w => w.workers.Contains(workerid)).Select(work => new
         {
             work_id = work.work_id.ToString(),
             work.work_name,
@@ -270,8 +269,12 @@ public class DbController : ControllerBase
             if (work != null)
             {
                 work.work_status = 'C';
-                var worker = _context.Workers.Find(work.worker);
-                worker.current_works.Remove((long)workId);
+                work.workers.ForEach(x =>
+                {
+                    var worker = _context.Workers.Find(x);
+                    worker.completed_works.Add((long)workId);
+                    worker.current_works.Remove((long)workId);
+                });
                 _context.SaveChanges();
             }
         }
@@ -477,12 +480,15 @@ public class DbController : ControllerBase
         }
 
         Work workpart = newWork.Work;
-        workpart.worker = (long) workpart.worker;
+        var workers = workpart.workers;
+        workers.ForEach(worker_id =>
+        {
+            var worker = _context.Workers.Find(worker_id);
+            worker.works_done += 1;
+            worker.current_works.Add(worker_id);
+        });
         _context.Works.Add(workpart);
         _context.SaveChanges();
-        var worker = _context.Workers.Find(workpart.worker);
-        worker.works_done += 1;
-        worker.current_works.Add(workpart.work_id);
         var new_image_entry = new Image();
         new_image_entry.links = new List<string>();
         new_image_entry.work = workpart.work_id;
@@ -496,7 +502,7 @@ public class DbController : ControllerBase
             _context.Tasks.Add(subtask);
         }
         _context.SaveChanges();
-        return Ok(new { message = "Work added successfully.", work_id = workpart.work_id });
+        return Ok(new { message = "Work added successfully.", workpart.work_id });
     }
     
     //ADD PAYMENT

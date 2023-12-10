@@ -28,7 +28,7 @@ public class Work
 
     public long? wage { get; set; }
 
-    public long? worker { get; set; }
+    public List<long>? workers { get; set; }
 
     public bool? advance_paid { get; set; }
 
@@ -36,7 +36,4 @@ public class Work
 
     public string? coordinator { get; set; }
     
-    [JsonIgnore]
-    [ForeignKey("worker")]
-    public Worker? WorkerNavigation { get; set; }
 }

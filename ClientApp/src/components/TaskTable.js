@@ -275,8 +275,6 @@ class TaskTable extends Component {
             dueDateDiff, advancePaid, dateOfPaid, editable, isChecked, paidbills,isLoading
         } = this.state;
 
-        const star = "⭐";
-
         return (
             <>
                 <div className="datepickerwrapper">
@@ -338,7 +336,7 @@ class TaskTable extends Component {
                                             by {Math.abs(Math.round(dueDateDiff))} {Math.abs(Math.round(dueDateDiff)) === 1 ? 'day' : 'days'}</p>
                                     )}
                                     <p>Coordinator: {selectedItem.coordinator}</p>
-                                    <p>Worker: {selectedItem.worker}</p>
+                                    <p>Workers: {selectedItem.worker_names}</p>
                                     <p>Total Expense: ₹{selectedItem.wage}</p>
                                     {editable ?
                                         <>{advancePaid === 0 ?

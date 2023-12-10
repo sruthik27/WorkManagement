@@ -374,7 +374,7 @@ const NewCoordinator = () => {
                                                 by {Math.abs(Math.round(dueDateDiff))} {Math.abs(Math.round(dueDateDiff)) === 1 ? 'day' : 'days'}</p>
                                         )}
                                         <p>Coordinator: {selectedItem.coordinator}</p>
-                                        <p>Worker: {selectedItem.worker}</p>
+                                        <p>Worker(s): {selectedItem.worker_names}</p>
                                         <p>Total Expense: ₹{selectedItem.wage}</p>
                                         {<>
                                             {advancePaid === 0 ?
@@ -488,11 +488,11 @@ const NewCoordinator = () => {
                                     ]}
                                 />
                                 <div className='piechart-lable-div'>
-                                    <buttom className='piechart-colour-info-active'></buttom>
+                                    <button className='piechart-colour-info-active'></button>
                                     <p className='piechart-colour-char-active'>Active</p>
                                 </div>
                                 <div className='piechart-lable-div'>
-                                    <buttom className='piechart-colour-info-completed'></buttom>
+                                    <button className='piechart-colour-info-completed'></button>
                                     <p className='piechart-colour-char-active'>Completed</p>
                                 </div>
                             </div>

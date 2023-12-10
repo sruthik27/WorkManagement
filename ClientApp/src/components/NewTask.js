@@ -7,13 +7,13 @@ import Delete from './trash_icon.png';
 
 const NewTask = (props) => {
     const location = useLocation();
-    const [workName, setWorkName] =  useState("");
+    const [workName, setWorkName] = useState("");
     const [workCost, setWorkCost] = useState("");
-    const [worker, setWorker] = useState("");
     const [startDate, setStartDate] = useState(new Date());
     const [dueDate, setDueDate] = useState(new Date());
     const [taskDescription, setTaskDescription] = useState("");
     const [workers, setWorkers] = useState([]);
+    const [selectedWorkers, setSelectedWorkers] = useState([]);
     const [coordinator, setCoordinator] = useState("");
     const [subtaskDescription, setSubtaskDescription] = useState("");
     const [subtaskDueDate, setSubtaskDueDate] = useState(new Date());
@@ -21,6 +21,7 @@ const NewTask = (props) => {
     const [subtasks, setSubtasks] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [showWorkers,setShowWorkers] = useState(false);
     const navigate = useNavigate();
 
 
@@ -31,10 +32,10 @@ const NewTask = (props) => {
             .catch(error => console.error('Error:', error));
     }
 
-    useEffect( () => {
+    useEffect(() => {
         fetchWorkerNames();
         if (location.state && location.state.worker_id) {
-            setWorker(location.state.worker_id);
+            setSelectedWorkers([location.state.worker_id]);
         }
     }, [location]);
 
@@ -49,8 +50,8 @@ const NewTask = (props) => {
             return;
         }
 
-        if (worker === "") {
-            setErrorMessage("Worker is required");
+        if (selectedWorkers.length===0) {
+            setErrorMessage("Atleast one worker is required");
         }
 
         if (startDate === "") {
@@ -71,6 +72,17 @@ const NewTask = (props) => {
         return null;
     };
 
+    const handleWorkerChange = (workerId) => {
+   setSelectedWorkers(prevWorkers => {
+       if (prevWorkers.includes(workerId)) {
+           // If the worker is already selected, remove it from the array
+           return prevWorkers.filter(id => id !== workerId);
+       } else {
+           // If the worker is not selected, add it to the array
+           return [...prevWorkers, workerId];
+       }
+   });
+};
 
     const handleFormSubmit = async () => {
         validateForm();
@@ -95,7 +107,7 @@ const NewTask = (props) => {
                 total_subtasks: subtasks.length,
                 completed_subtasks: 0,
                 wage: workCost,
-                worker: worker,
+                workers: selectedWorkers,
                 advance_paid: false,
                 bill_paid: false,
                 coordinator: coordinator
@@ -120,7 +132,7 @@ const NewTask = (props) => {
         setWorkName("");
         setTaskDescription("");
         setWorkCost("");
-        setWorker("");
+        setSelectedWorkers([]);
         setDueDate(new Date());
         setStartDate(new Date());
         setCoordinator("");
@@ -245,17 +257,26 @@ const NewTask = (props) => {
                             </div>
                             <div className="form-group">
                                 <label>Agency: </label>
-                                <select
-                                    className="formcontrol"
-                                    value={worker}
-                                    onChange={(event) => setWorker(event.target.value)}
-                                >
-                                    <option value="" disabled>Select Agency</option>
-                                    {workers.map((v, i) => (
-                                        <option key={i}
-                                                value={v.worker_id}>{v.worker_name.charAt(0).toUpperCase() + v.worker_name.slice(1)}</option>
-                                    ))}
-                                </select>
+                                <div className="dropdown-check-list" tabIndex="100">
+  <span className="anchor" onClick={() => setShowWorkers(!showWorkers)}>Select Agencies</span>
+  {showWorkers && (
+     <ul className="items">
+        {workers.map((worker, index) => (
+           <li key={index}>
+              <input
+                type="checkbox"
+                id={worker.worker_id}
+                value={worker.worker_id}
+                checked={selectedWorkers.includes(worker.worker_id)}
+                onChange={(event) => handleWorkerChange(event.target.value)}
+              />
+              <label htmlFor={worker.worker_id}>{worker.worker_name.charAt(0).toUpperCase() + worker.worker_name.slice(1)}</label>
+           </li>
+        ))}
+     </ul>
+  )}
+</div>
+
                             </div>
                             <div className="form-group">
                                 <label>Coordinator: </label>
@@ -271,7 +292,8 @@ const NewTask = (props) => {
                                     <div className="subtask-des" key={index}>
                                         <div className="subtask-head-div">
                                             <h1 className="subtask-des-head">Sub Task {index + 1}</h1>
-                                            <img className="subtask-delete-btn" src={Delete} onClick={() => handleDeleteSubtask(index)}/>
+                                            <img className="subtask-delete-btn" src={Delete}
+                                                 onClick={() => handleDeleteSubtask(index)}/>
                                         </div>
                                         <p className="subtask-des-des">Description: {subtask.task_name}</p>
                                         <p className="subtask-des-des">Due
@@ -309,55 +331,55 @@ const NewTask = (props) => {
                 </div>
 
             </div>
-                {showModal && (
-                    <div tabIndex="-1" role="dialog" style={{display: showModal ? "block" : "none"}}>
-                        <div role="document">
-                            <div className="modalcontent">
-                                <div className="modal-inner">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title">Add Subtask {noOfSubtasks}</h5>
-                                        <hr className="heading-line"/>
-                                    </div>
-                                    <div className="modal-body">
-                                        <form>
-                                            <div className="form-group">
-                                                <label>Description: </label>
-                                                <input
-                                                    type="text"
-                                                    placeholder="Enter subtask description"
-                                                    value={subtaskDescription}
-                                                    onChange={(event) =>
-                                                        setSubtaskDescription(event.target.value)
-                                                    }
-                                                    className="formcontrol"
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label>Due Date: </label>
-                                                <input
-                                                    type="date"
-                                                    value={subtaskDueDate.toISOString().split("T")[0]}
-                                                    onChange={(event) =>
-                                                        setSubtaskDueDate(new Date(event.target.value))
-                                                    }
-                                                    className="formcontrol"
-                                                />
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div className="modalfooter">
-                                        <button type="button" className="add-button" onClick={handleSubtaskFormSubmit}>
-                                            Save Subtask
-                                        </button>
-                                        <button type="button" className="add-button" onClick={handleCloseModal}>
-                                            Close
-                                        </button>
-                                    </div>
+            {showModal && (
+                <div tabIndex="-1" role="dialog" style={{display: showModal ? "block" : "none"}}>
+                    <div role="document">
+                        <div className="modalcontent">
+                            <div className="modal-inner">
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Add Subtask {noOfSubtasks}</h5>
+                                    <hr className="heading-line"/>
+                                </div>
+                                <div className="modal-body">
+                                    <form>
+                                        <div className="form-group">
+                                            <label>Description: </label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter subtask description"
+                                                value={subtaskDescription}
+                                                onChange={(event) =>
+                                                    setSubtaskDescription(event.target.value)
+                                                }
+                                                className="formcontrol"
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Due Date: </label>
+                                            <input
+                                                type="date"
+                                                value={subtaskDueDate.toISOString().split("T")[0]}
+                                                onChange={(event) =>
+                                                    setSubtaskDueDate(new Date(event.target.value))
+                                                }
+                                                className="formcontrol"
+                                            />
+                                        </div>
+                                    </form>
+                                </div>
+                                <div className="modalfooter">
+                                    <button type="button" className="add-button" onClick={handleSubtaskFormSubmit}>
+                                        Save Subtask
+                                    </button>
+                                    <button type="button" className="add-button" onClick={handleCloseModal}>
+                                        Close
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                )}
+                </div>
+            )}
 
         </>
     );
