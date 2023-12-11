@@ -8,6 +8,7 @@ import NewTask from './components/NewTask';
 import WorkReport from './components/WorkReport';
 import NewCoordinator from './components/NewCoordinator';
 import ResetPassword from './components/ResetPassword';
+import NewAdmin from "./components/NewAdmin";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path='/AdminMain' element={ <AdminMain/> }/>
         <Route path='/coordinator' element={ <Coordinator/> }/>
         <Route path='/HeadPortal' element={ <NewCoordinator/> }/>
+        <Route path='/AdminPortal' element={ <NewAdmin/> }/>
         <Route path='/NewTask' element={ <NewTask/> }/>
         <Route path='/WorkReport' element={ <WorkReport/> }/>
         <Route path='/ResetPassword' element={ <ResetPassword/> }/>

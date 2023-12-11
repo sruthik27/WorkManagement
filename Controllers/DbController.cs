@@ -406,7 +406,7 @@ public class DbController : ControllerBase
             // Passwords match, and admin
             if (existingLogin.designation=='A')
             {
-                return Ok(new { redirectTo = "AdminMain",where='A' });
+                return Ok(new { redirectTo = "AdminPortal",where='A' });
             }
             if (existingLogin.designation=='C')
                 return Ok(new { redirectTo = "HeadPortal",where='C'});

@@ -79,7 +79,7 @@ const AdminHome = () => {
         inputCheckbox ? setInputCheckbox(false) : setInputCheckbox(true);
     }
 
-    const HandleSubmit = () => {
+    const HandleSubmit = async () => {
         // Create an object with the login data
         setIsLoading(true);
         const loginData = {
@@ -88,7 +88,7 @@ const AdminHome = () => {
         };
 
         // Make a POST request to your API
-        fetch("/db/verify", {
+        await fetch("/db/verify", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -109,8 +109,8 @@ const AdminHome = () => {
                         setRememberMeCookie(data.where);
                     }
                     // Navigate to the specified route using React Router
-                    navigate(data.redirectTo,{ state: { fromAdminHome: true } });
-                    
+                    navigate(data.redirectTo, {state: {fromAdminHome: true}});
+
                 } else {
                     console.log('Authentication failed');
                     setInputLoginFail("Invalid Email or Password");
@@ -121,7 +121,7 @@ const AdminHome = () => {
                 console.error('Error:', error);
                 // Handle any errors that occur during the HTTP request
             })
-            setIsLoading(false);
+        setIsLoading(false);
     };
 
     const HandleLoginPrinci = (e) => {
