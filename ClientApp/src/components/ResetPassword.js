@@ -63,7 +63,7 @@ const ResetPassword = () => {
         setInputConfirmPassword("");
         setInputResetPassword("");
         setInputForgotPassword("");
-
+        window.location = '/';
     }
 
     return (

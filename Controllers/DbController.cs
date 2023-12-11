@@ -214,7 +214,7 @@ public class DbController : ControllerBase
                 <h2>Password Reset</h2>
                 <p>Hello,</p>
                 <p>We received a request to reset your password. Click the button below to reset it.</p>
-                <a href=""https://tceworkmanagement.azurewebsites.net/"" class=""button"" style=""color: #ffffff; text-decoration: none;"">Reset Password</a>
+                <a href=""https://tceworkmanagement.azurewebsites.net/ResetPassword"" class=""button"" style=""color: #ffffff; text-decoration: none;"">Reset Password</a>
                 <p>If you did not request a password reset, please ignore this email or reply to let us know.</p>
                 <b>Delete this email after resetting for security purposes<b>
                 </div>
@@ -339,7 +339,6 @@ public class DbController : ControllerBase
     public class ResetDto
     {
         public string email { get; set; }
-        public string oldpass { get; set; }
         public string newpass { get; set; }
     }
     
@@ -347,7 +346,6 @@ public class DbController : ControllerBase
     public IActionResult SetNewPass([FromBody] ResetDto resetDto)
     {
         var email = resetDto.email;
-        var oldpass = resetDto.oldpass;
         var newpass = resetDto.newpass;
         var existingLogin = _context.Logins.FirstOrDefault(l => l.email == email);
         if (existingLogin == null)
@@ -356,17 +354,10 @@ public class DbController : ControllerBase
             return NotFound(new { message = "Data not found" });
         }
         // Compare the provided password with the stored password
-        if (oldpass==existingLogin.password)
-        {
-            existingLogin.password = newpass;
-            _context.SaveChanges();
-            return Ok(new { success = "true" });
-        }
-        else
-        {
-            return Ok(new { success = "false" });
-        }
-        
+        existingLogin.password = newpass;
+        _context.SaveChanges();
+        return Ok(new { success = "true" });
+
     }
     
     //reset pass for workers

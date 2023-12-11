@@ -63,6 +63,8 @@ const AdminHome = () => {
             .then(response => response.text())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
+
+        alert("Please check your email");
     }
 
     const setRememberMeCookie = (who) => {
@@ -177,7 +179,7 @@ const AdminHome = () => {
                                     </div>
                                     <div className="Login" ><button className="Login-img" onClick={HandleSubmit}><p className = "login-para">Login</p></button></div>
                                     <div>
-                                        <a href={ '/ResetPassword' }><p className="flabel" onClick={handleForgotPassword}>Forgot Password</p></a>
+                                        <p className="flabel" onClick={handleForgotPassword}>Forgot Password</p>
                                     </div>
                                 </div>
                                 <p>{inputLoginFail}</p>
