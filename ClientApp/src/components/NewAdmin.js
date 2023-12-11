@@ -5,7 +5,6 @@ import routeMappings from "../routeMappings";
 import "./AdminMain.css";
 import "./NewCoordinator.css";
 import "./TaskTable.css";
-import CreateButton from "./create_btn.gif";
 import WorkImg from "./work_img.gif";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import Flag from "./flag_icon.svg";
@@ -13,19 +12,21 @@ import {PieChart} from 'react-minimal-pie-chart';
 import ProgressChart from './ProgressChart';
 import SlidingPane from "react-sliding-pane";
 import "react-sliding-pane/dist/react-sliding-pane.css";
-import VerificationCodeDisplay from "./VerificationCodeDisplay";
 import PopUp from './PopUp';
 import {Puff} from 'react-loader-spinner';
-import Switch from "@mui/material/Switch";
 import Print from "./print.svg";
-import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
-import CommentCard from "./CommentCard";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import NewTask from './NewTask';
 import CommentBox from "./CommentBox";
 
 class PuffLoader extends React.Component {
+    componentDidMount() {
+        console.log('Rendering Puff');
+    }
+
+    componentDidUpdate() {
+        console.log('Rerendering Puff');
+    }
 
     render() {
         return (
@@ -41,12 +42,11 @@ class PuffLoader extends React.Component {
     }
 }
 
-
 const NewAdmin = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [loading, setLoading] = useState(false);
-    const [isloading, setisLoading] = useState(false);
+    const [isloading, setIsLoading] = useState(false);
     const [topworks, setTopworks] = useState([]);
     const [workers, setWorkers] = useState([]);
     const [CompletedPercent, setCompletedPercent] = useState(0);
@@ -54,17 +54,14 @@ const NewAdmin = () => {
     const [isPaneOpen, setIsPaneOpen] = useState(false);
     const [activeData, setActiveData] = useState([]);
     const [selectedSubtasks, setSelectedSubtasks] = useState([]);
-    const [selectedComments, setSelectedComments] = useState([]);
     const [orderChanged, setOrderChanged] = useState(false);
     const [dueDateDiff, setDueDateDiff] = useState(0);
     const [advancePaid, setAdvancePaid] = useState(0);
     const [dateOfPaid, setDateOfPaid] = useState("-");
     const [selectedItem, setSelectedItem] = useState(null);
-    const [enteredAdvance, setEnteredAdvance] = useState(0);
-    const [enteredDate, setEnteredDate] = useState(new Date());
-    const [isChecked, setIsChecked] = useState(false);
-    const [nowPaid, setNowPaid] = useState(false);
     const [padiBills, setPaidBills] = useState(new Map());
+    const [selectedComments, setSelectedComments] = useState([]);
+    
 
     useEffect(() => {
         if (!location.state || !location.state.fromAdminHome) {
@@ -103,8 +100,8 @@ const NewAdmin = () => {
     }
 
     const HandleSelectedItem = async (item) => {
-        console.log(item);
-        //setisLoading(true);
+        
+        setIsLoading(true);
         setSelectedItem(item);
         let fetchedtasks = await fetch(`/db/gettasks?n=${item.work_id}`);
         let tasks = await fetchedtasks.json();
@@ -133,20 +130,8 @@ const NewAdmin = () => {
         let diffInTime = dueDate.getTime() - currentDate.getTime();
         let diffInDays = diffInTime / (1000 * 3600 * 24);
         setDueDateDiff(diffInDays);
+        setIsLoading(false);
     }
-
-    const handleOnDragEnd = (result) => {
-        if (!result.destination) return;
-        const items = Array.from(selectedSubtasks);
-        const [reorderedItem] = items.splice(result.source.index, 1);
-        items.splice(result.destination.index, 0, reorderedItem);
-        setSelectedSubtasks(items);
-        setOrderChanged(true);
-    };
-
-    const handleToggle = () => {
-        setIsChecked(!isChecked);
-    };
 
     const generatePDF = () => {
         const elementToCapture = document.getElementById('elementId');
@@ -232,43 +217,8 @@ const NewAdmin = () => {
         }
     }
 
-    const handleSubmit = () => {
-        var requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                payment_type: 'A',
-                paid_amount: enteredAdvance,
-                paid_date: enteredDate.toISOString(),
-                work: selectedItem.work_id,
-            }),
-            redirect: 'follow'
-        };
-
-        fetch("/db/addpayment", requestOptions)
-            .then(response => response.text())
-            .then(result => {
-                console.log(result);
-                setIsChecked(false);
-            })
-            .catch(error => console.log('error', error));
-        setAdvancePaid(enteredAdvance);
-        setDateOfPaid(enteredDate.toISOString());
-    }
-
-    const handleBill = () => {
-        if (padiBills.has(selectedItem.work_id)) {
-            padiBills.delete(selectedItem.work_id);
-        } else {
-            padiBills.set(selectedItem.work_id, true);
-        }
-    }
-
-
     const HandleForward = () => {
-        navigate(routeMappings["bHWtcH10="], {state: {fromAdminHome: true}});
+        navigate(routeMappings["aGVsbG9="],{ state: { fromAdminHome: true } });
     }
 
     return (
@@ -281,7 +231,7 @@ const NewAdmin = () => {
                 <div className='ahome1'>
                     <div>
                         <div className='head-div'>
-                            <h1 className="para">Welcome to DMDR - Head Portal</h1>\
+                            <h1 className="para">Welcome to DMDR - Admin Portal</h1>\
                         </div>
                         <hr className="heading-line"/>
                     </div>
@@ -296,7 +246,7 @@ const NewAdmin = () => {
                                         }}>{x.work_name}</h2>
                                         <div className='date-div'>
                                             <img style={{width: '22px', marginRight: '10px'}} src={Flag}/>
-                                            <h2 className='active-title-h2'>{new Date(x.due_date).toLocaleDateString('en-US', {
+                                            <h2 className='active-title-date-h2'>{new Date(x.due_date).toLocaleDateString('en-US', {
                                                 month: 'long',
                                                 day: 'numeric'
                                             })}</h2>
@@ -311,54 +261,56 @@ const NewAdmin = () => {
                             <button className='view-all-btn' onClick={HandleForward}>VIEW ALL &gt;</button>
                         </div>
                         <PopUp trigger={selectedItem !== null}>
-                    {/* Pass the selectedItem as a prop to the PopUp */}
-                    {isloading ?
-                        <div className="overlay">
-                            <div className="puff-loader"><PuffLoader /></div>
-                        </div>: (
-                    selectedItem && (
-                        <div id='elementId'>
-                            <h1 className="close-btn" onClick={handleClose}>x</h1>
-                            {/* Display information related to the selectedItem here */}
-                            <h2 className='popup-head'>Work Details:</h2>
-                            <hr className='line'/>
-                            <div className='popup-info'>
-                                <div className='popup-details1'>
-                                    <p>Work Name: {selectedItem.work_name}</p>
-                                    <p>Time
-                                        Period: {selectedItem.start_date.slice(0, 10)} to {selectedItem.due_date.slice(0, 10)}</p>
-                                    {dueDateDiff < 0 && (
-                                        <p style={{color: 'red'}}>Overdue
-                                            by {Math.abs(Math.round(dueDateDiff))} {Math.abs(Math.round(dueDateDiff)) === 1 ? 'day' : 'days'}</p>
-                                    )}
-                                    <p>Coordinator: {selectedItem.coordinator}</p>
-                                    <p>Workers: {selectedItem.worker_names}</p>
-                                    <p>Total Expense: ₹{selectedItem.wage}</p>
-                                    {<>
-                                        <p>Advance paid: ₹{advancePaid}</p>
-                                        <p>Advance paid date: {dateOfPaid.slice(0, 10)}</p>
-                                        {selectedItem.bill_paid ? <p>Bill paid ✅</p> : <p>Bill paid ❌</p>}
-                                    </>
+                            {isloading ? (
+                                <div className="overlay">
+                                    <div className="puff-loader"><PuffLoader /></div>
+                                </div> ): (
+                            selectedItem && (
+                                <div id='elementId'>
+                                    <h1 className="close-btn" onClick={handleClose}>x</h1>
+                                    {/* Display information related to the selectedItem here */}
+                                    <h2 className='popup-head'>Work Details:</h2>
+                                    <hr className='line'/>
+                                    <div className='popup-info'>
+                                        <div className='popup-details1-div'>
+                                            <p>Work Name: {selectedItem.work_name}</p>
+                                            <p>Coordinator: {selectedItem.coordinator}</p>
+                                            <p>Total Expense: ₹{selectedItem.wage}</p>
+                                        </div>
+                                        <div className='popup-details1'>
+                                            <p>Workers: {selectedItem.worker_names}</p>
+                                            <p>Time
+                                                Period: {selectedItem.start_date.slice(0, 10)} to {selectedItem.due_date.slice(0, 10)}</p>
+                                            {dueDateDiff < 0 && (
+                                                <p style={{color: 'red'}}>Overdue
+                                                    by {Math.abs(Math.round(dueDateDiff))} {Math.abs(Math.round(dueDateDiff)) === 1 ? 'day' : 'days'}</p>
+                                            )}
+                                        </div>
+                                        <div className='popup-details1-div'>    
+                                            {<>
+                                                <p>Advance paid: ₹{advancePaid}</p>
+                                                {selectedItem.bill_paid ? <p>Bill paid ✅</p> : <p>Bill paid ❌</p>}
+                                                <p>Advance paid date: {dateOfPaid.slice(0, 10)}</p>
+                                            </>
+                                            }
+                                        </div>
+                                        <div className='popup-piechart'>
+                                            <p>Work Progress: </p>
+                                            <ProgressChart
+                                                percentage={selectedItem.total_subtasks !== 0 ? selectedItem.completed_subtasks : 0}
+                                            />
+                                            {<CommentBox workid={selectedItem.work_id}/>}
+                                            <button className='print-button' onClick={generatePDF}><img src={Print} alt='print'/></button>
+                                        </div>
+                                    </div>
+                                    {<ol>
+                                        <p>Sub Tasks: </p>
+                                        {selectedSubtasks.map((subtask, index) => <li key={index}>{subtask.task_name}</li>)}
+                                    </ol>
                                     }
-
-                                    <p>Sub Tasks: </p>
                                 </div>
-                                <div className='popup-piechart'>
-                                    <p>Work Progress: </p>
-                                    <ProgressChart
-                                        percentage={selectedItem.total_subtasks !== 0 ? selectedItem.completed_subtasks : 0}
-                                    />
-                                    {<CommentBox workid={selectedItem.work_id}/>}
-                                    <button className='print-button' onClick={generatePDF}><img src={Print} alt='print'/></button>
-                                </div>
-                            </div>
-                            {<ol>
-                                {selectedSubtasks.map((subtask, index) => <li key={index}>{subtask.task_name}</li>)}
-                            </ol>
-                            }
-                        </div>
-                    ))}
-                </PopUp>
+                            ))}
+                        </PopUp>
                         <div className='work-container-div'>
                             <div className='work-div'>
                                 <img className='work-img-div' src={WorkImg} alt='Work'/>
@@ -400,13 +352,12 @@ const NewAdmin = () => {
                                             src="https://img.icons8.com/plasticine/100/delete-sign.png"
                                             alt="delete-sign"/>}
                             isOpen={isPaneOpen}
-                            title="Manage Agencies"
-                            subtitle='view or change the verification code for registers and manage the agencies registered'
+                            title="View Your Registered Agencies"
                             onRequestClose={() => {
                                 setIsPaneOpen(false);
                             }}
                         >
-                            <div className="notification-inner">
+                            <div className="notification-inner-admin">
                                 <div>
                                     <table className="workers-table">
                                         <thead>

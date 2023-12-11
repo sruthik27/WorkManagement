@@ -39,11 +39,7 @@ const Coordinator = () => {
           <div className="spinner"></div>
         </div>
        ) : (
-        <div className='ahome'>
-          <div>
-            <h1 className="para">Welcome to MDR - Head Portal</h1>
-            <hr className="heading-line"/>
-          </div>
+        <div className='tasktable-home'>
           <TaskTable data={itemData} editable={true}/>
         </div>
       )}

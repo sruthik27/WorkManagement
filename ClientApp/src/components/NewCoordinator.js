@@ -53,7 +53,7 @@ const NewCoordinator = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [loading, setLoading] = useState(false);
-    const [isloading, setisLoading] = useState(false);
+    const [isloading, setIsLoading] = useState(false);
     const [topworks, setTopworks] = useState([]);
     const [workers, setWorkers] = useState([]);
     const [CompletedPercent, setCompletedPercent] = useState(0);
@@ -118,8 +118,8 @@ const NewCoordinator = () => {
     }
 
     const HandleSelectedItem = async (item) => {
-        console.log(item);
-        //setisLoading(true);
+        
+        setIsLoading(true);
         setSelectedItem(item);
         let fetchedtasks = await fetch(`/db/gettasks?n=${item.work_id}`);
         let tasks = await fetchedtasks.json();
@@ -148,6 +148,7 @@ const NewCoordinator = () => {
         let diffInTime = dueDate.getTime() - currentDate.getTime();
         let diffInDays = diffInTime / (1000 * 3600 * 24);
         setDueDateDiff(diffInDays);
+        setIsLoading(false);
     }
 
     const handleOnDragEnd = (result) => {
@@ -310,8 +311,8 @@ const NewCoordinator = () => {
     }
 
     const handleAssignClick = (workerId) => {
-  navigate('/NewTask', { state: { worker_id: workerId } });
-};
+        navigate('/NewTask', { state: { worker_id: workerId } });
+    };
 
 
 
@@ -366,16 +367,28 @@ const NewCoordinator = () => {
                                         {/* Display information related to the selectedItem here */}
                                         <h2 className='popup-head'>Work Details:</h2>
                                         <hr className='line'/>
-                                        <p>Work Name: {selectedItem.work_name}</p>
-                                        <p>Time
-                                            Period: {selectedItem.start_date.slice(0, 10)} to {selectedItem.due_date.slice(0, 10)}</p>
-                                        {dueDateDiff < 0 && (
-                                            <p style={{color: 'red'}}>Overdue
-                                                by {Math.abs(Math.round(dueDateDiff))} {Math.abs(Math.round(dueDateDiff)) === 1 ? 'day' : 'days'}</p>
-                                        )}
-                                        <p>Coordinator: {selectedItem.coordinator}</p>
-                                        <p>Worker(s): {selectedItem.worker_names}</p>
-                                        <p>Total Expense: ₹{selectedItem.wage}</p>
+                                        <div>
+                                            <div className="detail">
+                                            <span className="label">Work Name</span>:<span>{selectedItem.work_name}</span>
+                                            </div>
+                                            <div className="detail">
+                                            <span className="label">Time Period</span>:<span>{selectedItem.start_date.slice(0, 10)} to {selectedItem.due_date.slice(0, 10)}</span>
+                                            </div>
+                                            {dueDateDiff < 0 && (
+                                            <div className="detail">
+                                                <span className="label">Overdue by</span>:<span style={{color: 'red'}}>{Math.abs(Math.round(dueDateDiff))} {Math.abs(Math.round(dueDateDiff)) === 1 ? 'day' : 'days'}</span>
+                                            </div>
+                                            )}
+                                            <div className="detail">
+                                            <span className="label">Coordinator</span>:<span>{selectedItem.coordinator}</span>
+                                            </div>
+                                            <div className="detail">
+                                            <span className="label">Worker(s)</span>:<span>{selectedItem.worker_names}</span>
+                                            </div>
+                                            <div className="detail">
+                                            <span className="label">Total Expense</span>:<span>₹{selectedItem.wage}</span>
+                                            </div>
+                                        </div>
                                         {<>
                                             {advancePaid === 0 ?
                                                 <>

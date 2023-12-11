@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import "./AdminMain.css";
 import TaskTable from './TaskTable';
 import {useLocation, useNavigate} from "react-router-dom";
-import {PieChart} from 'react-minimal-pie-chart';
 
 
 
@@ -49,26 +48,8 @@ const AdminMain = () => {
                     <div className="spinner"></div>
                 </div>
              ): (
-                <div className="ahome">
-                    <div>
-                        <p className="para">Welcome to MDR - Admin Portal</p>
-                        <hr className="heading-line"/>
-                    </div>
+                <div className="tasktable-home">
                     <TaskTable data={itemData} editable={false}/>
-                    <div className='base-item'>
-                        <div className="piechartdiv">
-                            <h2 className='table-head'>Progress chart:</h2>
-                            <PieChart
-                                data={[
-                                    {title: 'Completed', value: CompletedPercent, color: '#7cd57c'},
-                                    {title: 'Active', value: ActivePercent, color: '#FFF9DF'},
-                                ]} label={({dataEntry}) => dataEntry.title}
-                                labelStyle={{
-                                    fontSize: '6px',
-                                }}
-                            />
-                        </div>
-                    </div>
                 </div>
             )}
         </>

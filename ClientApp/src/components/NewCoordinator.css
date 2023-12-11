@@ -49,6 +49,7 @@
     width: 100%;
     height: 30px;
     overflow-x: auto;
+    cursor: pointer;
 }
 
 .active-title-date-h2 {
@@ -304,3 +305,22 @@
     color: white;
 }
 
+.notification-inner-admin {
+    padding: 1rem;
+    width: 100%;
+    max-width: 55vw;
+    height: 100%;
+    background: #FFF9DF;
+    border-radius: 7px;
+    margin-top: 15px;
+    overflow-y: auto;
+}
+
+.detail {
+    display: flex;
+    align-items: center;
+   }
+   
+.label {
+    width: 100px; /* Adjust this value to suit your needs */
+}

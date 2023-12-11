@@ -28,10 +28,11 @@
     border-radius: 20px;
     background: #FFF9DF;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    width: 52vw;
-    height: 50vh;
+    width: 100%;
+    height: 32vw;
     margin-bottom: 4vw;
     padding: 1vw;
+    border: 2px solid #640000;
 }
 
 .piechartdiv{
@@ -52,11 +53,12 @@
 
 .table_content {
     cursor: pointer;
+    font-size: 20px;
 }
 
 .scroll {
-    width: 200px;
-    height: 210px;
+    width: 100%;
+    height: 86%;
     overflow: auto;
     /* border: 1px solid #000000; */
 }
@@ -71,8 +73,8 @@
 }
 
 .v1 {
-    border-left: 2px solid #640000;;
-    height: 50vh;
+    border-left: 2px solid #640000;
+    height: 30vw;
 }
 
 .feedback-input {
@@ -132,7 +134,7 @@
     left: 0;
     width: 100%;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0.45);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -151,12 +153,12 @@
 
 .popup-inner .close-btn {
     position: absolute;
-    top: 0;
+    top: 10px;
     right: 30px;
     cursor: pointer;
     font-size: xx-large;
     font-family: Arial;
-    color: #640000;;
+    color: #640000;
 }
 
 .popup-head {
@@ -176,9 +178,19 @@
     font-weight: 300;
 }
 
+.popup-details1-div {
+    color: #640000;
+    font-family: Lexend Deca;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
 .popup-info {
-    display: flex;
-    justify-content: space-around;
+    /* display: flex;
+    justify-content: space-around; */
 }
 
 .popup-piechart {

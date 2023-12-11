@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Alatsi&family=Lexend+Deca:wght@300&display=swap');
 
+.tasktable-home {
+    display: flex;
+    background:url( 'TCE_BLUR.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    flex-direction: column;
+    align-items: center;
+    padding: 4% 10% 1% 10%;
+}
+
 .datepickerwrapper {
     margin-bottom: 2vw;
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
@@ -30,7 +40,7 @@
 .table-head {
     color: #640000;
     font-family: Alatsi;
-    font-size: 25px;
+    font-size: 2rem;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
