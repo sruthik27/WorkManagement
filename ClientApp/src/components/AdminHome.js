@@ -27,7 +27,6 @@ const AdminHome = () => {
     const [inputPassword, setInputPassword] = useState("");
     const [inputCheckbox, setInputCheckbox] = useState(false);
     const [inputLoginFail, setInputLoginFail] = useState("");
-    const [forgotPassword, setForgotPassword] = useState(false);
     const [inputForgotPassword, setInputForgotPassword] = useState("");
     const [oldPassword,setOldPassword] = useState("");
     const [emailCheck, setEmailCheck] = useState(false)
@@ -36,6 +35,7 @@ const AdminHome = () => {
     const [inputConfirmPassword, setInputConfirmPassword] = useState("");
     const [misMatch, setMisMatch] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
+    const [whoLogin, setWhoLogin] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
  
@@ -59,22 +59,39 @@ const AdminHome = () => {
         setInputForgotPassword(e.target.value);
     }
 
-    const HandleForgotPassword = () => {
-        setForgotPassword(true);
-    }
-
-    const HandleClose = () => {
-        setForgotPassword(false);
-        setEmailCheck(false);
-        setisEmailCheck(false);
-    }
+    // const HandleClose = () => {
+    //     setForgotPassword(false);
+    //     setEmailCheck(false);
+    //     setisEmailCheck(false);
+    // }
 
     function isEmail(input) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(input);
     }
 
-    const HandleForgotPasswordSubmit = async () => {
+    const handleForgotPassword = async () => {
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+            "who":whoLogin
+        });
+
+        var requestOptions = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        await fetch("/db/resetpasswordlink", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+    }
+
+    const handleForgotPasswordSubmit = async () => {
         if (isEmail(inputForgotPassword)) {
             setEmailCheck(true);
             setisEmailCheck(false);
@@ -112,7 +129,6 @@ const AdminHome = () => {
         setOldPassword("")
         setInputForgotPassword("");
 
-
     }
 
     const setRememberMeCookie = (who) => {
@@ -128,6 +144,7 @@ const AdminHome = () => {
     const HandleCheckbox = () => {
         inputCheckbox ? setInputCheckbox(false) : setInputCheckbox(true);
     }
+
     const HandleSubmit = () => {
         // Create an object with the login data
         const loginData = {
@@ -173,12 +190,12 @@ const AdminHome = () => {
 
     const HandleLoginPrinci = (e) => {
         setIsLogin(true);
-        console.log(e.target.value);
+        setWhoLogin(e.target.value);
         
     }
     const HandleLoginHead = (e) => {
         setIsLogin(true);
-        console.log(e.target.value);
+        setWhoLogin(e.target.value);
     }
 
     return (
@@ -224,20 +241,18 @@ const AdminHome = () => {
                                     </div>
                                     <div className="Login" ><button className="Login-img" onClick={HandleSubmit}><p className = "login-para">Login</p></button></div>
                                     <div>
-                                        <p className="flabel" onClick={HandleForgotPassword}>Reset Password</p>
+                                        <p className="flabel" onClick={handleForgotPassword}>Forgot Password</p>
                                     </div>
                                 </div>
                                 <div>
-                                    <PopUp trigger = {forgotPassword}>
-                                        {forgotPassword ? (
+                                        {(
                                             <div>
-                                                <h1 onClick={HandleClose} className="close-btn">x</h1>
                                                 <div>
                                                     <h1 className="forgot-password-head">Reset Password: </h1>
                                                     <hr className="heading-line"/>
                                                     <div className="forgot-password">
-                                                        <input 
-                                                            className="input2" 
+                                                        <input
+                                                            className="input2"
                                                             placeholder="Enter your Email id"
                                                             value={inputForgotPassword}
                                                             onChange={HandleInputForgotPassword}
@@ -257,24 +272,30 @@ const AdminHome = () => {
                                                             type={"password"}
                                                             value={inputResetPassword}
                                                             onChange={HandleInputResetPassword}
-                                                            placeholder="New Password"                        
+                                                            placeholder="New Password"
                                                         />
                                                         <input
                                                             className="input2"
                                                             type={"password"}
                                                             value={inputConfirmPassword}
                                                             onChange={HandleInputConfirmPassword}
-                                                            placeholder="Confirm new Password"                        
+                                                            placeholder="Confirm new Password"
                                                         />
-                                                        {emailCheck ? <p className="verify-para">Password changed!</p> : ""}
-                                                        {isEmailCheck ? <p className="verify-para">Invalid or Error in Email id</p> : ""}
-                                                        {misMatch ? <p className="verify-para">Password is Mismatched Check Your Password</p> : ""}
-                                                        <button className="forgot-password-button" onClick={HandleForgotPasswordSubmit}>Change</button>
+                                                        {emailCheck ?
+                                                            <p className="verify-para">Password changed!</p> : ""}
+                                                        {isEmailCheck ?
+                                                            <p className="verify-para">Invalid or Error in Email
+                                                                id</p> : ""}
+                                                        {misMatch ?
+                                                            <p className="verify-para">Password is Mismatched Check Your
+                                                                Password</p> : ""}
+                                                        <button className="forgot-password-button"
+                                                                onClick={handleForgotPasswordSubmit}>Change
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
-                                        ): "" }
-                                    </PopUp>
+                                        ) }
                                 </div>
                                 <p>{inputLoginFail}</p>
                             </div>
