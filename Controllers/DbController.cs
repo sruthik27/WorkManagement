@@ -163,13 +163,20 @@ public class DbController : ControllerBase
     //--------------------------------------------------------
     
     //TO CHANGE PASSWORD FOR ADMIN/COORDINATOR
-    [HttpPut("resetpassword")]
-    public void SendPasswordResetEmail()
+    public class Who
     {
+        public char who { get; set; }
+    }
+    
+    [HttpPut("resetpasswordlink")]
+    public IActionResult SendPasswordResetEmail([FromBody] Who who)
+    {
+        var to_name = who.who == 'P' ? "Principal" : "DMDR Head";
+        var to_email = who.who == 'P' ? "sruthik2016@gmail.com" : "vigneshkabilan65@gmail.com";
         // Create email message
         var emailMessage = new MimeMessage();
         emailMessage.From.Add(new MailboxAddress("TCE DMDR", "insomniadevs007@gmail.com"));
-        emailMessage.To.Add(new MailboxAddress("M.r sruthik", "sruthik2016@gmail.com"));
+        emailMessage.To.Add(new MailboxAddress(to_name, to_email));
         emailMessage.Subject = "Password Reset";
         emailMessage.Body = new TextPart("html") { Text = @"
 <!DOCTYPE html>
@@ -197,7 +204,7 @@ public class DbController : ControllerBase
           font-size: 16px;
           margin-top: 20px;
       }
-        .ii a[href] {
+        a {
          color: #fff;
       }
   </style>
@@ -207,7 +214,7 @@ public class DbController : ControllerBase
                 <h2>Password Reset</h2>
                 <p>Hello,</p>
                 <p>We received a request to reset your password. Click the button below to reset it.</p>
-                <a href=""https://tceworkmanagement.azurewebsites.net/"" class=""button"">Reset Password</a>
+                <a href=""https://tceworkmanagement.azurewebsites.net/"" class=""button"" style=""color: #ffffff; text-decoration: none;"">Reset Password</a>
                 <p>If you did not request a password reset, please ignore this email or reply to let us know.</p>
                 <b>Delete this email after resetting for security purposes<b>
                 </div>
@@ -221,6 +228,7 @@ public class DbController : ControllerBase
         smtp.Authenticate("insomniadevs007@gmail.com", "lzhyecgavxzkcgvg");
         smtp.Send(emailMessage);
         smtp.Disconnect(true);
+        return Ok(new { message = "sent successfully" });
     }
 
         
