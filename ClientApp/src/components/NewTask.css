@@ -48,22 +48,25 @@
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
+    color: #640000;
 }
 
 .formcontrol {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #640000;
+    cursor: pointer;
 }
 
 .task-button {
     margin-top: 20px;
     display: flex;
     justify-content: space-evenly;
+    margin-bottom: 10px;
 }
 
 .add-button {
-    padding: 10px 20px;
+    padding: 6px 20px;
     border: none;
     border-radius: 20px;
     cursor: pointer;
@@ -143,48 +146,53 @@
 }
 
 .dropdown-check-list {
-  display: inline-block;
+    position: relative;
 }
 
-.dropdown-check-list .anchor {
-  position: relative;
-  cursor: pointer;
-  display: inline-block;
-  padding: 5px 50px 5px 10px;
-  border: 1px solid #ccc;
+.dropdown-button {
+    background-color: white;
+    height: 30px;
+    width: 100%;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    padding: 23px;
+    padding-left: 10px;
+    border: 1px solid #640000;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.dropdown-check-list .anchor:after {
-  position: absolute;
-  content: "";
-  border-left: 2px solid black;
-  border-top: 2px solid black;
-  padding: 5px;
-  right: 10px;
-  top: 20%;
-  transform: rotate(-135deg);
+.items {
+    position: absolute;
+    background-color: #fde8c5;
+    padding: 20px;
+    font-size: 16px;
+    color: #640000;
+    width: 100%;
+    overflow-y: auto;
+    height: 150px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 12px;
+    border: 1px solid #640000;
+    border-radius: 7px;
 }
 
-.dropdown-check-list .anchor:active:after {
-  right: 8px;
-  top: 21%;
+.items-field {
+    display: flex;
+    align-items: center;
+    border: none;
+    column-gap: 4px;
+    padding: 5px;
 }
 
-.dropdown-check-list ul.items {
-  padding: 2px;
-  margin: 0;
-  border: 1px solid #ccc;
-  border-top: none;
-}
-
-.dropdown-check-list ul.items li {
-  list-style: none;
-}
-
-.dropdown-check-list.visible .anchor {
-  color: #0094ff;
-}
-
-.dropdown-check-list.visible .items {
-  display: block;
+.items-field-selected {
+    display: flex;
+    align-items: center;
+    column-gap: 4px;
+    background-color: #fff9df;
+    padding: 4px;
+    border: 1px solid #640000;
+    border-radius: 5px;
 }

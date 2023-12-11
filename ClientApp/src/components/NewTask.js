@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import './NewTask.css';
+import './AdminMain.css';
 import Slider from '@mui/material/Slider';
 import routeMappings from "../routeMappings";
 import {useLocation, useNavigate} from 'react-router-dom';
@@ -22,6 +23,7 @@ const NewTask = (props) => {
     const [showModal, setShowModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [showWorkers,setShowWorkers] = useState(false);
+    const [isLoading, setLoading] = useState(false);
     const navigate = useNavigate();
 
 
@@ -257,26 +259,26 @@ const NewTask = (props) => {
                             </div>
                             <div className="form-group">
                                 <label>Agency: </label>
-                                <div className="dropdown-check-list" tabIndex="100">
-  <span className="anchor" onClick={() => setShowWorkers(!showWorkers)}>Select Agencies</span>
-  {showWorkers && (
-     <ul className="items">
-        {workers.map((worker, index) => (
-           <li key={index}>
-              <input
-                type="checkbox"
-                id={worker.worker_id}
-                value={worker.worker_id}
-                checked={selectedWorkers.includes(worker.worker_id)}
-                onChange={(event) => handleWorkerChange(event.target.value)}
-              />
-              <label htmlFor={worker.worker_id}>{worker.worker_name.charAt(0).toUpperCase() + worker.worker_name.slice(1)}</label>
-           </li>
-        ))}
-     </ul>
-  )}
-</div>
-
+                                <div className="dropdown-check-list">
+                                    <span className="dropdown-button" onClick={() => setShowWorkers(!showWorkers)}>Select Agencies</span>
+                                    {showWorkers && (
+                                        <div className="items">
+                                            {workers.map((worker, index) => (
+                                            <fieldset className={selectedWorkers.includes(worker.worker_id) ? 'items-field-selected' : 'items-field'} key={index}>
+                                                <input
+                                                    style={{cursor: 'pointer'}}
+                                                    type="checkbox"
+                                                    id={worker.worker_id}
+                                                    value={worker.worker_id}
+                                                    checked={selectedWorkers.includes(worker.worker_id)}
+                                                    onChange={(event) => handleWorkerChange(event.target.value)}
+                                                />
+                                                <label htmlFor={worker.worker_id}>{worker.worker_name.charAt(0).toUpperCase() + worker.worker_name.slice(1)}</label>
+                                            </fieldset>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                             <div className="form-group">
                                 <label>Coordinator: </label>
@@ -286,6 +288,11 @@ const NewTask = (props) => {
                                     onChange={(event) => setCoordinator(event.target.value)}
                                     className="formcontrol"
                                 />
+                            </div>
+                            <div className="task-button">
+                                <button type="button" className="add-button" onClick={handleShowModal}>
+                                Add Subtask
+                                </button>
                             </div>
                             <div>
                                 {subtasks.map((subtask, index) => (
@@ -319,10 +326,6 @@ const NewTask = (props) => {
                         </form>
                     </div>
                     <div className="task-button">
-                        <button type="button" className="add-button" onClick={handleShowModal}>
-                            Add Subtask
-                        </button>
-                        <br/>
                         <button type="button" className="add-button" onClick={handleFormSubmit}>
                             SUBMIT
                         </button>

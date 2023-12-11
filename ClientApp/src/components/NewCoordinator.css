@@ -174,17 +174,20 @@
     background-color: #640000;
     padding: 10px;
     margin: 10px;
+    border: none;
 }
 
 .piechart-colour-char-active {
     margin: 6px;
     color: #640000;
+    border: none;
 }
 
 .piechart-colour-info-completed {
     background-color: #7cd57c;
     padding: 10px;
     margin: 10px;
+    border: none;
 }
 
 .title-div1 {
@@ -231,10 +234,11 @@
     padding: 1rem;
     width: 100%;
     max-width: 55vw;
-    max-height: 81vh;
+    max-height: 50vh;
     background: #FFF9DF;
     border-radius: 7px;
     margin-top: 15px;
+    overflow-y: auto;
 }
 
 .workers-table {
