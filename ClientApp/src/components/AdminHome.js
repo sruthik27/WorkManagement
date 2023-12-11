@@ -5,7 +5,6 @@ import './AdminHome.css';
 import "./AdminMain.css";
 import Footer from "./Vector.png";
 import routeMappings from "../routeMappings";
-import PopUp from "./PopUp";
 
 
 const AdminHome = () => {
@@ -27,13 +26,6 @@ const AdminHome = () => {
     const [inputPassword, setInputPassword] = useState("");
     const [inputCheckbox, setInputCheckbox] = useState(false);
     const [inputLoginFail, setInputLoginFail] = useState("");
-    const [inputForgotPassword, setInputForgotPassword] = useState("");
-    const [oldPassword,setOldPassword] = useState("");
-    const [emailCheck, setEmailCheck] = useState(false)
-    const [isEmailCheck, setisEmailCheck] = useState(false)
-    const [inputResetPassword, setInputResetPassword] = useState("");
-    const [inputConfirmPassword, setInputConfirmPassword] = useState("");
-    const [misMatch, setMisMatch] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
     const [whoLogin, setWhoLogin] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -46,24 +38,6 @@ const AdminHome = () => {
     const HandleInputPassword = (e) => {
         setInputPassword(e.target.value);
     }
-
-    const HandleInputResetPassword = (e) => {
-        setInputResetPassword(e.target.value);
-    }
-
-    const HandleInputConfirmPassword = (e) => {
-        setInputConfirmPassword(e.target.value);
-    }
-
-    const HandleInputForgotPassword = (e) => {
-        setInputForgotPassword(e.target.value);
-    }
-
-    // const HandleClose = () => {
-    //     setForgotPassword(false);
-    //     setEmailCheck(false);
-    //     setisEmailCheck(false);
-    // }
 
     function isEmail(input) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -91,46 +65,6 @@ const AdminHome = () => {
             .catch(error => console.log('error', error));
     }
 
-    const handleForgotPasswordSubmit = async () => {
-        if (isEmail(inputForgotPassword)) {
-            setEmailCheck(true);
-            setisEmailCheck(false);
-        } else {
-            setisEmailCheck(true);
-        }
-        if (inputResetPassword !== inputConfirmPassword) {
-            setMisMatch(true);
-        } else {
-            setMisMatch(false);
-        }
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-
-        var raw = JSON.stringify({
-            "email": inputForgotPassword,
-            "newpass": inputResetPassword,
-            "oldpass": oldPassword,
-        });
-
-        var requestOptions = {
-            method: 'PUT',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-
-        await fetch("/db/resetpass1", requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
-
-        setInputConfirmPassword("");
-        setInputResetPassword("");
-        setOldPassword("")
-        setInputForgotPassword("");
-
-    }
-
     const setRememberMeCookie = (who) => {
         // Set a cookie with an expiration date (e.g., 30 days)
         const expirationDate = new Date();
@@ -147,6 +81,7 @@ const AdminHome = () => {
 
     const HandleSubmit = () => {
         // Create an object with the login data
+        setIsLoading(true);
         const loginData = {
             email: inputEmail,
             password: inputPassword
@@ -185,7 +120,8 @@ const AdminHome = () => {
             .catch((error) => {
                 console.error('Error:', error);
                 // Handle any errors that occur during the HTTP request
-            });
+            })
+            setIsLoading(false);
     };
 
     const HandleLoginPrinci = (e) => {
@@ -241,61 +177,8 @@ const AdminHome = () => {
                                     </div>
                                     <div className="Login" ><button className="Login-img" onClick={HandleSubmit}><p className = "login-para">Login</p></button></div>
                                     <div>
-                                        <p className="flabel" onClick={handleForgotPassword}>Forgot Password</p>
+                                        <a href={ '/ResetPassword' }><p className="flabel" onClick={handleForgotPassword}>Forgot Password</p></a>
                                     </div>
-                                </div>
-                                <div>
-                                        {(
-                                            <div>
-                                                <div>
-                                                    <h1 className="forgot-password-head">Reset Password: </h1>
-                                                    <hr className="heading-line"/>
-                                                    <div className="forgot-password">
-                                                        <input
-                                                            className="input2"
-                                                            placeholder="Enter your Email id"
-                                                            value={inputForgotPassword}
-                                                            onChange={HandleInputForgotPassword}
-                                                            type={"email"}
-                                                        />
-                                                        <input
-                                                            className="input2"
-                                                            type={"password"}
-                                                            placeholder="Enter old password"
-                                                            value={oldPassword}
-                                                            onChange={(e) => {
-                                                                setOldPassword(e.target.value);
-                                                            }}
-                                                        />
-                                                        <input
-                                                            className="input2"
-                                                            type={"password"}
-                                                            value={inputResetPassword}
-                                                            onChange={HandleInputResetPassword}
-                                                            placeholder="New Password"
-                                                        />
-                                                        <input
-                                                            className="input2"
-                                                            type={"password"}
-                                                            value={inputConfirmPassword}
-                                                            onChange={HandleInputConfirmPassword}
-                                                            placeholder="Confirm new Password"
-                                                        />
-                                                        {emailCheck ?
-                                                            <p className="verify-para">Password changed!</p> : ""}
-                                                        {isEmailCheck ?
-                                                            <p className="verify-para">Invalid or Error in Email
-                                                                id</p> : ""}
-                                                        {misMatch ?
-                                                            <p className="verify-para">Password is Mismatched Check Your
-                                                                Password</p> : ""}
-                                                        <button className="forgot-password-button"
-                                                                onClick={handleForgotPasswordSubmit}>Change
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ) }
                                 </div>
                                 <p>{inputLoginFail}</p>
                             </div>

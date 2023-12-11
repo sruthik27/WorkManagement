@@ -340,7 +340,7 @@ const NewCoordinator = () => {
                                         }}>{x.work_name}</h2>
                                         <div className='date-div'>
                                             <img style={{width: '22px', marginRight: '10px'}} src={Flag}/>
-                                            <h2 className='active-title-h2'>{new Date(x.due_date).toLocaleDateString('en-US', {
+                                            <h2 className='active-title-date-h2'>{new Date(x.due_date).toLocaleDateString('en-US', {
                                                 month: 'long',
                                                 day: 'numeric'
                                             })}</h2>

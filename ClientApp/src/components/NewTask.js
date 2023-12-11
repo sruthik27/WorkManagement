@@ -23,11 +23,12 @@ const NewTask = (props) => {
     const [showModal, setShowModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [showWorkers,setShowWorkers] = useState(false);
-    const [isLoading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
 
     const fetchWorkerNames = () => {
+        setIsLoading(false);
         fetch('/db/getworkers')
             .then(response => response.json())
             .then(data => setWorkers(data))
@@ -202,187 +203,192 @@ const NewTask = (props) => {
 
     return (
         <>
-            <div className="form-background">
-                <div className="form">
-                    <div>
+            {isLoading ? (
+                <div className="loader-container">
+                    <div className="spinner"></div>
+                </div>
+            ) : 
+                <div className="form-background">
+                    <div className="form">
                         <div>
-                            <h1 className="heading">PUBLISH NEW TASK</h1>
-                            <hr className="heading-line"/>
-                        </div>
-                        <form className="form-class">
-                            <div className="form-group">
-                                <label>Work Name: </label>
-                                <input
-                                    type="text"
-                                    className="formcontrol"
-                                    placeholder="Type Work Name"
-                                    value={workName}
-                                    onChange={event => setWorkName(event.target.value)}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Work Cost: </label>
-                                <input
-                                    type="number"
-                                    className="formcontrol"
-                                    placeholder="Type Work Cost"
-                                    value={workCost}
-                                    onChange={event => setWorkCost(event.target.value)}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Start Date: </label>
-                                <input
-                                    type="date"
-                                    value={startDate.toISOString().split('T')[0]}
-                                    onChange={(event) => setStartDate(new Date(event.target.value))}
-                                    className="formcontrol"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Due Date: </label>
-                                <input
-                                    type="date"
-                                    value={dueDate.toISOString().split('T')[0]}
-                                    onChange={(event) => setDueDate(new Date(event.target.value))}
-                                    className="formcontrol"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Task Description: </label>
-                                <input
-                                    type="text"
-                                    placeholder="Type task description"
-                                    onChange={(event) => setTaskDescription(event.target.value)}
-                                    className="formcontrol"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Agency: </label>
-                                <div className="dropdown-check-list">
-                                    <span className="dropdown-button" onClick={() => setShowWorkers(!showWorkers)}>Select Agencies</span>
-                                    {showWorkers && (
-                                        <div className="items">
-                                            {workers.map((worker, index) => (
-                                            <fieldset className={selectedWorkers.includes(worker.worker_id) ? 'items-field-selected' : 'items-field'} key={index}>
-                                                <input
-                                                    style={{cursor: 'pointer'}}
-                                                    type="checkbox"
-                                                    id={worker.worker_id}
-                                                    value={worker.worker_id}
-                                                    checked={selectedWorkers.includes(worker.worker_id)}
-                                                    onChange={(event) => handleWorkerChange(event.target.value)}
-                                                />
-                                                <label htmlFor={worker.worker_id}>{worker.worker_name.charAt(0).toUpperCase() + worker.worker_name.slice(1)}</label>
-                                            </fieldset>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label>Coordinator: </label>
-                                <input
-                                    type="text"
-                                    placeholder="Who is supervising?"
-                                    onChange={(event) => setCoordinator(event.target.value)}
-                                    className="formcontrol"
-                                />
-                            </div>
-                            <div className="task-button">
-                                <button type="button" className="add-button" onClick={handleShowModal}>
-                                Add Subtask
-                                </button>
-                            </div>
                             <div>
-                                {subtasks.map((subtask, index) => (
-                                    <div className="subtask-des" key={index}>
-                                        <div className="subtask-head-div">
-                                            <h1 className="subtask-des-head">Sub Task {index + 1}</h1>
-                                            <img className="subtask-delete-btn" src={Delete}
-                                                 onClick={() => handleDeleteSubtask(index)}/>
+                                <h1 className="heading">PUBLISH NEW TASK</h1>
+                                <hr className="heading-line"/>
+                            </div>
+                            <form className="form-class">
+                                <div className="form-group">
+                                    <label>Work Name: </label>
+                                    <input
+                                        type="text"
+                                        className="formcontrol"
+                                        placeholder="Type Work Name"
+                                        value={workName}
+                                        onChange={event => setWorkName(event.target.value)}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Work Cost: </label>
+                                    <input
+                                        type="number"
+                                        className="formcontrol"
+                                        placeholder="Type Work Cost"
+                                        value={workCost}
+                                        onChange={event => setWorkCost(event.target.value)}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Start Date: </label>
+                                    <input
+                                        type="date"
+                                        value={startDate.toISOString().split('T')[0]}
+                                        onChange={(event) => setStartDate(new Date(event.target.value))}
+                                        className="formcontrol"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Due Date: </label>
+                                    <input
+                                        type="date"
+                                        value={dueDate.toISOString().split('T')[0]}
+                                        onChange={(event) => setDueDate(new Date(event.target.value))}
+                                        className="formcontrol"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Task Description: </label>
+                                    <input
+                                        type="text"
+                                        placeholder="Type task description"
+                                        onChange={(event) => setTaskDescription(event.target.value)}
+                                        className="formcontrol"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Agency: </label>
+                                    <div className="dropdown-check-list">
+                                        <span className="dropdown-button" onClick={() => setShowWorkers(!showWorkers)}>Select Agencies</span>
+                                        {showWorkers && (
+                                            <div className="items">
+                                                {workers.map((worker, index) => (
+                                                <fieldset className={selectedWorkers.includes(worker.worker_id) ? 'items-field-selected' : 'items-field'} key={index}>
+                                                    <input
+                                                        style={{cursor: 'pointer'}}
+                                                        type="checkbox"
+                                                        id={worker.worker_id}
+                                                        value={worker.worker_id}
+                                                        checked={selectedWorkers.includes(worker.worker_id)}
+                                                        onChange={(event) => handleWorkerChange(event.target.value)}
+                                                    />
+                                                    <label htmlFor={worker.worker_id}>{worker.worker_name.charAt(0).toUpperCase() + worker.worker_name.slice(1)}</label>
+                                                </fieldset>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="form-group">
+                                    <label>Coordinator: </label>
+                                    <input
+                                        type="text"
+                                        placeholder="Who is supervising?"
+                                        onChange={(event) => setCoordinator(event.target.value)}
+                                        className="formcontrol"
+                                    />
+                                </div>
+                                <div className="task-button">
+                                    <button type="button" className="add-button" onClick={handleShowModal}>
+                                    Add Subtask
+                                    </button>
+                                </div>
+                                <div>
+                                    {subtasks.map((subtask, index) => (
+                                        <div className="subtask-des" key={index}>
+                                            <div className="subtask-head-div">
+                                                <h1 className="subtask-des-head">Sub Task {index + 1}</h1>
+                                                <img className="subtask-delete-btn" src={Delete}
+                                                    onClick={() => handleDeleteSubtask(index)}/>
+                                            </div>
+                                            <p className="subtask-des-des">Description: {subtask.task_name}</p>
+                                            <p className="subtask-des-des">Due
+                                                Date: {new Date(subtask.due_date).toDateString()}</p>
+                                            <div className="form-group">
+                                                <label>Task Weightage: </label>
+                                                <Slider
+                                                    aria-label="Temperature"
+                                                    defaultValue={1}
+                                                    valueLabelDisplay="auto"
+                                                    step={5}
+                                                    marks
+                                                    min={0}
+                                                    max={100}
+                                                    style={{color: "#640000"}}
+                                                    onChange={handleSliderChange(index)}
+                                                    value={subtask.weightage}
+                                                />
+                                            </div>
                                         </div>
-                                        <p className="subtask-des-des">Description: {subtask.task_name}</p>
-                                        <p className="subtask-des-des">Due
-                                            Date: {new Date(subtask.due_date).toDateString()}</p>
-                                        <div className="form-group">
-                                            <label>Task Weightage: </label>
-                                            <Slider
-                                                aria-label="Temperature"
-                                                defaultValue={1}
-                                                valueLabelDisplay="auto"
-                                                step={5}
-                                                marks
-                                                min={0}
-                                                max={100}
-                                                style={{color: "#640000"}}
-                                                onChange={handleSliderChange(index)}
-                                                value={subtask.weightage}
-                                            />
+                                    ))}
+                                </div>
+                            </form>
+                        </div>
+                        <div className="task-button">
+                            <button type="button" className="add-button" onClick={handleFormSubmit}>
+                                SUBMIT
+                            </button>
+                        </div>
+                        {errorMessage && <p className="error">{errorMessage}</p>}
+                    </div>
+                    {showModal && (
+                        <div tabIndex="-1" role="dialog" style={{display: showModal ? "block" : "none"}}>
+                            <div role="document">
+                                <div className="modalcontent">
+                                    <div className="modal-inner">
+                                        <div className="modal-header">
+                                            <h5 className="modal-title">Add Subtask {noOfSubtasks}</h5>
+                                            <hr className="heading-line"/>
+                                        </div>
+                                        <div className="modal-body">
+                                            <form>
+                                                <div className="form-group">
+                                                    <label>Description: </label>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Enter subtask description"
+                                                        value={subtaskDescription}
+                                                        onChange={(event) =>
+                                                            setSubtaskDescription(event.target.value)
+                                                        }
+                                                        className="formcontrol"
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Due Date: </label>
+                                                    <input
+                                                        type="date"
+                                                        value={subtaskDueDate.toISOString().split("T")[0]}
+                                                        onChange={(event) =>
+                                                            setSubtaskDueDate(new Date(event.target.value))
+                                                        }
+                                                        className="formcontrol"
+                                                    />
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div className="modalfooter">
+                                            <button type="button" className="add-button" onClick={handleSubtaskFormSubmit}>
+                                                Save Subtask
+                                            </button>
+                                            <button type="button" className="add-button" onClick={handleCloseModal}>
+                                                Close
+                                            </button>
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-                        </form>
-                    </div>
-                    <div className="task-button">
-                        <button type="button" className="add-button" onClick={handleFormSubmit}>
-                            SUBMIT
-                        </button>
-                    </div>
-                    {errorMessage && <p className="error">{errorMessage}</p>}
-                </div>
-
-            </div>
-            {showModal && (
-                <div tabIndex="-1" role="dialog" style={{display: showModal ? "block" : "none"}}>
-                    <div role="document">
-                        <div className="modalcontent">
-                            <div className="modal-inner">
-                                <div className="modal-header">
-                                    <h5 className="modal-title">Add Subtask {noOfSubtasks}</h5>
-                                    <hr className="heading-line"/>
-                                </div>
-                                <div className="modal-body">
-                                    <form>
-                                        <div className="form-group">
-                                            <label>Description: </label>
-                                            <input
-                                                type="text"
-                                                placeholder="Enter subtask description"
-                                                value={subtaskDescription}
-                                                onChange={(event) =>
-                                                    setSubtaskDescription(event.target.value)
-                                                }
-                                                className="formcontrol"
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Due Date: </label>
-                                            <input
-                                                type="date"
-                                                value={subtaskDueDate.toISOString().split("T")[0]}
-                                                onChange={(event) =>
-                                                    setSubtaskDueDate(new Date(event.target.value))
-                                                }
-                                                className="formcontrol"
-                                            />
-                                        </div>
-                                    </form>
-                                </div>
-                                <div className="modalfooter">
-                                    <button type="button" className="add-button" onClick={handleSubtaskFormSubmit}>
-                                        Save Subtask
-                                    </button>
-                                    <button type="button" className="add-button" onClick={handleCloseModal}>
-                                        Close
-                                    </button>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    )}
                 </div>
-            )}
+            }
 
         </>
     );

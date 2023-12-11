@@ -7,6 +7,7 @@ import Coordinator from './components/Coordinator';
 import NewTask from './components/NewTask';
 import WorkReport from './components/WorkReport';
 import NewCoordinator from './components/NewCoordinator';
+import ResetPassword from './components/ResetPassword';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path='/HeadPortal' element={ <NewCoordinator/> }/>
         <Route path='/NewTask' element={ <NewTask/> }/>
         <Route path='/WorkReport' element={ <WorkReport/> }/>
+        <Route path='/ResetPassword' element={ <ResetPassword/> }/>
       </Routes>
     </div>
     
