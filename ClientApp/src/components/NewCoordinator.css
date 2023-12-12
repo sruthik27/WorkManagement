@@ -316,11 +316,34 @@
     overflow-y: auto;
 }
 
+.detail-grid-1 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 20px;
+}
+
 .detail {
     display: flex;
     align-items: center;
-   }
+}
    
 .label {
-    width: 100px; /* Adjust this value to suit your needs */
+    width: 115px;
+    font-size: 19px;
+    margin-right: 10px;
+}
+
+.label-inner {
+    margin-left: 10px;
+    font-size: 18px;
+}
+
+.detail-grid-2 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.label-2 {
+    margin: 0;
+    font-size: 18px;
 }

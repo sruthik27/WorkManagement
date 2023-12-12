@@ -134,7 +134,7 @@
     left: 0;
     width: 100%;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.45);
+    background-color: rgba(0, 0, 0, 0.65);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -142,7 +142,7 @@
 
 .popup-inner {
     position: relative;
-    padding: 2rem;
+    padding: 3rem;
     width: 100%;
     max-width: 55vw;
     max-height: 81vh;
@@ -178,23 +178,17 @@
     font-weight: 300;
 }
 
-.popup-details1-div {
-    color: #640000;
-    font-family: Lexend Deca;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 300;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-}
-
-.popup-info {
-    /* display: flex;
-    justify-content: space-around; */
-}
-
 .popup-piechart {
-    padding-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.popup-piechart-admin {
+    display: flex;
+    align-items: center;
+    column-gap: 56px;
 }
 
 .coordinator-buttons {

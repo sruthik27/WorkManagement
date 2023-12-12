@@ -270,44 +270,60 @@ const NewAdmin = () => {
                                     <h1 className="close-btn" onClick={handleClose}>x</h1>
                                     {/* Display information related to the selectedItem here */}
                                     <h2 className='popup-head'>Work Details:</h2>
-                                    <hr className='line'/>
-                                    <div className='popup-info'>
-                                        <div className='popup-details1-div'>
-                                            <p>Work Name: {selectedItem.work_name}</p>
-                                            <p>Coordinator: {selectedItem.coordinator}</p>
-                                            <p>Total Expense: ₹{selectedItem.wage}</p>
+                                    <hr className='heading-line'/>
+                                    <div className='detail-grid-1'>
+                                        <div className="detail">
+                                            <span className="label">Work Name</span>:<span className='label-inner'>{selectedItem.work_name}</span>
                                         </div>
-                                        <div className='popup-details1'>
-                                            <p>Workers: {selectedItem.worker_names}</p>
-                                            <p>Time
-                                                Period: {selectedItem.start_date.slice(0, 10)} to {selectedItem.due_date.slice(0, 10)}</p>
-                                            {dueDateDiff < 0 && (
-                                                <p style={{color: 'red'}}>Overdue
-                                                    by {Math.abs(Math.round(dueDateDiff))} {Math.abs(Math.round(dueDateDiff)) === 1 ? 'day' : 'days'}</p>
-                                            )}
+                                        <div className="detail">
+                                            <span className="label">Start Date</span>:<span className='label-inner'>{selectedItem.start_date.slice(0, 10)}</span>
                                         </div>
-                                        <div className='popup-details1-div'>    
-                                            {<>
-                                                <p>Advance paid: ₹{advancePaid}</p>
-                                                {selectedItem.bill_paid ? <p>Bill paid ✅</p> : <p>Bill paid ❌</p>}
-                                                <p>Advance paid date: {dateOfPaid.slice(0, 10)}</p>
-                                            </>
-                                            }
+                                        <div className="detail">
+                                            <span className="label">Coordinator</span>:<span className='label-inner'>{selectedItem.coordinator}</span>
                                         </div>
-                                        <div className='popup-piechart'>
-                                            <p>Work Progress: </p>
-                                            <ProgressChart
-                                                percentage={selectedItem.total_subtasks !== 0 ? selectedItem.completed_subtasks : 0}
-                                            />
-                                            {<CommentBox workid={selectedItem.work_id}/>}
+                                        {dueDateDiff < 0 && (
+                                            <div className="detail">
+                                                <span className="label">Overdue by</span>:<span className='label-inner' style={{color: 'red'}}>{Math.abs(Math.round(dueDateDiff))} {Math.abs(Math.round(dueDateDiff)) === 1 ? 'day' : 'days'}</span>
+                                            </div>
+                                        )}
+                                        <div className="detail">
+                                            <span className="label">Due Date</span>:<span className='label-inner'>{selectedItem.due_date.slice(0, 10)}</span>
+                                        </div>
+                                        <div className="detail">
+                                            <span className="label">Worker(s)</span>:<span className='label-inner'>{selectedItem.worker_names}</span>
+                                        </div>
+                                        <div className="detail">
+                                            <span className="label">Total Expense</span>:<span className='label-inner'>₹{selectedItem.wage}</span>
+                                        </div>
+                                        <div className="detail">
+                                            <span className="label">Advance Paid</span>:<span className='label-inner'>₹{advancePaid}</span>
+                                        </div>
+                                        <div className="detail">
+                                            {selectedItem.bill_paid ? <p className='label'>Bill paid ✅</p> : <p className='label'>Bill paid ❌</p>}
+                                        </div>
+                                        <div className="detail">
+                                            <span className="label">Advance Paid Date</span>:<span className='label-inner'>{dateOfPaid.slice(0, 10)}</span>
+                                        </div>
+                                        <div className="detail">
+                                            <span className="label">Print As PDF</span>:
                                             <button className='print-button' onClick={generatePDF}><img src={Print} alt='print'/></button>
                                         </div>
                                     </div>
-                                    {<ol>
-                                        <p>Sub Tasks: </p>
-                                        {selectedSubtasks.map((subtask, index) => <li key={index}>{subtask.task_name}</li>)}
-                                    </ol>
-                                    }
+                                    <div>
+                                        <div className='popup-piechart-admin'>
+                                            <p className='label-2'>Work Progress: </p>
+                                            <ProgressChart
+                                                percentage={selectedItem.total_subtasks !== 0 ? selectedItem.completed_subtasks : 0}
+                                            />
+                                            <CommentBox workid={selectedItem.work_id}/>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p className='label'>Sub Tasks: </p>
+                                        <div style={{marginLeft: "20px"}}>
+                                            {selectedSubtasks.map((subtask, index) => <p key={index}>{index + 1}.{subtask.task_name}</p>)}
+                                        </div>
+                                    </div>
                                 </div>
                             ))}
                         </PopUp>

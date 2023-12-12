@@ -5,6 +5,8 @@ import Slider from '@mui/material/Slider';
 import routeMappings from "../routeMappings";
 import {useLocation, useNavigate} from 'react-router-dom';
 import Delete from './trash_icon.png';
+import DropUp from "./DropUp.png";
+import DropDown from "./DropDown.png";
 
 const NewTask = (props) => {
     const location = useLocation();
@@ -24,6 +26,7 @@ const NewTask = (props) => {
     const [errorMessage, setErrorMessage] = useState("");
     const [showWorkers,setShowWorkers] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [dropDownIcon, setDropDownIcon] = useState(false);
     const navigate = useNavigate();
 
 
@@ -139,6 +142,7 @@ const NewTask = (props) => {
         setDueDate(new Date());
         setStartDate(new Date());
         setCoordinator("");
+        setIsLoading(true);
 
         navigate(routeMappings["bHWtcH10="], {state: {fromAdminHome: true}});
     };
@@ -198,6 +202,11 @@ const NewTask = (props) => {
         handleCloseModal();
     };
 
+    const HandDropDownICon = () => {
+        setShowWorkers(!showWorkers);
+        dropDownIcon ? setDropDownIcon(false) : setDropDownIcon(true)
+    }
+
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
 
@@ -209,8 +218,9 @@ const NewTask = (props) => {
                 </div>
             ) : 
                 <div className="form-background">
+                    <button className="go-back-button" onClick={() => navigate(-1)}>Home</button>
                     <div className="form">
-                        <div>
+                        <div>-
                             <div>
                                 <h1 className="heading">PUBLISH NEW TASK</h1>
                                 <hr className="heading-line"/>
@@ -266,7 +276,10 @@ const NewTask = (props) => {
                                 <div className="form-group">
                                     <label>Agency: </label>
                                     <div className="dropdown-check-list">
-                                        <span className="dropdown-button" onClick={() => setShowWorkers(!showWorkers)}>Select Agencies</span>
+                                        <div className="dropdown-button" onClick={HandDropDownICon}>
+                                            <span >Select Agencies</span>
+                                            <span >{ dropDownIcon ? <img src={DropUp}/> : <img src={DropDown}/> }</span>
+                                        </div>
                                         {showWorkers && (
                                             <div className="items">
                                                 {workers.map((worker, index) => (

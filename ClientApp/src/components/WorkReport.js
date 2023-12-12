@@ -3,6 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./WorkReport.css"
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -31,6 +32,7 @@ function SamplePrevArrow(props) {
 
 const WorkReport = () => {
     const [data, setData] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch('/db/getimages')
@@ -52,6 +54,7 @@ const WorkReport = () => {
     return (
       <>
         <div className='report-grid'>
+          <button className="go-back-button" onClick={() => navigate(-1)}>Home</button>
           <h1 className='report-title'>Work Reports</h1>
           <hr className="heading-line"/>
           <div className='grid-con'>

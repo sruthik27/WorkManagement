@@ -4,6 +4,7 @@ import ProgressChart from './ProgressChart';
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 import './TaskTable.css';
 import './AdminHome.css';
+import './NewCoordinator.css';
 import CommentBox from './CommentBox';
 import CommentCard from './CommentCard';
 import Switch from '@mui/material/Switch';
@@ -327,72 +328,100 @@ class TaskTable extends Component {
                             <h2 className='popup-head'>Work Details:</h2>
                             <hr className='line'/>
                             <div className='popup-info'>
-                                <div className='popup-details1'>
-                                    <p>Work Name: {selectedItem.work_name}</p>
-                                    <p>Time
-                                        Period: {selectedItem.start_date.slice(0, 10)} to {selectedItem.due_date.slice(0, 10)}</p>
+                                <div className='detail-grid-1'>
+                                <div className="detail">
+                                        <span className="label">Work Name</span>:<span className='label-inner'>{selectedItem.work_name}</span>
+                                    </div>
+                                    <div className="detail">
+                                        <span className="label">Start Date</span>:<span className='label-inner'>{selectedItem.start_date.slice(0, 10)}</span>
+                                    </div>
+                                    <div className="detail">
+                                        <span className="label">Coordinator</span>:<span className='label-inner'>{selectedItem.coordinator}</span>
+                                    </div>
                                     {dueDateDiff < 0 && (
-                                        <p style={{color: 'red'}}>Overdue
-                                            by {Math.abs(Math.round(dueDateDiff))} {Math.abs(Math.round(dueDateDiff)) === 1 ? 'day' : 'days'}</p>
+                                        <div className="detail">
+                                            <span className="label">Overdue by</span>:<span className='label-inner' style={{color: 'red'}}>{Math.abs(Math.round(dueDateDiff))} {Math.abs(Math.round(dueDateDiff)) === 1 ? 'day' : 'days'}</span>
+                                        </div>
                                     )}
-                                    <p>Coordinator: {selectedItem.coordinator}</p>
-                                    <p>Workers: {selectedItem.worker_names}</p>
-                                    <p>Total Expense: ₹{selectedItem.wage}</p>
+                                    <div className="detail">
+                                        <span className="label">Due Date</span>:<span className='label-inner'>{selectedItem.due_date.slice(0, 10)}</span>
+                                    </div>
+                                    <div className="detail">
+                                        <span className="label">Worker(s)</span>:<span className='label-inner'>{selectedItem.worker_names}</span>
+                                    </div>
+                                    <div className="detail">
+                                        <span className="label">Total Expense</span>:<span className='label-inner'>₹{selectedItem.wage}</span>
+                                    </div>
                                     {editable ?
-                                        <>{advancePaid === 0 ?
-                                            <>
-                                                <p>Advance paid?
-                                                    <Switch checked={isChecked} onChange={this.handleToggle}/></p>
-                                                {isChecked ?
-                                                    <div>
-                                                        <input type='number'
-                                                               placeholder='Advance to be Paid'
-                                                               className='advance-input'
-                                                               value={this.state.enteredAdvance}
-                                                               onChange={(e) => {
-                                                                   this.setState({enteredAdvance: e.target.value});
-                                                               }}/>
-                                                        <input type='date'
-                                                               value={this.state.enteredDate.toISOString().split('T')[0]}
-                                                               className='advance-date-input'
-                                                               onChange={(e) => {
-                                                                   this.setState({enteredDate: new Date(e.target.value)});
-                                                               }} placeholder='Date'/>
-                                                        <button onClick={this.handleSubmit} className='advance-submit-bitton'>Submit</button>
+                                        <>
+                                            {advancePaid === 0 ?
+                                                <>
+                                                    <p className='label-2'>Advance paid?
+                                                        <Switch checked={isChecked} onChange={this.handleToggle}/></p>
+                                                </>
+                                                :
+                                                <div>
+                                                    <div className="detail" style={{marginBottom: "20px"}}>
+                                                        <span className='label'>Advance Paid</span>:<span className='label-inner'> ₹{advancePaid}</span>
                                                     </div>
-                                                    : ''
+                                                    <div className="detail">
+                                                        <span className='label'>Advance Paid Date</span>:<span className='label-inner'>{dateOfPaid.slice(0, 10)}</span>
+                                                    </div>
+                                                </div>}
+                                                {selectedItem.bill_paid || paidbills.get(selectedItem.work_id) ?
+                                                    <p className='label-2'>Bill Paid ✅</p> :
+                                                    <p className='label-2'>Bill Paid? <Switch onChange={this.handleBill}></Switch></p>
                                                 }
-                                            </>
-                                            :
-                                            <div>
-                                                <p>Advance paid: ₹{advancePaid}</p>
-                                                <p>Advance paid date: {dateOfPaid.slice(0, 10)}</p>
-                                            </div>}
-                                            {selectedItem.bill_paid || paidbills.get(selectedItem.work_id) ?
-                                                <p>Bill paid ✅</p> :
-                                                <p>Bill paid? <Switch onChange={this.handleBill}></Switch></p>}</>
-
+                                        </>
                                         :
                                         <>
-                                            <p>Advance paid: ₹{advancePaid}</p>
-                                            <p>Advance paid date: {dateOfPaid.slice(0, 10)}</p>
-                                            {selectedItem.bill_paid ? <p>Bill paid ✅</p> : <p>Bill paid ❌</p>}
+                                            <div className="detail">
+                                                <span className="label">Advance Paid</span>:<span className='label-inner'>₹{advancePaid}</span>
+                                            </div>
+                                            <div className="detail">
+                                                {selectedItem.bill_paid ? <p className='label'>Bill paid ✅</p> : <p className='label'>Bill paid ❌</p>}
+                                            </div>
+                                            <div className="detail">
+                                                <span className="label">Advance Paid Date</span>:<span className='label-inner'>{dateOfPaid.slice(0, 10)}</span>
+                                            </div>
+                                            <div className="detail">
+                                                <span className="label">Print As PDF</span>:
+                                                <button className='print-button' onClick={this.generatePDF}><img src={Print} alt='print'/></button>
+                                            </div>
                                         </>
                                     }
-
-                                    <p>Sub Tasks: </p>
                                 </div>
-                                <div className='popup-piechart'>
-                                    <p>Work Progress: </p>
+                                {isChecked ?
+                                    <div>
+                                        <input type='number'
+                                                placeholder='Advance to be Paid'
+                                                className='advance-input'
+                                                value={this.state.enteredAdvance}
+                                                onChange={(e) => {
+                                                    this.setState({enteredAdvance: e.target.value});
+                                                }}/>
+                                        <input type='date'
+                                                value={this.state.enteredDate.toISOString().split('T')[0]}
+                                                className='advance-date-input'
+                                                onChange={(e) => {
+                                                    this.setState({enteredDate: new Date(e.target.value)});
+                                                }} placeholder='Date'/>
+                                        <button onClick={this.handleSubmit} className='advance-submit-bitton'>Submit</button>
+                                    </div>
+                                    : ''
+                                }
+                                <div className={this.state.editable ? "popup-piechart" :    "popup-piechart-admin"}>
+                                    <p className='label-2'>Work Progress: </p>
                                     <ProgressChart
                                         percentage={selectedItem.total_subtasks !== 0 ? selectedItem.completed_subtasks : 0}
                                     />
                                     {this.state.editable ? <p>{""}</p> : <CommentBox workid={selectedItem.work_id}/>}
-                                    <button className='print-button' onClick={this.generatePDF}><img src={Print} alt='print'/></button>
+                                    {this.state.editable ? <p className='label-2'>Print As PDF : <button className='print-button' onClick={this.generatePDF}><img src={Print} alt='print'/></button></p> : ""}
                                 </div>
                             </div>
                             {this.state.editable ?
                                 <div className='subtask-div'>
+                                    <p className='label-2'>Sub Tasks: </p>
                                     <div className='subtask-table'>
                                         <DragDropContext onDragEnd={this.handleOnDragEnd}>
                                             <Droppable droppableId="subtasks">
@@ -423,16 +452,20 @@ class TaskTable extends Component {
                                             </Droppable>
                                         </DragDropContext>
                                     </div>
-                                    <p>Comments/Queries</p>
+                                    <p className='label-2'>Comments/Queries : </p>
                                     {this.state.selectedComments.map((comment, index) =>
                                         <CommentCard key={index} comment={comment} />
                                     )}
 
                                 </div>
                                 :
-                                <ol>
-                                    {selectedSubtasks.map((subtask, index) => <li key={index}>{subtask.task_name}</li>)}
-                                </ol>
+                                
+                                <div>
+                                    <p className='label'>Sub Tasks: </p>
+                                    <div style={{marginLeft: "20px"}}>
+                                        {selectedSubtasks.map((subtask, index) => <p key={index}>{index + 1}.{subtask.task_name}</p>)}
+                                    </div>
+                                </div>
                             }
                         </div>
                     ))}

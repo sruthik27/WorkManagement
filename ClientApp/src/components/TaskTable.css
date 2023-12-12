@@ -46,22 +46,22 @@
     line-height: normal;
 }
 
-.subtask-div {
-    padding-left: 3.1vw;
-}
-
 .subtask-table {
     background-color: white;
-    border-radius: 20px;
+    border-radius: 10px;
+    border: 1px solid #640000;
     padding: 1px;
+    padding-top: 10px;
     max-height: 20vh;
     overflow: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .advance-input {
     padding: 10px;
     margin-right: 20px;
-    border: none;
+    border: 1px solid #640000;
     border-radius: 6px;
 }
 
@@ -91,6 +91,10 @@
     background-color: #640000d3;
 }
 
+.advance-paid-div {
+    margin-bottom: 20px;
+}
+
 .overlay {
   position: relative;
   width: 100%;
@@ -117,5 +121,5 @@
     background-color: #FFF9DF;
     border: none;
     cursor: pointer;
-    margin: 20px;
+    margin-left: 20px;
 }
