@@ -460,14 +460,17 @@ const NewCoordinator = () => {
                                                                                index={index}>
                                                                         {(provided) => (
                                                                             <div>
-                                                                                <li {...provided.draggableProps} {...provided.dragHandleProps}
-                                                                                    ref={provided.innerRef}>
-                                                                                    <div className='sub-star'>
-                                                                                        <div>
-                                                                                            {subtask.task_name}
+                                                                                <div style={{display: "flex", justifyContent: "space-between"}}>
+                                                                                    <li {...provided.draggableProps} {...provided.dragHandleProps}
+                                                                                        ref={provided.innerRef}>
+                                                                                        <div className='sub-star'>
+                                                                                            <div>
+                                                                                                {subtask.task_name}
+                                                                                            </div>
                                                                                         </div>
-                                                                                    </div>
-                                                                                </li>
+                                                                                    </li>
+                                                                                    <p style={{marginRight: '20px'}}>Weightage : {subtask.weightage} %</p>
+                                                                                </div>
                                                                                 <hr/>
                                                                             </div>
                                                                         )}
@@ -502,7 +505,7 @@ const NewCoordinator = () => {
                                 </a>
                             </div>
                         </div>
-                        <div className='piechart-mange-div'>
+                        <div>
                             <div className="piechart-div">
                                 <h2 className='title-div1'>Progress chart:</h2>
                                 <PieChart
@@ -530,7 +533,7 @@ const NewCoordinator = () => {
                         <SlidingPane
                             className="notification-head"
                             overlayClassName="custom-overlay"
-                            width={700}
+                            width={770}
                             closeIcon={<img width="25" height="25"
                                             src="https://img.icons8.com/plasticine/100/delete-sign.png"
                                             alt="delete-sign"/>}

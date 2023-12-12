@@ -39,8 +39,11 @@ const Coordinator = () => {
           <div className="spinner"></div>
         </div>
        ) : (
-        <div className='tasktable-home'>
-          <TaskTable data={itemData} editable={true}/>
+        <div>
+          <button style={{position: 'absolute', margin: '20px'}} className="go-back-button" onClick={() => navigate(-1)}>Home</button>
+          <div className='tasktable-home'>
+            <TaskTable data={itemData} editable={true}/>
+          </div>
         </div>
       )}
     </>

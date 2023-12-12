@@ -333,25 +333,29 @@ const NewAdmin = () => {
                                     <button className='coo-button'>WORK REPORTS</button>
                                 </a>
                             </div>
-                        </div>
-                        <div className='piechart-mange-div'>
-                            <div className="piechart-div">
-                                <h2 className='title-div1'>Progress chart:</h2>
-                                <PieChart
-                                    data={[
-                                        {title: 'Completed', value: CompletedPercent, color: '#7cd57c'},
-                                        {title: 'Active', value: ActivePercent, color: '#640000'},
-                                    ]}
-                                />
-                                <div className='piechart-lable-div'>
-                                    <button className='piechart-colour-info-active'></button>
-                                    <p className='piechart-colour-char-active'>Active</p>
+                            <div className="piechart-div-admin">
+                                <div>
+                                    <h2 className='title-div1'>Progress chart:</h2>
+                                    <PieChart
+                                        data={[
+                                            {title: 'Completed', value: CompletedPercent, color: '#7cd57c'},
+                                            {title: 'Active', value: ActivePercent, color: '#640000'},
+                                        ]}
+                                    />
                                 </div>
-                                <div className='piechart-lable-div'>
-                                    <button className='piechart-colour-info-completed'></button>
-                                    <p className='piechart-colour-char-active'>Completed</p>
+                                <div>
+                                    <div className='piechart-lable-div'>
+                                        <button className='piechart-colour-info-active'></button>
+                                        <p className='piechart-colour-char-active'>Active</p>
+                                    </div>
+                                    <div className='piechart-lable-div'>
+                                        <button className='piechart-colour-info-completed'></button>
+                                        <p className='piechart-colour-char-active'>Completed</p>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+                        <div className='piechart-mange-div'>
                             <div className='manage-agencie-div' onClick={() => setIsPaneOpen(true)}>
                                 <p className='mange-agen-sym-p'>&lt;</p>
                                 <p className='mang-agen-p'>MANAGE AGENCIES</p>

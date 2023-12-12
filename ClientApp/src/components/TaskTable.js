@@ -432,18 +432,21 @@ class TaskTable extends Component {
                                                     <ol {...provided.droppableProps} ref={provided.innerRef}>
                                                         {selectedSubtasks.map((subtask, index) => (
                                                             <Draggable key={subtask.task_id}
-                                                                       draggableId={String(subtask.task_id)}
-                                                                       index={index}>
+                                                                        draggableId={String(subtask.task_id)}
+                                                                        index={index}>
                                                                 {(provided) => (
                                                                     <div>
-                                                                        <li {...provided.draggableProps} {...provided.dragHandleProps}
-                                                                            ref={provided.innerRef}>
+                                                                        <div style={{display: "flex", justifyContent: "space-between"}}>
+                                                                            <li {...provided.draggableProps} {...provided.dragHandleProps}
+                                                                                ref={provided.innerRef}>
                                                                                 <div className='sub-star'>
                                                                                     <div>
                                                                                         {subtask.task_name}
                                                                                     </div>
                                                                                 </div>
-                                                                        </li>
+                                                                            </li>
+                                                                            <p style={{marginRight: '20px'}}>Weightage : {subtask.weightage} %</p>
+                                                                        </div>
                                                                         <hr/>
                                                                     </div>
                                                                 )}

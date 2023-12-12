@@ -7,6 +7,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     padding: 25px;
+    padding-left: 0;
     padding-right: 0;
 }
 
@@ -18,6 +19,7 @@
 .container-div {
     display: flex;
     column-gap: 4vw;
+    padding-left: 25px;
 }
 
 .active-div {
@@ -175,6 +177,16 @@
     border: 2px solid #640000;
 }
 
+.piechart-div-admin {
+    width: 300px;
+    background-color: #FDE8C5;
+    padding: 20px;
+    border-radius: 45px;
+    border: 2px solid #640000;
+    display: flex;
+    align-items: center;
+}
+
 .piechart-lable-div {
     display: flex;
 }
@@ -242,7 +254,7 @@
 .notification-inner {
     padding: 1rem;
     width: 100%;
-    max-width: 55vw;
+    max-width: 60vw;
     max-height: 50vh;
     background: #FFF9DF;
     border-radius: 7px;
@@ -346,4 +358,10 @@
 .label-2 {
     margin: 0;
     font-size: 18px;
+}
+
+.piechart-mange-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   
 }
