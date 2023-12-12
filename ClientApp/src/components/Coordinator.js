@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import TaskTable from './TaskTable';
 import "./AdminMain.css";
 import { useLocation, useNavigate } from "react-router-dom";
+import routeMappings from "../routeMappings";
 
 
 const Coordinator = () => {
@@ -40,7 +41,7 @@ const Coordinator = () => {
         </div>
        ) : (
         <div>
-          <button style={{position: 'absolute', margin: '20px'}} className="go-back-button" onClick={() => navigate(-1)}>Home</button>
+          <button style={{position: 'absolute', margin: '20px'}} className="go-back-button" onClick={() => navigate(routeMappings["Csjdjovn="],{ state: { fromAdminHome: true } })}>Home</button>
           <div className='tasktable-home'>
             <TaskTable data={itemData} editable={true}/>
           </div>

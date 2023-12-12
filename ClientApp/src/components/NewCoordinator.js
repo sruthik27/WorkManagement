@@ -144,9 +144,11 @@ const NewCoordinator = () => {
             setSelectedComments(comments);
         }
         let currentDate = new Date();
-        let dueDate = new Date(item.due_date);
+        let parts = item.due_date.slice(0,10).split('-');
+        let dueDate = new Date(parts[0], parts[1]-1, parts[2]);
+        currentDate.setHours(0,0,0);
         let diffInTime = dueDate.getTime() - currentDate.getTime();
-        let diffInDays = Math.floor(diffInTime / (24 * 60 * 60 * 1000));
+        let diffInDays = Math.round(diffInTime / (24 * 60 * 60 * 1000));
         setDueDateDiff(diffInDays);
         setIsLoading(false);
     }

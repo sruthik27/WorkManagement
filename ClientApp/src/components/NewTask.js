@@ -111,6 +111,10 @@ const NewTask = (props) => {
         if (errorMessage !== "") {
             return;
         }
+        startDate.setHours(startDate.getHours() + 5);
+        startDate.setMinutes(startDate.getMinutes() + 30);
+        dueDate.setHours(dueDate.getHours() + 5);
+        dueDate.setMinutes(dueDate.getMinutes() + 30);
         const newWork = {
             work: {
                 work_name: workName,
