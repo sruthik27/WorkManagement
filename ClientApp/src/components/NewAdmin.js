@@ -78,7 +78,6 @@ const NewAdmin = () => {
             const response = await fetch('/db/getnearworks');
             const data = await response.json();
             setActiveData(data.worksData);
-            console.log(activeData);
             setTopworks(data["worksData"]);
             setCompletedPercent(data["percentData"][0]);
             setActivePercent(data["percentData"][1])

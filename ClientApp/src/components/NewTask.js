@@ -45,6 +45,14 @@ const NewTask = (props) => {
         }
     }, [location]);
 
+    const formatDateToYYYYMMDD = (date)=> {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+
     const validateForm = () => {
         if (workName === "") {
             setErrorMessage("Work Name is required");
@@ -250,7 +258,7 @@ const NewTask = (props) => {
                                     <label>Start Date: </label>
                                     <input
                                         type="date"
-                                        value={startDate.toISOString().split('T')[0]}
+                                        value={formatDateToYYYYMMDD(startDate)}
                                         onChange={(event) => setStartDate(new Date(event.target.value))}
                                         className="formcontrol"
                                     />
@@ -259,7 +267,7 @@ const NewTask = (props) => {
                                     <label>Due Date: </label>
                                     <input
                                         type="date"
-                                        value={dueDate.toISOString().split('T')[0]}
+                                        value={formatDateToYYYYMMDD(dueDate)}
                                         onChange={(event) => setDueDate(new Date(event.target.value))}
                                         className="formcontrol"
                                     />
@@ -378,7 +386,7 @@ const NewTask = (props) => {
                                                     <label>Due Date: </label>
                                                     <input
                                                         type="date"
-                                                        value={subtaskDueDate.toISOString().split("T")[0]}
+                                                        value={formatDateToYYYYMMDD(subtaskDueDate)}
                                                         onChange={(event) =>
                                                             setSubtaskDueDate(new Date(event.target.value))
                                                         }

@@ -104,9 +104,12 @@ class TaskTable extends Component {
         }
 
         let currentDate = new Date();
-        let dueDate = new Date(item.due_date);
+        let parts = item.due_date.slice(0,10).split('-');
+        let dueDate = new Date(parts[0], parts[1]-1, parts[2]);
+        currentDate.setHours(0,0,0);
         let diffInTime = dueDate.getTime() - currentDate.getTime();
-        let diffInDays = diffInTime / (1000 * 3600 * 24);
+        let diffInDays = Math.round(diffInTime / (24 * 60 * 60 * 1000));
+        console.log(diffInDays);
 
         // Use the callback function of setState to ensure the state is updated
         this.setState({ selectedItem: item, selectedSubtasks: tasks, dueDateDiff: diffInDays }, () => {

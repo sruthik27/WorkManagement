@@ -146,7 +146,7 @@ const NewCoordinator = () => {
         let currentDate = new Date();
         let dueDate = new Date(item.due_date);
         let diffInTime = dueDate.getTime() - currentDate.getTime();
-        let diffInDays = diffInTime / (1000 * 3600 * 24);
+        let diffInDays = Math.floor(diffInTime / (24 * 60 * 60 * 1000));
         setDueDateDiff(diffInDays);
         setIsLoading(false);
     }

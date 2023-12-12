@@ -7,8 +7,6 @@ import {useLocation, useNavigate} from "react-router-dom";
 
 const AdminMain = () => {
     const [itemData, setItemData] = useState([]);
-    const [CompletedPercent, setCompletedPercent] = useState(0);
-    const [ActivePercent, setActivePercent] = useState(0);
     const [loading, setLoading] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
@@ -28,11 +26,6 @@ const AdminMain = () => {
             const response = await fetch('/db/getworks'); //need to add "/getWorks" after backend is pushed
             const data = await response.json();
             setItemData(data);
-            const NoOfTotalTasks = data.length;
-            const NoOfCompletedTasks = data.filter(x => x.work_status === 'C').length;
-            const NoOfActiveTasks = data.filter(x => x.work_status === 'A').length;
-            setCompletedPercent(NoOfCompletedTasks / NoOfTotalTasks * 100);
-            setActivePercent(NoOfActiveTasks / NoOfTotalTasks * 100);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -57,4 +50,3 @@ const AdminMain = () => {
 }
 
 export default AdminMain;
-
