@@ -12,6 +12,7 @@ import {Puff} from 'react-loader-spinner';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import Print from "./print.svg";
+import tceLogo from './TCE-Logo.jpeg';
 
 class PuffLoader extends React.Component {
  componentDidMount() {
@@ -247,7 +248,7 @@ class TaskTable extends Component {
                     unit: "mm",
                     format: "a4",
                 });
-
+                doc.addImage(tceLogo, 'jpge',0, 0, 30, 30);
                 doc.setFontSize(25);
                 doc.text('Thiagarajan College Of Engineering', 30, 10)
                 doc.setFontSize(12);

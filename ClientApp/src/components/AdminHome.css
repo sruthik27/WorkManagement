@@ -206,3 +206,10 @@ body {
     border: 3px solid #640000;
     border-radius: 24px;
 }
+
+.stop-warning {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 20px;
+}

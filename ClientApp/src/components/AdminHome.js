@@ -116,6 +116,10 @@ const AdminHome = () => {
                 } else {
                     console.log('Authentication failed');
                     setInputLoginFail("Invalid Email or Password");
+                    setTimeout(() => {
+                        window.location.reload();
+                        setInputLoginFail("");
+                    },2000);
                     // Handle authentication failure (e.g., display an error message)
                 }
             })
@@ -152,11 +156,11 @@ const AdminHome = () => {
                         </div>
                         <div className="radio-box-div">
                             <div className="radio-box-input">
-                                <input type="radio" id="Princi" name="Login" onClick={HandleLoginPrinci} value="P"/>
+                                <input style={{cursor: 'pointer'}} type="radio" id="Princi" name="Login" onClick={HandleLoginPrinci} value="P"/>
                                 <label className="radio-box-label" for='Princi'>Login As DMDR Principal</label>
                             </div>
                             <div className="radio-box-input">
-                                <input type="radio" id="Head" name="Login" onClick={HandleLoginHead} value="H"/>
+                                <input style={{cursor: 'pointer'}} type="radio" id="Head" name="Login" onClick={HandleLoginHead} value="H"/>
                                 <label className="radio-box-label" for='Head'>Login As DMDR Head</label>
                             </div>
                         </div>

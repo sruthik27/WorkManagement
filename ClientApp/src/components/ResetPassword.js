@@ -1,9 +1,11 @@
 import React from "react";
 import './AdminHome.css';
 import { useState } from "react";
+import Stop from './Stop.gif';
 
 const ResetPassword = () => {
 
+    const [isCheck, setCheck] = useState(1);
     const [emailCheck, setEmailCheck] = useState(false)
     const [inputForgotPassword, setInputForgotPassword] = useState("");
     const [isEmailCheck, setisEmailCheck] = useState(false)
@@ -69,45 +71,53 @@ const ResetPassword = () => {
     return (
         <>
             <div className="forgot-pass-whole-div">
-                <div className="forgot-password-head-div">
-                    <h1 className="forgot-password-head">Reset Password: </h1>
-                </div>
-                <hr className="heading-line"/>
-                <div className="forgot-password">
-                    <input
-                        className="input2"
-                        placeholder="Enter your Email id"
-                        value={inputForgotPassword}
-                        onChange={HandleInputForgotPassword}
-                        type={"email"}
-                    />
-                    <input
-                        className="input2"
-                        type={"password"}
-                        value={inputResetPassword}
-                        onChange={HandleInputResetPassword}
-                        placeholder="New Password"
-                    />
-                    <input
-                        className="input2"
-                        type={"password"}
-                        value={inputConfirmPassword}
-                        onChange={HandleInputConfirmPassword}
-                        placeholder="Confirm new Password"
-                    />
-                    {emailCheck ?
-                        <p className="verify-para">Password changed!</p> : ""}
-                    {isEmailCheck ?
-                        <p className="verify-para">Invalid or Error in Email
-                            id</p> : ""}
-                    {misMatch ?
-                        <p className="verify-para">Password is Mismatched Check Your
-                            Password</p> : ""}
-                    <button className="forgot-password-button"
-                            onClick={handleForgotPasswordSubmit}>Change
-                    </button>
-                </div>
-                
+                {isCheck === 0 ? (
+                    <div>
+                        <div className="forgot-password-head-div">
+                            <h1 className="forgot-password-head">Reset Password: </h1>
+                        </div>
+                        <hr className="heading-line"/>
+                        <div className="forgot-password">
+                            <input
+                                className="input2"
+                                placeholder="Enter your Email id"
+                                value={inputForgotPassword}
+                                onChange={HandleInputForgotPassword}
+                                type={"email"}
+                            />
+                            <input
+                                className="input2"
+                                type={"password"}
+                                value={inputResetPassword}
+                                onChange={HandleInputResetPassword}
+                                placeholder="New Password"
+                            />
+                            <input
+                                className="input2"
+                                type={"password"}
+                                value={inputConfirmPassword}
+                                onChange={HandleInputConfirmPassword}
+                                placeholder="Confirm new Password"
+                            />
+                            {emailCheck ?
+                                <p className="verify-para">Password changed!</p> : ""}
+                            {isEmailCheck ?
+                                <p className="verify-para">Invalid or Error in Email
+                                    id</p> : ""}
+                            {misMatch ?
+                                <p className="verify-para">Password is Mismatched Check Your
+                                    Password</p> : ""}
+                            <button className="forgot-password-button"
+                                    onClick={handleForgotPasswordSubmit}>Change
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="stop-warning">
+                        <img src={Stop} />
+                        <p className="verify-para">This Link Is Vailed Only One Time To Reset Again Click Forgot Password Again</p>
+                    </div>
+                )}
             </div>
         </>
     )

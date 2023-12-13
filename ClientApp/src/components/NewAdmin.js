@@ -21,6 +21,7 @@ import CommentBox from "./CommentBox";
 import noData from './noDataInActive.png';
 import manageWorkers from './ManageWorkes.png';
 import ArrowLeft from './ArrowLeft.png';
+import tceLogo from './TCE-Logo.jpeg';
 class PuffLoader extends React.Component {
     componentDidMount() {
         console.log('Rendering Puff');
@@ -153,6 +154,7 @@ const NewAdmin = () => {
                     unit: "mm",
                     format: "a4",
                 });
+                doc.addImage(tceLogo, 'jpge',0, 0, 30, 30);
                 doc.setFontSize(25);
                 doc.text('Thiagarajan College Of Engineering', 30, 10)
                 doc.setFontSize(12);
@@ -353,12 +355,20 @@ const NewAdmin = () => {
                                 <h1 className='title-div'>Progress chart:</h1>
                                 <div className="piechart-div">
                                     <div>
-                                    <PieChart
-                                        data={[
-                                            {title: 'Completed', value: CompletedPercent, color: '#7cd57c'},
-                                            {title: 'Active', value: ActivePercent, color: '#640000'},
-                                        ]}
-                                    />
+                                        {CompletedPercent === 0 && ActivePercent === 0 ? 
+                                            <PieChart
+                                                data={[
+                                                    {title: 'NoWork', value: 100, color: 'rgba(0, 0, 0, 0.125)'}
+                                                ]}
+                                            />
+                                        : 
+                                            <PieChart
+                                                data={[
+                                                    {title: 'Completed', value: CompletedPercent, color: '#7cd57c'},
+                                                    {title: 'Active', value: ActivePercent, color: '#640000'},
+                                                ]}
+                                            />
+                                        }   
                                     </div>
                                     <div>
                                         <div className='piechart-lable-div'>
@@ -369,14 +379,21 @@ const NewAdmin = () => {
                                             <button className='piechart-colour-info-completed'></button>
                                             <p className='piechart-colour-char-active'>Completed</p>
                                         </div>
+                                        <div className='piechart-lable-div'>
+                                            <button style={{backgroundColor: 'rgba(0, 0, 0, 0.125)'}} className='piechart-colour-info-completed'></button>
+                                            <p className='piechart-colour-char-active'>No Task</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className='piechart-mange-div'>
                             <div className='manage-agencie-div' onClick={() => setIsPaneOpen(true)}>
-                                <p style={{fontSize: '20px'}} className='mang-agen-p'><img style={{width: '100px'}} src={ ArrowLeft }/> MANAGE AGENCIES</p>
-                                <img style={{width: '24%'}} src={ manageWorkers }/>
+                                <img style={{width: '100px'}} src={ ArrowLeft }/>
+                                <div className='mang-div'>
+                                    <p className='mang-agen-p'>AGENCIES</p>
+                                    <img style={{width: '50%'}} src={ manageWorkers }/>
+                                </div>
                             </div>
                         </div>
                     </div>

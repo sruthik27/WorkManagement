@@ -25,6 +25,7 @@ import jsPDF from "jspdf";
 import noData from './noDataInActive.png';
 import manageWorkers from './ManageWorkes.png';
 import ArrowLeft from './ArrowLeft.png';
+import tceLogo from './TCE-Logo.jpeg';
 
 class PuffLoader extends React.Component {
     componentDidMount() {
@@ -187,6 +188,7 @@ const NewCoordinator = () => {
                     unit: "mm",
                     format: "a4",
                 });
+                doc.addImage(tceLogo, 'jpge',0, 0, 30, 30);
                 doc.setFontSize(25);
                 doc.text('Thiagarajan College Of Engineering', 30, 10)
                 doc.setFontSize(12);
@@ -525,8 +527,11 @@ const NewCoordinator = () => {
                         </div>
                         <div>
                             <div className='manage-agencie-div' onClick={() => setIsPaneOpen(true)}>
-                                <p className='mang-agen-p'><img style={{width: '100px'}} src={ ArrowLeft }/> MANAGE AGENCIES</p>
-                                <img style={{width: '24%'}} src={ manageWorkers }/>
+                                <img style={{width: '100px'}} src={ ArrowLeft }/>
+                                <div className='mang-div'>
+                                    <p className='mang-agen-p'>AGENCIES</p>
+                                    <img style={{width: '50%'}} src={ manageWorkers }/>
+                                </div>
                             </div>
                             <div className='piechart-main-div'>
                                 <h1 className='title-div'>Progress chart:</h1>
