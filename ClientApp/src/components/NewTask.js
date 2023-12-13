@@ -54,36 +54,43 @@ const NewTask = (props) => {
 
 
     const validateForm = () => {
+        console.log('validation called');
         if (workName === "") {
             setErrorMessage("Work Name is required");
             return;
         }
 
-        if (workCost === "" || isNaN(workCost) || workCost === 0) {
+        if (workCost === "" || isNaN(workCost) || parseInt(workCost, 10)<1) {
             setErrorMessage("Work Cost is required and must be a number");
             return;
         }
 
         if (selectedWorkers.length===0) {
             setErrorMessage("Atleast one worker is required");
+            return;
         }
 
         if (startDate === "") {
             setErrorMessage("Start Date is required");
+            return;
         }
 
         if (dueDate === "") {
             setErrorMessage("Due Date is required");
+            return;
         }
 
         if (coordinator === "") {
             setErrorMessage("Coordinator is required");
+            return;
         }
 
-        if (subtasks.length === 0) {
+        if (noOfSubtasks===1) {
             setErrorMessage("Add atleast one subtask");
+            return;
         }
-        return null;
+        setErrorMessage("");
+        console.log("error is"+errorMessage);
     };
 
     const handleWorkerChange = (workerId) => {
@@ -99,7 +106,7 @@ const NewTask = (props) => {
 };
 
     const handleFormSubmit = async () => {
-        validateForm();
+        await validateForm();
         // Calculate the total weightage of the subtasks
         const totalWeightage = subtasks.reduce((total, subtask) => total + subtask.weightage, 0);
 
@@ -108,6 +115,7 @@ const NewTask = (props) => {
             alert("The total weightage of the subtasks does not add up to 100. Please check the subtask weightages.");
             return;
         }
+        console.log("error msg inside"+errorMessage);
         if (errorMessage !== "") {
             return;
         }
