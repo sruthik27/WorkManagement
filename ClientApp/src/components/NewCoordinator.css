@@ -16,7 +16,7 @@
 
 .container-div {
     display: flex;
-    column-gap: 5vw;
+    column-gap: 4vw;
     padding-left: 25px;
 }
 
@@ -156,19 +156,14 @@
 .manage-agencie-div {
     display: flex;
     align-items: center;
+    flex-direction: column-reverse;
     background-color: #FDE8C5;
     font-family: Montserrat;
-    font-size: 30px;
+    font-size: 26px;
     border-radius: 22px 0 0 22px;
     margin-bottom: 20px;
     border: 2px solid #640000;
-}
-
-.mange-agen-sym-p {
-    margin: 0;
-    font-size: 50px;
-    color: #ffc107;
-    margin-left: 10px;
+    padding-right: 20px;
     cursor: pointer;
 }
 
