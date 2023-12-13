@@ -247,22 +247,30 @@ class TaskTable extends Component {
                     unit: "mm",
                     format: "a4",
                 });
+
+                doc.setFontSize(25);
+                doc.text('Thiagarajan College Of Engineering', 30, 10)
+                doc.setFontSize(12);
+                doc.text('Department of Modernization,Development and Restoration (DMDR)', 35, 20)
+                doc.setFontSize(20);
+                doc.text(this.state.selectedItem.work_name + ' Data Report', 75, 30);
                 doc.setFontSize(14);
-                // Add some text
-                doc.text('Work Name: '+this.state.selectedItem.work_name, 20, 30);
-                doc.text('Work Description: '+this.state.selectedItem.work_description, 20, 40);
-                doc.text('Cost Of Work: '+this.state.selectedItem.wage, 20, 50);
-                doc.text('Advance Paid: '+(this.state.selectedItem.advancePaid ? "YES" : "NO"), 20, 60);
-                doc.text('Bill Paid: '+(this.state.selectedItem.bill_paid ? "YES" : "NO"), 20, 70);
-                doc.text('Start Date: '+this.state.selectedItem.start_date.slice(0, 10), 20, 80);
-                doc.text('Due Date: '+this.state.selectedItem.due_date.slice(0, 10), 20, 90);
-                doc.text('Work Status: '+(this.state.selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"), 20, 100);
-                doc.text('Coordinator: '+this.state.selectedItem.coordinator, 20, 110);
-                doc.text('Worker: '+this.state.selectedItem.worker, 20, 120);
-                doc.text('Total SubTask: '+this.state.selectedSubtasks.length, 20, 130);
-                doc.text('Downloaded on '+formattedDate, 20, 140);
+                doc.text('Work Description    : ' + this.state.selectedItem.work_description, 30, 50);
+                doc.text('Cost Of Work          : ' + 'Rs.' +  this.state.selectedItem.wage, 30, 60);
+                doc.text('Advance Paid         : ' + (this.state.advancePaid === 0 ? "No" : "Rs." + this.state.advancePaid), 30, 70);
+                doc.text('Advance Paid Date: ' + (this.state.dateOfPaid === '-' ? "-" : this.state.dateOfPaid.slice(0, 10)), 30, 80)
+                doc.text('Bill Paid                  : ' + (this.state.selectedItem.bill_paid? "YES" : "NO"), 30, 90);
+                doc.text('Start Date               : ' + this.state.selectedItem.start_date.slice(0, 10), 30, 100);
+                doc.text('Due Date                : ' + this.state.selectedItem.due_date.slice(0, 10), 30, 110);
+                doc.text('Work Status           : ' + (this.state.selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"), 30, 120);
+                doc.text('Coordinator            : ' + this.state.selectedItem.coordinator, 30, 130);
+                doc.text('Worker                   : ' + this.state.selectedItem.worker_names, 30, 140);
+                doc.text('Total SubTask       : ' + this.state.selectedSubtasks.length, 30, 150);
+                doc.text('Downloaded on ' + formattedDate, 10, 200);
                 // Save the PDF with a name
                 doc.save(this.state.selectedItem.work_name + '.PDF');
+
+                doc.text('Advance Paid: '+(this.state.selectedItem.advancePaid ? "YES" : "NO"), 20, 60);
             })
             .catch(error => {
                 // Handle errors if any

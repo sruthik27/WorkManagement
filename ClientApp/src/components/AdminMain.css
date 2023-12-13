@@ -14,8 +14,8 @@
 
 .para {
     color: #FFF9DF;
+    margin: 0;
     font-family: Rammetto One;
-    font-size: 45px;
     font-style: italic;
     font-weight: 400;
     line-height: normal;

@@ -22,7 +22,7 @@ import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import CommentCard from "./CommentCard";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import NewTask from './NewTask';
+import noData from './noDataInActive.png';
 
 class PuffLoader extends React.Component {
     componentDidMount() {
@@ -185,20 +185,25 @@ const NewCoordinator = () => {
                     unit: "mm",
                     format: "a4",
                 });
+                doc.setFontSize(25);
+                doc.text('Thiagarajan College Of Engineering', 30, 10)
+                doc.setFontSize(12);
+                doc.text('Department of Modernization,Development and Restoration (DMDR)', 35, 20)
+                doc.setFontSize(20);
+                doc.text(selectedItem.work_name + ' Data Report', 75, 30);
                 doc.setFontSize(14);
-                // Add some text
-                doc.text('Work Name: ' + selectedItem.work_name, 20, 30);
-                doc.text('Work Description: ' + selectedItem.work_description, 20, 40);
-                doc.text('Cost Of Work: ' + selectedItem.wage, 20, 50);
-                doc.text('Advance Paid: ' + (selectedItem.advancePaid ? "YES" : "NO"), 20, 60);
-                doc.text('Bill Paid: ' + (selectedItem.bill_paid ? "YES" : "NO"), 20, 70);
-                doc.text('Start Date: ' + selectedItem.start_date.slice(0, 10), 20, 80);
-                doc.text('Due Date: ' + selectedItem.due_date.slice(0, 10), 20, 90);
-                doc.text('Work Status: ' + (selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"), 20, 100);
-                doc.text('Coordinator: ' + selectedItem.coordinator, 20, 110);
-                doc.text('Worker: ' + selectedItem.worker, 20, 120);
-                doc.text('Total SubTask: ' + selectedSubtasks.length, 20, 130);
-                doc.text('Downloaded on ' + formattedDate, 20, 140);
+                doc.text('Work Description    : ' + selectedItem.work_description, 30, 50);
+                doc.text('Cost Of Work          : ' + 'Rs.' +  selectedItem.wage, 30, 60);
+                doc.text('Advance Paid         : ' + (advancePaid === 0 ? "No" : "Rs." + advancePaid), 30, 70);
+                doc.text('Advance Paid Date: ' + (dateOfPaid === '-' ? "-" : dateOfPaid.slice(0, 10)), 30, 80)
+                doc.text('Bill Paid                  : ' + (selectedItem.bill_paid ? "YES" : "NO"), 30, 90);
+                doc.text('Start Date               : ' + selectedItem.start_date.slice(0, 10), 30, 100);
+                doc.text('Due Date                : ' + selectedItem.due_date.slice(0, 10), 30, 110);
+                doc.text('Work Status           : ' + (selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"), 30, 120);
+                doc.text('Coordinator            : ' + selectedItem.coordinator, 30, 130);
+                doc.text('Worker                   : ' + selectedItem.worker_names, 30, 140);
+                doc.text('Total SubTask       : ' + selectedSubtasks.length, 30, 150);
+                doc.text('Downloaded on ' + formattedDate, 10, 200);
                 // Save the PDF with a name
                 doc.save(selectedItem.work_name + '.PDF');
             })
@@ -333,30 +338,39 @@ const NewCoordinator = () => {
                         <hr className="heading-line"/>
                     </div>
                     <div className='container-div'>
-                        <div className='active-div'>
-                            <h1 className='title-div'>Active Projects</h1>
-                            {topworks.map((x, i) => (
-                                <div key={i} className='active-inner-div'>
-                                    <div className='Active-head-div'>
-                                        <h2 className='active-title-h2' onClick={() => {
-                                            HandleSelectedItem(x)
-                                        }}>{x.work_name}</h2>
-                                        <div className='date-div'>
-                                            <img style={{width: '22px', marginRight: '10px'}} src={Flag}/>
-                                            <h2 className='active-title-date-h2'>{new Date(x.due_date).toLocaleDateString('en-US', {
-                                                month: 'long',
-                                                day: 'numeric'
-                                            })}</h2>
+                        {topworks.length === 0 ? (
+                            <div className='active-div'>
+                                <h1 className='title-div'>Active Projects</h1>
+                                <img style={{width: "90%"}} src={ noData } />
+                                <p className='notask-p'>No Active Task Assigned</p>
+                                <button className='view-all-btn' onClick={HandleForward}>VIEW ALL &gt;</button>
+                            </div>
+                        ):(
+                            <div className='active-div'>
+                                <h1 className='title-div'>Active Projects</h1>
+                                {topworks.map((x, i) => (
+                                    <div key={i} className='active-inner-div'>
+                                        <div className='Active-head-div'>
+                                            <h2 className='active-title-h2' onClick={() => {
+                                                HandleSelectedItem(x)
+                                            }}>{x.work_name}</h2>
+                                            <div className='date-div'>
+                                                <img style={{width: '22px', marginRight: '10px'}} src={Flag}/>
+                                                <h2 className='active-title-date-h2'>{new Date(x.due_date).toLocaleDateString('en-US', {
+                                                    month: 'long',
+                                                    day: 'numeric'
+                                                })}</h2>
+                                            </div>
+                                        </div>
+                                        <div style={{margin: '20px'}}>
+                                            <ProgressBar striped variant="warning" animated
+                                                        now={x.completed_subtasks}/>
                                         </div>
                                     </div>
-                                    <div style={{margin: '20px'}}>
-                                        <ProgressBar striped variant="warning" animated
-                                                     now={x.completed_subtasks}/>
-                                    </div>
-                                </div>
-                            ))}
-                            <button className='view-all-btn' onClick={HandleForward}>VIEW ALL &gt;</button>
-                        </div>
+                                ))}
+                                <button className='view-all-btn' onClick={HandleForward}>VIEW ALL &gt;</button>
+                            </div>
+                        )}
                         <PopUp trigger={selectedItem !== null}>
                             {isloading ? (
                                 <div className="overlay">
@@ -508,26 +522,44 @@ const NewCoordinator = () => {
                             </div>
                         </div>
                         <div>
-                            <div className="piechart-div">
-                                <h2 className='title-div1'>Progress chart:</h2>
-                                <PieChart
-                                    data={[
-                                        {title: 'Completed', value: CompletedPercent, color: '#7cd57c'},
-                                        {title: 'Active', value: ActivePercent, color: '#640000'},
-                                    ]}
-                                />
-                                <div className='piechart-lable-div'>
-                                    <button className='piechart-colour-info-active'></button>
-                                    <p className='piechart-colour-char-active'>Active</p>
-                                </div>
-                                <div className='piechart-lable-div'>
-                                    <button className='piechart-colour-info-completed'></button>
-                                    <p className='piechart-colour-char-active'>Completed</p>
-                                </div>
-                            </div>
                             <div className='manage-agencie-div' onClick={() => setIsPaneOpen(true)}>
                                 <p className='mange-agen-sym-p'>&lt;</p>
                                 <p className='mang-agen-p'>MANAGE AGENCIES</p>
+                            </div>
+                            <div className='piechart-main-div'>
+                                <h1 className='title-div'>Progress chart:</h1>
+                                <div className="piechart-div">
+                                    <div>
+                                        {CompletedPercent === 0 && ActivePercent === 0 ? 
+                                            <PieChart
+                                                data={[
+                                                    {title: 'NoWork', value: 100, color: 'rgba(0, 0, 0, 0.125)'}
+                                                ]}
+                                            />
+                                        : 
+                                            <PieChart
+                                                data={[
+                                                    {title: 'Completed', value: CompletedPercent, color: '#7cd57c'},
+                                                    {title: 'Active', value: ActivePercent, color: '#640000'},
+                                                ]}
+                                            />
+                                        }   
+                                    </div>
+                                    <div>
+                                        <div className='piechart-lable-div'>
+                                            <button className='piechart-colour-info-active'></button>
+                                            <p className='piechart-colour-char-active'>Active</p>
+                                        </div>
+                                        <div className='piechart-lable-div'>
+                                            <button className='piechart-colour-info-completed'></button>
+                                            <p className='piechart-colour-char-active'>Completed</p>
+                                        </div>
+                                        <div className='piechart-lable-div'>
+                                            <button style={{backgroundColor: 'rgba(0, 0, 0, 0.125)'}} className='piechart-colour-info-completed'></button>
+                                            <p className='piechart-colour-char-active'>No Task</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
