@@ -3,26 +3,33 @@ using WorkManagement.Db;
 using WorkManagement.Models;
 using Microsoft.AspNetCore.Mvc;
 using MailKit.Net.Smtp;
-using MailKit;
+using System.IO;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using MailKit.Security;
 using MimeKit;
-namespace WorkManagement.Controllers;
+using Newtonsoft.Json.Linq;
 
+namespace WorkManagement.Controllers;
 
 [ApiController]
 [Route("[controller]")]
 public class DbController : ControllerBase
 {
     private readonly DefaultDbContext _context;
+
     // Specify the TimeZoneId for IST (Indian Standard Time)
     static string istTimeZoneId = "India Standard Time";
+
     // Use TimeZoneInfo to convert from UTC to IST
     TimeZoneInfo istTimeZone = TimeZoneInfo.FindSystemTimeZoneById(istTimeZoneId);
+
     public DbController(DefaultDbContext context)
     {
         _context = context;
     }
-    
+
     //TO GET TOP 3 WORKS
     [HttpGet("getnearworks")]
     public IActionResult GetNearWorks()
@@ -36,7 +43,8 @@ public class DbController : ControllerBase
             .Select(work => new
             {
                 work_id = work.work_id.ToString(),
-                worker_names = string.Join(", ",_context.Workers.Where(x=>work.workers.Contains((x.worker_id))).Select(y=>y.worker_name)),
+                worker_names = string.Join(", ",
+                    _context.Workers.Where(x => work.workers.Contains((x.worker_id))).Select(y => y.worker_name)),
                 work.work_name,
                 work.work_description,
                 work.work_status,
@@ -50,10 +58,10 @@ public class DbController : ControllerBase
                 work.coordinator
             });
         var completed = _context.Works.Count(x => x.work_status == 'C');
-        var percentages = new List<int>{completed,_context.Works.Count()-completed};
+        var percentages = new List<int> { completed, _context.Works.Count() - completed };
         return Ok(new
         {
-            worksData=works,percentData=percentages
+            worksData = works, percentData = percentages
         });
     }
 
@@ -61,13 +69,13 @@ public class DbController : ControllerBase
     [HttpGet("getworks")]
     public IActionResult GetWorks()
     {
-        
         var works = _context.Works
             .AsNoTracking()
             .Select(work => new
             {
                 work_id = work.work_id.ToString(),
-                worker_names = string.Join(", ",_context.Workers.Where(x=>work.workers.Contains((x.worker_id))).Select(y=>y.worker_name)),
+                worker_names = string.Join(", ",
+                    _context.Workers.Where(x => work.workers.Contains((x.worker_id))).Select(y => y.worker_name)),
                 work.work_name,
                 work.work_description,
                 work.work_status,
@@ -104,13 +112,18 @@ public class DbController : ControllerBase
         });
         return Ok(works);
     }
-    
+
     [HttpGet("gettasks")]
     public IActionResult GetTasks(string n)
     {
-        return Ok(_context.Tasks.Where(x=>x.work_id==long.Parse(n)).OrderBy(t=>t.order_no).Select(y=>new{task_id = y.task_id.ToString(),work_id=y.work_id.ToString(),y.order_no,y.completed,y.due_date,y.task_name,y.weightage}));
+        return Ok(_context.Tasks.Where(x => x.work_id == long.Parse(n)).OrderBy(t => t.order_no).Select(y =>
+            new
+            {
+                task_id = y.task_id.ToString(), work_id = y.work_id.ToString(), y.order_no, y.completed, y.due_date,
+                y.task_name, y.weightage
+            }));
     }
-    
+
     //get workers data
     [HttpGet("getworkers")]
     public IActionResult GetWorkers()
@@ -137,40 +150,102 @@ public class DbController : ControllerBase
     [HttpGet("getreviews")]
     public IActionResult GetReviews(long workid)
     {
-        return Ok(_context.Queries.Where(x=>x.work==workid));
+        return Ok(_context.Queries.Where(x => x.work == workid));
     }
-    
+
     //TO GET IMAGES OF A GIVEN WORK
     [HttpGet("getimages")]
     public IActionResult GetImageUrls()
     {
         var images = _context.Images.Select(x => new
         {
-            workname=x.WorkReference.work_name,
+            workname = x.WorkReference.work_name,
             x.links
         });
         return Ok(images);
     }
-    
+
     //TO GET VERIFICATION CODE
     [HttpGet("getverificationcode")]
     public IActionResult GetVerification()
     {
         return Ok(_context.Logins.Find("check@verify.in").password);
     }
-    
-    
+
+    [HttpGet("getresetkey")]
+    public IActionResult GetResetKey()
+    {
+        string key = "";
+        using (StreamReader streamReader = new StreamReader(@"ClientApp/public/vault.json"))
+        {
+            string jsonString = streamReader.ReadToEnd();
+
+            // Parse the JSON string using JsonDocument
+            JsonDocument jsonDocument = JsonDocument.Parse(jsonString);
+
+            // Access values using the root element
+            JsonElement root = jsonDocument.RootElement;
+
+            key = root.GetProperty("reseturl").GetString()!;
+        }
+
+        return Ok(new
+        {
+            reset_key = key
+        });
+    }
+
+
     //--------------------------------------------------------
-    
+
     //TO CHANGE PASSWORD FOR ADMIN/COORDINATOR
+
+    static string GenerateRandomString(int length = 10)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        StringBuilder stringBuilder = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++)
+        {
+            stringBuilder.Append(chars[random.Next(chars.Length)]);
+        }
+
+        return stringBuilder.ToString();
+    }
+
     public class Who
     {
         public char who { get; set; }
     }
-    
+
     [HttpPut("resetpasswordlink")]
     public IActionResult SendPasswordResetEmail([FromBody] Who who)
     {
+        string randomstuffing = GenerateRandomString();
+        try
+        {
+            // Read the JSON file
+            string jsonString = System.IO.File.ReadAllText("ClientApp/public/vault.json");
+
+            // Parse the JSON string into a JObject
+            JObject jsonObject = JObject.Parse(jsonString);
+
+            // Generate a random alphanumeric string and set it as the 'reseturl' value
+            jsonObject["reseturl"] = randomstuffing; 
+
+            // Convert the modified JObject back into a string
+            string modifiedJsonString = jsonObject.ToString();
+
+            // Write the modified JSON back to the file
+            System.IO.File.WriteAllText("ClientApp/public/vault.json", modifiedJsonString);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return NoContent();
+        }
+
         var to_name = who.who == 'P' ? "Principal" : "DMDR Head";
         var to_email = who.who == 'P' ? "sruthik2016@gmail.com" : "vigneshkabilan65@gmail.com";
         // Create email message
@@ -178,23 +253,25 @@ public class DbController : ControllerBase
         emailMessage.From.Add(new MailboxAddress("TCE DMDR", "insomniadevs007@gmail.com"));
         emailMessage.To.Add(new MailboxAddress(to_name, to_email));
         emailMessage.Subject = "Password Reset";
-        emailMessage.Body = new TextPart("html") { Text = @"
+        emailMessage.Body = new TextPart("html")
+        {
+            Text = @$"
 <!DOCTYPE html>
 <html>
 <head>
   <title>Password Reset</title>
   <style>
-      body {
+      body {{
           font-family: Arial, sans-serif;
-      }
-      .container {
+      }}
+      .container {{
           width: 600px;
           margin: 0 auto;
           padding: 20px;
           background-color: #f9f9f9;
           border-radius: 5px;
-      }
-      .button {
+      }}
+      .button {{
           display: inline-block;
           background-color: #007BFF;
           color: #ffffff;
@@ -203,10 +280,10 @@ public class DbController : ControllerBase
           border-radius: 5px;
           font-size: 16px;
           margin-top: 20px;
-      }
-        a {
+      }}
+        a {{
          color: #fff;
-      }
+      }}
   </style>
 </head>
 <body>
@@ -214,13 +291,14 @@ public class DbController : ControllerBase
                 <h2>Password Reset</h2>
                 <p>Hello,</p>
                 <p>We received a request to reset your password. Click the button below to reset it.</p>
-                <a href=""https://tceworkmanagement.azurewebsites.net/ResetPassword"" class=""button"" style=""color: #ffffff; text-decoration: none;"">Reset Password</a>
+                <a href=""https://tceworkmanagement.azurewebsites.net/ResetPassword/{randomstuffing}"" class=""button"" style=""color: #ffffff; text-decoration: none;"">Reset Password</a>
                 <p>If you did not request a password reset, please ignore this email or reply to let us know.</p>
                 <b>Delete this email after resetting for security purposes<b>
                 </div>
                 </body>
                 </html>
-"};
+"
+        };
 
         // Send email
         using var smtp = new SmtpClient();
@@ -228,14 +306,15 @@ public class DbController : ControllerBase
         smtp.Authenticate("insomniadevs007@gmail.com", "lzhyecgavxzkcgvg");
         smtp.Send(emailMessage);
         smtp.Disconnect(true);
+        
         return Ok(new { message = "sent successfully" });
     }
 
-        
+
     //TO UPDATE ORDER OF SUBTASK
     [Route("updateorder")]
     [HttpPut]
-    public IActionResult UpdateOrder(string task_id,int new_order)
+    public IActionResult UpdateOrder(string task_id, int new_order)
     {
         var taskid = long.Parse(task_id);
         //FindTask by taskid
@@ -244,12 +323,13 @@ public class DbController : ControllerBase
         {
             return BadRequest("Task not found");
         }
+
         //Update task's order
         task.order_no = new_order;
         _context.SaveChanges();
         return Ok(new { message = "Order updated succesfully" });
     }
-    
+
     //UPDATE COMPLETION OF TASKS (WORK)
     [Route("updatetaskcompletion")]
     [HttpPut]
@@ -269,7 +349,7 @@ public class DbController : ControllerBase
         _context.SaveChanges();
 
         // Check if all tasks for the same work_id are completed
-        var allTasksCompleted = _context.Tasks.Where(t => t.work_id == workId && t.completed!=true).Count() == 0;
+        var allTasksCompleted = _context.Tasks.Where(t => t.work_id == workId && t.completed != true).Count() == 0;
 
         if (allTasksCompleted)
         {
@@ -289,7 +369,7 @@ public class DbController : ControllerBase
 
         return Ok(new { message = "Completion updated successfully" });
     }
-    
+
     //ADD NEW IMAGE URL 
 
     public class ImageItems
@@ -297,19 +377,19 @@ public class DbController : ControllerBase
         public long id { get; set; }
         public string url { get; set; }
     }
-    
+
     [Route("appendimage")]
     [HttpPut]
     public IActionResult AppendImage([FromBody] ImageItems imageitem)
     {
         var workid = imageitem.id;
         var url = imageitem.url;
-        var imagebox = _context.Images.FirstOrDefault(i=>i.work==workid);
+        var imagebox = _context.Images.FirstOrDefault(i => i.work == workid);
         imagebox.links.Add(url);
         _context.SaveChanges();
         return Ok(new { message = "image appened sucessfully" });
     }
-    
+
     //UPDATE BILL PAID
     [Route("updatebill")]
     [HttpPut]
@@ -321,7 +401,7 @@ public class DbController : ControllerBase
         _context.SaveChanges();
         return Ok(new { message = "bill updated successfully" });
     }
-    
+
     //UPDATE VERIFICATION CODE
     [HttpPut("updatevcode")]
     public IActionResult UpdateVCode()
@@ -332,16 +412,16 @@ public class DbController : ControllerBase
         _context.SaveChanges();
         return Ok();
     }
-    
+
     //TO RESET PASSWORD
-    
+
     //reset pass for admin/coordinator
     public class ResetDto
     {
         public string email { get; set; }
         public string newpass { get; set; }
     }
-    
+
     [HttpPut("resetpass1")]
     public IActionResult SetNewPass([FromBody] ResetDto resetDto)
     {
@@ -353,13 +433,39 @@ public class DbController : ControllerBase
             // Email not found in the database, return false
             return NotFound(new { message = "Data not found" });
         }
-        // Compare the provided password with the stored password
+
+        // Change in db
         existingLogin.password = newpass;
         _context.SaveChanges();
-        return Ok(new { success = "true" });
+        
+        // Refresh reset key in vault
+        string newRandomstuffing = GenerateRandomString();
+        try
+        {
+            // Read the JSON file
+            string jsonString = System.IO.File.ReadAllText("ClientApp/public/vault.json");
 
+            // Parse the JSON string into a JObject
+            JObject jsonObject = JObject.Parse(jsonString);
+
+            // Generate a random alphanumeric string and set it as the 'reseturl' value
+            jsonObject["reseturl"] = newRandomstuffing; 
+
+            // Convert the modified JObject back into a string
+            string modifiedJsonString = jsonObject.ToString();
+
+            // Write the modified JSON back to the file
+            System.IO.File.WriteAllText("ClientApp/public/vault.json", modifiedJsonString);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return NoContent();
+        }
+        
+        return Ok(new { success = "true" });
     }
-    
+
     //reset pass for workers
     [HttpPut("resetpass")]
     public IActionResult ResetPass([FromBody] ResetDto resetDto)
@@ -369,7 +475,7 @@ public class DbController : ControllerBase
         string passwordHash = BCrypt.Net.BCrypt.HashPassword(newpass);
         user.password = passwordHash;
         _context.SaveChangesAsync();
-        return Ok(new {message = "success"});
+        return Ok(new { message = "success" });
     }
 
     //-------------------------------------------------------------------
@@ -395,12 +501,13 @@ public class DbController : ControllerBase
         if (existingLogin.password == login.password)
         {
             // Passwords match, and admin
-            if (existingLogin.designation=='A')
+            if (existingLogin.designation == 'A')
             {
-                return Ok(new { redirectTo = "AdminPortal",where='A' });
+                return Ok(new { redirectTo = "AdminPortal", where = 'A' });
             }
-            if (existingLogin.designation=='C')
-                return Ok(new { redirectTo = "HeadPortal",where='C'});
+
+            if (existingLogin.designation == 'C')
+                return Ok(new { redirectTo = "HeadPortal", where = 'C' });
             return Ok(new { redirectTo = "worker" });
         }
         else
@@ -409,7 +516,7 @@ public class DbController : ControllerBase
             return Ok(new { success = "false" });
         }
     }
-    
+
     //WORKER LOGIN
 
     public class LoginCred
@@ -417,7 +524,7 @@ public class DbController : ControllerBase
         public string useremail { get; set; }
         public string userpassword { get; set; }
     }
-    
+
     [Route("workerlogin")]
     [HttpPost]
     public IActionResult Login([FromBody] LoginCred cred)
@@ -444,7 +551,7 @@ public class DbController : ControllerBase
         return Ok(wlogin.wid);
     }
 
-    
+
     //ADD QUERY
     [HttpPost("addquery")]
     public IActionResult AddQuery([FromBody] Query newQuery)
@@ -453,6 +560,7 @@ public class DbController : ControllerBase
         {
             return BadRequest("Invalid query data.");
         }
+
         newQuery.query_date = DateTime.UtcNow.Date; // Set the date to UTC date
         newQuery.query_time = DateTime.UtcNow.TimeOfDay; // Set the time to UTC time
         _context.Queries.Add(newQuery);
@@ -461,7 +569,7 @@ public class DbController : ControllerBase
         Console.WriteLine("IST Time: " + istTime.ToString("yyyy-MM-dd HH:mm:ss"));
         return Ok(new { message = "Query added successfully." });
     }
-    
+
     //ADD NEW WORK ALONG WITH SUBTASKS AND IMAGES ENTRY
     public class WorkWithSubtasks
     {
@@ -493,49 +601,50 @@ public class DbController : ControllerBase
         new_image_entry.work = workpart.work_id;
         _context.Images.Add(new_image_entry);
         _context.SaveChanges();
-        
+
         List<SubTask> taskspart = newWork.Subtasks;
         foreach (var subtask in taskspart)
         {
             subtask.work_id = workpart.work_id;
             _context.Tasks.Add(subtask);
         }
+
         _context.SaveChanges();
         return Ok(new { message = "Work added successfully.", workpart.work_id });
     }
-    
+
     //ADD PAYMENT
     [Route("addpayment")]
     [HttpPost]
     public IActionResult AddPayment([FromBody] Payment newpayment)
     {
-        if (newpayment==null)
+        if (newpayment == null)
         {
             return BadRequest("Invalid payment data.");
         }
 
-        newpayment.work = (long) newpayment.work;
+        newpayment.work = (long)newpayment.work;
         _context.Payments.Add(newpayment);
         var work = _context.Works.Find(newpayment.work);
         if (work != null)
         {
-            if (newpayment.payment_type=='A')
+            if (newpayment.payment_type == 'A')
             {
                 work.advance_paid = true;
             }
-            else if (newpayment.payment_type=='B')
+            else if (newpayment.payment_type == 'B')
             {
                 work.bill_paid = true;
             }
         }
+
         _context.SaveChanges();
         return Ok(new
         {
             message = "payment added sucessfully"
-            
         });
     }
-    
+
     //REGISTER WORKER
     public class WorkerDto
     {
@@ -543,10 +652,10 @@ public class DbController : ControllerBase
         public string email { get; set; }
         public string phone_number { get; set; }
         public string password { get; set; }
-        
+
         public string verificationcode { get; set; }
     }
-    
+
     [Route("addworker")]
     [HttpPost]
     public async Task<ActionResult<Worker>> AddWorker([FromBody] WorkerDto workerDto)
@@ -558,7 +667,7 @@ public class DbController : ControllerBase
         }
 
         var vcode = _context.Logins.Find("check@verify.in").password;
-        if (workerDto.verificationcode!=vcode)
+        if (workerDto.verificationcode != vcode)
         {
             return Ok("check fail");
         }
@@ -594,10 +703,7 @@ public class DbController : ControllerBase
         // Add the WLogin object to the database.
         _context.WLogins.Add(wlogin);
         await _context.SaveChangesAsync();
-        
-        return Ok(new {message = "registration succesffull"});
-    }
-    
-    
 
+        return Ok(new { message = "registration succesffull" });
+    }
 }
