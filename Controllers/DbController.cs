@@ -176,7 +176,7 @@ public class DbController : ControllerBase
     public IActionResult GetResetKey()
     {
         string key = "";
-        using (StreamReader streamReader = new StreamReader(@"ClientApp/public/vault.json"))
+        using (StreamReader streamReader = new StreamReader(@"Files/vault.json"))
         {
             string jsonString = streamReader.ReadToEnd();
 
@@ -218,18 +218,20 @@ public class DbController : ControllerBase
     {
         public char who { get; set; }
     }
-
-    [HttpPut("resetpasswordlink")]
+    
+    [HttpPost("resetpasswordlink")]
     public IActionResult SendPasswordResetEmail([FromBody] Who who)
     {
         string randomstuffing = GenerateRandomString();
         try
         {
             // Read the JSON file
-            string jsonString = System.IO.File.ReadAllText("ClientApp/public/vault.json");
+            string jsonString = System.IO.File.ReadAllText(@"Files/vault.json");
 
             // Parse the JSON string into a JObject
             JObject jsonObject = JObject.Parse(jsonString);
+
+            Console.WriteLine(jsonObject["reseturl"]);
 
             // Generate a random alphanumeric string and set it as the 'reseturl' value
             jsonObject["reseturl"] = randomstuffing; 
@@ -238,12 +240,11 @@ public class DbController : ControllerBase
             string modifiedJsonString = jsonObject.ToString();
 
             // Write the modified JSON back to the file
-            System.IO.File.WriteAllText("ClientApp/public/vault.json", modifiedJsonString);
+            System.IO.File.WriteAllText(@"Files/vault.json", modifiedJsonString);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            return NoContent();
         }
 
         var to_name = who.who == 'P' ? "Principal" : "DMDR Head";
@@ -443,7 +444,7 @@ public class DbController : ControllerBase
         try
         {
             // Read the JSON file
-            string jsonString = System.IO.File.ReadAllText("ClientApp/public/vault.json");
+            string jsonString = System.IO.File.ReadAllText("Files/vault.json");
 
             // Parse the JSON string into a JObject
             JObject jsonObject = JObject.Parse(jsonString);
@@ -455,7 +456,7 @@ public class DbController : ControllerBase
             string modifiedJsonString = jsonObject.ToString();
 
             // Write the modified JSON back to the file
-            System.IO.File.WriteAllText("ClientApp/public/vault.json", modifiedJsonString);
+            System.IO.File.WriteAllText("Files/vault.json", modifiedJsonString);
         }
         catch (Exception ex)
         {

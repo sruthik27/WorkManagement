@@ -10,7 +10,7 @@ import routeMappings from "../routeMappings";
 const AdminHome = () => {
 
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         const rememberMe = document.cookie;
         if (rememberMe.includes("rememberAMe=true")) {
@@ -30,7 +30,7 @@ const AdminHome = () => {
     const [whoLogin, setWhoLogin] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
- 
+
     const HandleInputEmail = (e) => {
         setInputEmail(e.target.value);
     }
@@ -53,7 +53,7 @@ const AdminHome = () => {
         });
 
         var requestOptions = {
-            method: 'PUT',
+            method: 'POST',
             headers: myHeaders,
             body: raw,
             redirect: 'follow'
@@ -62,9 +62,10 @@ const AdminHome = () => {
         await fetch("/db/resetpasswordlink", requestOptions)
             .then(response => response.text())
             .then(result => console.log(result))
+            .then(alert("Please check your email"))
             .catch(error => console.log('error', error));
 
-        alert("Please check your email");
+
     }
 
     const setRememberMeCookie = (who) => {
@@ -133,7 +134,7 @@ const AdminHome = () => {
     const HandleLoginPrinci = (e) => {
         setIsLogin(true);
         setWhoLogin(e.target.value);
-        
+
     }
     const HandleLoginHead = (e) => {
         setIsLogin(true);
@@ -157,11 +158,11 @@ const AdminHome = () => {
                         <div className="radio-box-div">
                             <div className="radio-box-input">
                                 <input style={{cursor: 'pointer'}} type="radio" id="Princi" name="Login" onClick={HandleLoginPrinci} value="P"/>
-                                <label className="radio-box-label" for='Princi'>Login As DMDR Principal</label>
+                                <label className="radio-box-label" htmlFor='Princi'>Login As DMDR Principal</label>
                             </div>
                             <div className="radio-box-input">
                                 <input style={{cursor: 'pointer'}} type="radio" id="Head" name="Login" onClick={HandleLoginHead} value="H"/>
-                                <label className="radio-box-label" for='Head'>Login As DMDR Head</label>
+                                <label className="radio-box-label" htmlFor='Head'>Login As DMDR Head</label>
                             </div>
                         </div>
                         {isLogin ? (
@@ -173,7 +174,7 @@ const AdminHome = () => {
                                         type={"password"}
                                         value={inputPassword}
                                         onChange={HandleInputPassword}
-                                        placeholder="Password"                        
+                                        placeholder="Password"
                                     />
                                 </div>
                                 <div className="Login-container">
