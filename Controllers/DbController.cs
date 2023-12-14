@@ -293,7 +293,7 @@ public class DbController : ControllerBase
                 <p>We received a request to reset your password. Click the button below to reset it.</p>
                 <a href=""https://tceworkmanagement.azurewebsites.net/ResetPassword/{randomstuffing}"" class=""button"" style=""color: #ffffff; text-decoration: none;"">Reset Password</a>
                 <p>If you did not request a password reset, please ignore this email or reply to let us know.</p>
-                <b>Delete this email after resetting for security purposes<b>
+                <b>This email can be used only once to change the password<b>
                 </div>
                 </body>
                 </html>
