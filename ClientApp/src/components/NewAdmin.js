@@ -22,6 +22,7 @@ import noData from './noDataInActive.png';
 import manageWorkers from './ManageWorkes.png';
 import ArrowLeft from './Arrow.gif';
 import tceLogo from './TCE-Logo.jpeg';
+import Tooltip from './ToolTip';
 class PuffLoader extends React.Component {
     componentDidMount() {
         console.log('Rendering Puff');
@@ -257,9 +258,11 @@ const NewAdmin = () => {
                                 {topworks.map((x, i) => (
                                     <div key={i} className='active-inner-div'>
                                         <div className='Active-head-div'>
-                                            <h2 className='active-title-h2' onClick={() => {
-                                                HandleSelectedItem(x)
-                                            }}>{x.work_name}</h2>
+                                            <Tooltip text={x.work_name}>
+                                                <h2 className='active-title-h2' onClick={() => {
+                                                    HandleSelectedItem(x)
+                                                }}>{x.work_name.slice(0,8)}</h2>
+                                            </Tooltip>
                                             <div className='date-div'>
                                                 <img style={{width: '22px', marginRight: '10px'}} src={Flag}/>
                                                 <h2 className='active-title-date-h2'>{new Date(x.due_date).toLocaleDateString('en-US', {
