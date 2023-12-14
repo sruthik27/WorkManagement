@@ -1,17 +1,39 @@
-import React from "react";
+import React, {useEffect} from "react";
 import './AdminHome.css';
 import { useState } from "react";
+import { useParams } from 'react-router-dom';
 import Stop from './Stop.gif';
+import routeMappings from "../routeMappings";
 
 const ResetPassword = () => {
 
-    const [isCheck, setCheck] = useState(1);
+    const { id } = useParams();
+    const [isAllowed, setAllowed] = useState(true);
     const [emailCheck, setEmailCheck] = useState(false)
     const [inputForgotPassword, setInputForgotPassword] = useState("");
     const [isEmailCheck, setisEmailCheck] = useState(false)
     const [inputResetPassword, setInputResetPassword] = useState("");
     const [inputConfirmPassword, setInputConfirmPassword] = useState("");
     const [misMatch, setMisMatch] = useState(false);
+    console.log(id);
+
+    useEffect( () => {
+        async function fetchData() {
+        try {
+            const response = await fetch('/db/getresetkey');
+            const data = await response.json();
+            if (data.reset_key===id) {
+                setAllowed(true);
+}
+            else {
+                setAllowed(false);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } finally {
+        }}
+        fetchData();
+    })
 
     const HandleInputResetPassword = (e) => {
         setInputResetPassword(e.target.value);
@@ -71,7 +93,7 @@ const ResetPassword = () => {
     return (
         <>
             <div className="forgot-pass-whole-div">
-                {isCheck === 0 ? (
+                {isAllowed ? (
                     <div>
                         <div className="forgot-password-head-div">
                             <h1 className="forgot-password-head">Reset Password: </h1>

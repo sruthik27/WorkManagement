@@ -21,7 +21,7 @@ function App() {
         <Route path='/AdminPortal' element={ <NewAdmin/> }/>
         <Route path='/NewTask' element={ <NewTask/> }/>
         <Route path='/WorkReport' element={ <WorkReport/> }/>
-        <Route path='/ResetPassword' element={ <ResetPassword/> }/>
+        <Route path='/ResetPassword/:id' element={ <ResetPassword/> }/>
       </Routes>
     </div>
     
