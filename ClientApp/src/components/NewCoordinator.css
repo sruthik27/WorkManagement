@@ -14,9 +14,16 @@
     justify-content: center;
 }
 
+.manage-work-div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    row-gap: 30px;
+}
+
 .container-div {
     display: flex;
-    column-gap: 4vw;
+    column-gap: 6vw;
     padding-left: 25px;
 }
 
@@ -367,7 +374,8 @@
 .piechart-mange-div {
     display: flex;
     flex-direction: column;
-    justify-content: center;   
+    justify-content: center;
+    margin-left: 30px;   
 }
 
 .notask-p {

@@ -250,7 +250,7 @@ class TaskTable extends Component {
                 });
                 doc.addImage(tceLogo, 'jpge',0, 0, 30, 30);
                 doc.setFontSize(25);
-                doc.text('Thiagarajan College Of Engineering', 30, 10)
+                doc.text('Thiagarajar College Of Engineering', 30, 10)
                 doc.setFontSize(12);
                 doc.text('Department of Modernization,Development and Restoration (DMDR)', 35, 20)
                 doc.setFontSize(20);

@@ -20,7 +20,7 @@ import jsPDF from "jspdf";
 import CommentBox from "./CommentBox";
 import noData from './noDataInActive.png';
 import manageWorkers from './ManageWorkes.png';
-import ArrowLeft from './ArrowLeft.png';
+import ArrowLeft from './Arrow.gif';
 import tceLogo from './TCE-Logo.jpeg';
 class PuffLoader extends React.Component {
     componentDidMount() {
@@ -156,7 +156,7 @@ const NewAdmin = () => {
                 });
                 doc.addImage(tceLogo, 'jpge',0, 0, 30, 30);
                 doc.setFontSize(25);
-                doc.text('Thiagarajan College Of Engineering', 30, 10)
+                doc.text('Thiagarajar College Of Engineering', 30, 10)
                 doc.setFontSize(12);
                 doc.text('Department of Modernization,Development and Restoration (DMDR)', 35, 20)
                 doc.setFontSize(20);
@@ -166,7 +166,7 @@ const NewAdmin = () => {
                 doc.text('Cost Of Work          : ' + 'Rs.' +  selectedItem.wage, 30, 60);
                 doc.text('Advance Paid         : ' + (advancePaid === 0 ? "No" : "Rs." + advancePaid), 30, 70);
                 doc.text('Advance Paid Date: ' + (dateOfPaid === '-' ? "-" : dateOfPaid.slice(0, 10)), 30, 80)
-                doc.text('Bill Paid                  : ' + (selectedItem.bill_paid ? "YES" : "NO"), 30, 90);
+                doc.text('Bill Paid                  : ' + (selectedItem.bill_paid ? "Yes" : "No"), 30, 90);
                 doc.text('Start Date               : ' + selectedItem.start_date.slice(0, 10), 30, 100);
                 doc.text('Due Date                : ' + selectedItem.due_date.slice(0, 10), 30, 110);
                 doc.text('Work Status           : ' + (selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"), 30, 120);
@@ -389,7 +389,7 @@ const NewAdmin = () => {
                         </div>
                         <div className='piechart-mange-div'>
                             <div className='manage-agencie-div' onClick={() => setIsPaneOpen(true)}>
-                                <img style={{width: '100px'}} src={ ArrowLeft }/>
+                                <img style={{width: '100px', transform: 'rotate(90deg)'}} src={ ArrowLeft }/>
                                 <div className='mang-div'>
                                     <p className='mang-agen-p'>AGENCIES</p>
                                     <img style={{width: '50%'}} src={ manageWorkers }/>
