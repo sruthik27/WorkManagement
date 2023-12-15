@@ -303,8 +303,8 @@ public class DbController : ControllerBase
 
         // Send email
         using var smtp = new SmtpClient();
-        smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-        smtp.Authenticate("insomniadevs007@gmail.com", "lzhyecgavxzkcgvg");
+        smtp.Connect("smtp-relay.brevo.com", 587, SecureSocketOptions.StartTls);
+        smtp.Authenticate("sruthik2016@gmail.com", "a4BrdMsQJXLkcyYE");
         smtp.Send(emailMessage);
         smtp.Disconnect(true);
         
