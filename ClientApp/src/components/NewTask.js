@@ -94,16 +94,16 @@ const NewTask = (props) => {
     };
 
     const handleWorkerChange = (workerId) => {
-   setSelectedWorkers(prevWorkers => {
-       if (prevWorkers.includes(workerId)) {
-           // If the worker is already selected, remove it from the array
-           return prevWorkers.filter(id => id !== workerId);
-       } else {
-           // If the worker is not selected, add it to the array
-           return [...prevWorkers, workerId];
-       }
-   });
-};
+        setSelectedWorkers(prevWorkers => {
+            if (prevWorkers.includes(workerId)) {
+                // If the worker is already selected, remove it from the array
+                return prevWorkers.filter(id => id !== workerId);
+            } else {
+                // If the worker is not selected, add it to the array
+                return [...prevWorkers, workerId];
+            }
+        });
+    };
 
     const handleFormSubmit = async () => {
         // Calculate the total weightage of the subtasks
@@ -228,6 +228,9 @@ const NewTask = (props) => {
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
 
+    const noOfChecked = Object.values(selectedWorkers.filter(Boolean));
+    console.log(noOfChecked);
+
     return (
         <>
             {isLoading ? (
@@ -295,19 +298,21 @@ const NewTask = (props) => {
                                     <label>Agency: </label>
                                     <div className="dropdown-check-list">
                                         <div className="dropdown-button" onClick={HandDropDownICon}>
-                                            <span >Select Agencies</span>
+                                            <span >{noOfChecked.length > 0 ? (noOfChecked.map((worker, i) =>(
+                                                worker.charAt(0).toUpperCase() + worker.slice(1) + " ,"
+                                            )) ) : "Select Agencies"}</span>
                                             <span >{ dropDownIcon ? <img src={DropUp}/> : <img src={DropDown}/> }</span>
                                         </div>
                                         {showWorkers && (
                                             <div className="items">
                                                 {workers.map((worker, index) => (
-                                                <fieldset className={selectedWorkers.includes(worker.worker_id) ? 'items-field-selected' : 'items-field'} key={index}>
+                                                <fieldset className={selectedWorkers.includes(worker.worker_name) ? 'items-field-selected' : 'items-field'} key={index}>
                                                     <input
                                                         style={{cursor: 'pointer'}}
                                                         type="checkbox"
                                                         id={worker.worker_id}
-                                                        value={worker.worker_id}
-                                                        checked={selectedWorkers.includes(worker.worker_id)}
+                                                        value={worker.worker_name}
+                                                        checked={selectedWorkers.includes(worker.worker_name)}
                                                         onChange={(event) => handleWorkerChange(event.target.value)}
                                                     />
                                                     <label htmlFor={worker.worker_id}>{worker.worker_name.charAt(0).toUpperCase() + worker.worker_name.slice(1)}</label>

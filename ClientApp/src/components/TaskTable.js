@@ -300,7 +300,7 @@ class TaskTable extends Component {
                     </p>
                 </div>
                 <div className="task-table">
-                    <div>
+                    <div className='table-left'>
                         <p className='table-head'>Active Task</p>
                         <div className='scroll'>
                             <ul>
@@ -312,8 +312,7 @@ class TaskTable extends Component {
                             </ul>
                         </div>
                     </div>
-                    <div className='v1'></div>
-                    <div>
+                    <div className='table-right'>
                         <p className='table-head'>Completed Task</p>
                         <div className='scroll'>
                             <ul>

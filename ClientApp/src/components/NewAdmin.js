@@ -155,26 +155,26 @@ const NewAdmin = () => {
                     unit: "mm",
                     format: "a4",
                 });
-                doc.addImage(tceLogo, 'jpge',0, 0, 30, 30);
+                doc.addImage(tceLogo, 'jpge',10, 0, 35, 30);
                 doc.setFontSize(25);
-                doc.text('Thiagarajar College Of Engineering', 30, 10)
+                doc.text('Thiagarajar College Of Engineering', 45, 10)
                 doc.setFontSize(12);
-                doc.text('Department of Modernization,Development and Restoration (DMDR)', 35, 20)
+                doc.text('Department of Modernization,Development and Restoration (DMDR)', 50, 20)
                 doc.setFontSize(20);
-                doc.text(selectedItem.work_name + ' Data Report', 75, 30);
+                doc.text(selectedItem.work_name + ' Data Report', 30, 40);
                 doc.setFontSize(14);
-                doc.text('Work Description    : ' + selectedItem.work_description, 30, 50);
-                doc.text('Cost Of Work          : ' + 'Rs.' +  selectedItem.wage, 30, 60);
-                doc.text('Advance Paid         : ' + (advancePaid === 0 ? "No" : "Rs." + advancePaid), 30, 70);
-                doc.text('Advance Paid Date: ' + (dateOfPaid === '-' ? "-" : dateOfPaid.slice(0, 10)), 30, 80)
-                doc.text('Bill Paid                  : ' + (selectedItem.bill_paid ? "Yes" : "No"), 30, 90);
-                doc.text('Start Date               : ' + selectedItem.start_date.slice(0, 10), 30, 100);
-                doc.text('Due Date                : ' + selectedItem.due_date.slice(0, 10), 30, 110);
-                doc.text('Work Status           : ' + (selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"), 30, 120);
-                doc.text('Coordinator            : ' + selectedItem.coordinator, 30, 130);
-                doc.text('Worker                   : ' + selectedItem.worker_names, 30, 140);
-                doc.text('Total SubTask       : ' + selectedSubtasks.length, 30, 150);
-                doc.text('Downloaded on ' + formattedDate, 10, 200);
+                doc.text('Work Description    : ' + selectedItem.work_description, 40, 60);
+                doc.text('Cost Of Work          : ' + 'Rs.' +  selectedItem.wage, 40, 70);
+                doc.text('Advance Paid         : ' + (advancePaid === 0 ? "No" : "Rs." + advancePaid), 40, 80);
+                doc.text('Advance Paid Date: ' + (dateOfPaid === '-' ? "-" : dateOfPaid.slice(0, 10)), 40, 90)
+                doc.text('Bill Paid                  : ' + (selectedItem.bill_paid ? "Yes" : "No"), 40, 100);
+                doc.text('Start Date               : ' + selectedItem.start_date.slice(0, 10), 40, 110);
+                doc.text('Due Date                : ' + selectedItem.due_date.slice(0, 10), 40, 120);
+                doc.text('Work Status           : ' + (selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"), 40, 130);
+                doc.text('Coordinator            : ' + selectedItem.coordinator, 40, 140);
+                doc.text('Worker                   : ' + selectedItem.worker_names, 40, 150);
+                doc.text('Total SubTask       : ' + selectedSubtasks.length, 40, 160);
+                doc.text('Downloaded on ' + formattedDate, 10, 210);
                 // Save the PDF with a name
                 doc.save(selectedItem.work_name + '.PDF');
             })

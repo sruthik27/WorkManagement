@@ -9,7 +9,7 @@
     background:url( 'TCE_BLUR.png');
     background-size: cover;
     background-repeat: no-repeat;
-    
+    height: 100vh;
 }
 
 .para {
@@ -24,7 +24,6 @@
 
 .task-table {
     display: flex;
-    justify-content: space-evenly;
     border-radius: 20px;
     background: #FFF9DF;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -54,6 +53,7 @@
 .table_content {
     cursor: pointer;
     font-size: 20px;
+    border-bottom: 1px solid #640000;
 }
 
 .scroll {
