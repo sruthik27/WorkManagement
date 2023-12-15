@@ -72,11 +72,6 @@
     line-height: normal;   
 }
 
-.v1 {
-    border-left: 2px solid #640000;
-    height: 30vw;
-}
-
 .feedback-input {
     border-radius: 12px;
     border: 0.5px solid #640000;

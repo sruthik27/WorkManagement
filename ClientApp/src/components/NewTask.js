@@ -321,7 +321,7 @@ const NewTask = (props) => {
                                     <div className="dropdown-check-list">
                                         <div className="dropdown-button" onClick={HandDropDownICon}>
                                             <span >{selectedWorkersNames.length > 0 ? (selectedWorkersNames.map((worker, i) =>(
-                                                worker.charAt(0).toUpperCase() + worker.slice(1) + " ,"
+                                                i === 0 ? (worker.charAt(0).toUpperCase() + worker.slice(1)) :  (", " + worker.charAt(0).toUpperCase() + worker.slice(1)) 
                                             )) ) : "Select Agencies"}</span>
                                             <span >{ dropDownIcon ? <img src={DropUp}/> : <img src={DropDown}/> }</span>
                                         </div>
