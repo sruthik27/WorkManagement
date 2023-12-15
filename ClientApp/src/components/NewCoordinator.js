@@ -321,8 +321,8 @@ const NewCoordinator = () => {
         navigate(routeMappings["bHWtcH10="], {state: {fromAdminHome: true}});
     }
 
-    const handleAssignClick = (workerId) => {
-        navigate('/NewTask', { state: { worker_id: workerId } });
+    const handleAssignClick = (workerString) => {
+        navigate('/NewTask', { state: { worker: workerString } });
     };
 
 
@@ -616,7 +616,7 @@ const NewCoordinator = () => {
                                                 <td><a href={`mailto:${worker.email}`}>{worker.email}</a></td>
                                                 <td>{worker.phone_number}</td>
                                                 <td>
-                                                    <button onClick={() => handleAssignClick(worker.worker_name)}>Assign</button>
+                                                    <button onClick={() => handleAssignClick(worker.worker_id+"?"+worker.worker_name)}>Assign</button>
                                                 </td>
                                             </tr>
 

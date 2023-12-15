@@ -17,6 +17,7 @@ const NewTask = (props) => {
     const [taskDescription, setTaskDescription] = useState("");
     const [workers, setWorkers] = useState([]);
     const [selectedWorkers, setSelectedWorkers] = useState([]);
+    const [selectedWorkersNames, setSelectedWorkersNames] = useState([]);
     const [coordinator, setCoordinator] = useState("");
     const [subtaskDescription, setSubtaskDescription] = useState("");
     const [subtaskDueDate, setSubtaskDueDate] = useState(new Date());
@@ -40,8 +41,11 @@ const NewTask = (props) => {
 
     useEffect(() => {
         fetchWorkerNames();
-        if (location.state && location.state.worker_id) {
-            setSelectedWorkers([location.state.worker_id]);
+        if (location.state && location.state.worker) {
+            let parts = location.state.worker.split("?");
+            setSelectedWorkers([parts[0]]);
+        setSelectedWorkersNames([parts[1]]);
+
         }
     }, [location]);
 
@@ -93,7 +97,13 @@ const NewTask = (props) => {
         return true;
     };
 
-    const handleWorkerChange = (workerId) => {
+    const handleWorkerChange = (worker) => {
+        let parts = worker.split("?");
+        handleWorkerChange1(parts[0]);
+        handleWorkerChange2(parts[1]);
+    };
+
+    const handleWorkerChange1 = (workerId) => {
         setSelectedWorkers(prevWorkers => {
             if (prevWorkers.includes(workerId)) {
                 // If the worker is already selected, remove it from the array
@@ -101,6 +111,18 @@ const NewTask = (props) => {
             } else {
                 // If the worker is not selected, add it to the array
                 return [...prevWorkers, workerId];
+            }
+        });
+    };
+
+    const handleWorkerChange2 = (workerName) => {
+        setSelectedWorkersNames(prevWorkers => {
+            if (prevWorkers.includes(workerName)) {
+                // If the worker is already selected, remove it from the array
+                return prevWorkers.filter(name => name !== workerName);
+            } else {
+                // If the worker is not selected, add it to the array
+                return [...prevWorkers, workerName];
             }
         });
     };
@@ -298,7 +320,7 @@ const NewTask = (props) => {
                                     <label>Agency: </label>
                                     <div className="dropdown-check-list">
                                         <div className="dropdown-button" onClick={HandDropDownICon}>
-                                            <span >{noOfChecked.length > 0 ? (noOfChecked.map((worker, i) =>(
+                                            <span >{selectedWorkersNames.length > 0 ? (selectedWorkersNames.map((worker, i) =>(
                                                 worker.charAt(0).toUpperCase() + worker.slice(1) + " ,"
                                             )) ) : "Select Agencies"}</span>
                                             <span >{ dropDownIcon ? <img src={DropUp}/> : <img src={DropDown}/> }</span>
@@ -311,8 +333,8 @@ const NewTask = (props) => {
                                                         style={{cursor: 'pointer'}}
                                                         type="checkbox"
                                                         id={worker.worker_id}
-                                                        value={worker.worker_name}
-                                                        checked={selectedWorkers.includes(worker.worker_name)}
+                                                        value={worker.worker_id+"?"+worker.worker_name}
+                                                        checked={selectedWorkers.includes(worker.worker_id)}
                                                         onChange={(event) => handleWorkerChange(event.target.value)}
                                                     />
                                                     <label htmlFor={worker.worker_id}>{worker.worker_name.charAt(0).toUpperCase() + worker.worker_name.slice(1)}</label>

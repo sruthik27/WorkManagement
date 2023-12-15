@@ -358,12 +358,12 @@ public class DbController : ControllerBase
             if (work != null)
             {
                 work.work_status = 'C';
-                work.workers.ForEach(x =>
+                foreach (var x in work.workers) 
                 {
                     var worker = _context.Workers.Find(x);
                     worker.completed_works.Add((long)workId);
                     worker.current_works.Remove((long)workId);
-                });
+                }
                 _context.SaveChanges();
             }
         }
@@ -680,7 +680,8 @@ public class DbController : ControllerBase
             email = workerDto.email,
             phone_number = workerDto.phone_number,
             works_done = 0,
-            current_works = new List<long>()
+            current_works = new List<long>(),
+            completed_works = new List<long>()
         };
 
         // Add the worker to the database.
