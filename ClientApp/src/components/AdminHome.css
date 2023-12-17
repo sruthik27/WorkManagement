@@ -269,3 +269,13 @@ body {
         opacity: 0;
     }
 }
+
+@media (max-width: 400px) {
+    .Home {
+        height: 260vh;
+    }
+
+    .radio-box-label {
+        font-size: 3vw;
+    }
+}
