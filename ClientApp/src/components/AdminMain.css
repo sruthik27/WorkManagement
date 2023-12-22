@@ -262,3 +262,17 @@
     }
 }
 
+@media (max-width: 767px) {
+    .para {
+        margin-top: 2vh;
+        font-size: 19px;
+    }
+
+    .coo-button {
+        font-size: 12px;
+    }
+
+    .update-button {
+        font-size: 16px;
+    }
+}

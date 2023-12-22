@@ -45,7 +45,7 @@ body {
 }
 
 .input1 {
-    margin: 0 100px 31px 100px;
+    margin: 0 17vh 31px 17vh;
     border-radius: 10px;
     border: 5px solid #640000;
     background: #FFF;
@@ -219,12 +219,6 @@ body {
         opacity: 0;
     }
 
-    .radio-box-div {
-        flex-direction: column;
-        row-gap: 50px;
-        margin-bottom: 50px;
-    }
-
 }
 
 /* Mobile Response */
@@ -232,6 +226,7 @@ body {
 @media (max-width: 767px) {
     .Home {
         padding-bottom: 2vw;
+        height: 125vh;
     }
 
     .Admin-head1 {
@@ -259,6 +254,18 @@ body {
         font-size: 25px;
     }
 
+    .radio-box-div {
+        flex-direction: column;
+        row-gap: 50px;
+        margin-bottom: 0;
+        padding-bottom: 50px;
+        background: #FFF9DF;
+    }
+
+    .user-input {
+        background-color: #FFF9DF;
+    }
+
     .Login-container {
         flex-direction: column;
         row-gap: 20px;
@@ -271,10 +278,7 @@ body {
 }
 
 @media (max-width: 400px) {
-    .Home {
-        height: 260vh;
-    }
-
+    
     .radio-box-label {
         font-size: 3vw;
     }
