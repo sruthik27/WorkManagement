@@ -7,7 +7,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     padding-bottom: 5px;
-    height: 100vh;
+    height: 102vh;
 }
 
 .head-div {
@@ -408,9 +408,11 @@
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1230px) {
     .ahome1 {
-        background: white;
+        background: rgb(252, 252, 158);
+        width: 100%;
+        height: 100%;
     }
     
     .container-div {
@@ -419,9 +421,91 @@
         align-items: center;
         row-gap: 6vw;
     }
+
+    .work-container-div {
+        flex-direction: row;
+        column-gap: 20px;
+    }
+
+    .create-work-div {
+        padding: 16px;
+    }
+
+    .create-work-div,.work-div {
+        width: 260px;
+        height: 215px;
+        border-radius: 30px;
+    }
+
+    .manage-work-div {
+        flex-direction: row-reverse;
+        align-items: flex-start;
+        margin-bottom: 10px;
+        column-gap: 20px;
+    }
+
+    .piechart-main-div {
+        padding: 18px;
+        border-radius: 30px;
+    }
+
+    .piechart-div {
+        width: 270px;
+        column-gap: 10px;
+    }
+
+    .piechart-colour-char-active {
+        margin: 0;
+    }
+
+    .title-div {
+        font-size: 25px;
+    }
+
+    .arrow-img {
+        width: 80px;
+    }
+
+    .manage-agencie-div {
+        margin: 0;
+        font-size: 24px;
+        border-radius: 18px 0 0 18px;
+    }
+
+    .mang-agen-p {
+        margin: 0;
+    }
+
+    .mange-img {
+        width: 30%;
+    }
+
+    .notification-inner {
+        max-width: 90vw;
+    }
+
+    .active-inner-div {
+        width: 320px;
+        border-radius: 15px;
+    }
+
+    .active-title-h2 {
+        height: 25px;
+        font-size: 18px;
+    }
+
+    .date-div {
+        border: 2px solid white;
+        border-radius: 6px;
+        padding: 5px;
+    }
+
+    .view-all-btn {
+        font-size: 14px;
+    }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
     .active-div {
         width: 370px;
         row-gap: 5px;
@@ -453,6 +537,7 @@
     .manage-work-div {
         flex-direction: column-reverse;
         margin-bottom: 10px;
+        align-items: end;
     }
 
     .manage-agencie-div {

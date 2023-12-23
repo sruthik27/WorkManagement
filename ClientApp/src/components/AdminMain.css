@@ -63,7 +63,7 @@
     /* border: 1px solid #000000; */
 }
 
-.table-head {
+.table-head-left {
     color: #640000;
     font-family: Alatsi;
     font-size: 25px;
@@ -269,10 +269,16 @@
     }
 
     .coo-button {
-        font-size: 12px;
+        font-size: 16px;
     }
 
     .update-button {
         font-size: 16px;
     }
+}
+
+@media (max-width: 600px) {
+    .coo-button {
+        font-size: 12px;
+    }    
 }
