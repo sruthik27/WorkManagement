@@ -26,6 +26,7 @@
     display: flex;
     column-gap: 6vw;
     padding-left: 25px;
+    justify-content: space-between;
 }
 
 .active-div {
@@ -577,4 +578,11 @@
     .workers-table button {
         font-size: 12px;
     }
+}
+
+@media (max-width: 480px) {
+    .detail-grid-1 {
+        grid-template-columns: 1fr;
+    }
+
 }

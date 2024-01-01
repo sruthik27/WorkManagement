@@ -148,6 +148,7 @@
 .subtask-head-div {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .subtask-delete-btn {
