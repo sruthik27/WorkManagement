@@ -301,8 +301,8 @@ class TaskTable extends Component {
                 </div>
                 <div className="task-table">
                     <div className='table-left'>
-                        <p className='table-head'>Active Task</p>
-                        <div className='scroll'>
+                        <p className='table-head1'>Active Task</p>
+                        <div className='scroll1'>
                             <ul>
                                 {activeTask.map((x, i) => (
                                     <p className='table_content' key={i} onClick={() => this.handleItemClick(x)}>

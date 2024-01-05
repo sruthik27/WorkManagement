@@ -481,7 +481,7 @@
         width: 30%;
     }
 
-    .notification-inner {
+    .notification-inner,.notification-inner-admin {
         max-width: 90vw;
     }
 
@@ -566,7 +566,7 @@
         max-width: 400px;
     }
 
-    .notification-inner {
+    .notification-inner,.notification-inner-admin {
         max-width: 85vw;
     }
 
@@ -581,8 +581,16 @@
 }
 
 @media (max-width: 480px) {
+    .ahome1 {
+        width: 110%;
+    }
+
     .detail-grid-1 {
         grid-template-columns: 1fr;
+    }
+
+    .active-div {
+        padding: 10px;
     }
 
 }

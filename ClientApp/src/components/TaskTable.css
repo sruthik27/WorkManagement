@@ -47,6 +47,16 @@
     margin-left: 10vw;
 }
 
+.table-head1 {
+    color: #640000;
+    font-family: Alatsi;
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-right: 10vw;
+}
+
 .subtask-table {
     background-color: white;
     border-radius: 10px;
@@ -136,3 +146,45 @@
     border-left: 1px solid #640000;
 }
 
+
+@media (max-width: 1220px) {
+    .tasktable-home {
+        background: #fcfc9e;
+    }
+    
+}
+
+@media (max-width: 767px) {
+    .table-left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 100%;
+        padding-right: 0;
+        border: none;
+    }
+
+    .table-head1{
+        margin-right: 0;
+    }
+
+    .table-head {
+        margin-left: 0;
+    }
+
+    .table-right {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 100%;
+        border-left: 0;
+    }
+
+    
+}
+
+@media (max-width: 600px) {
+    .tasktable-home {
+        padding-top: 20%;
+    }
+}

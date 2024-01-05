@@ -392,10 +392,10 @@ const NewAdmin = () => {
                         </div>
                         <div className='piechart-mange-div'>
                             <div className='manage-agencie-div' onClick={() => setIsPaneOpen(true)}>
-                                <img style={{width: '100px', transform: 'rotate(90deg)'}} src={ ArrowLeft }/>
+                                <img className='arrow-img' src={ ArrowLeft }/>
                                 <div className='mang-div'>
                                     <p className='mang-agen-p'>AGENCIES</p>
-                                    <img style={{width: '50%'}} src={ manageWorkers }/>
+                                    <img className='mange-img' src={ manageWorkers }/>
                                 </div>
                             </div>
                         </div>

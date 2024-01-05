@@ -219,3 +219,38 @@
     border-radius: 20px;
     cursor: pointer;
 }
+
+@media (max-width: 1220px) {
+    .form-background {
+        background: #fcfc9e;
+    }
+}
+
+@media (max-width: 1000px) {
+    .form {
+        margin-left: 200px;
+        margin-right: 200px;
+    }
+}
+
+@media (max-width: 767px) {
+    .form{
+        margin-left: 100px;
+        margin-right: 100px;
+    }
+
+    .heading {
+        font-size: 25px;
+    }
+}
+
+@media (max-width: 450px) {
+    .form{
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .heading {
+        font-size: 20px;
+    }
+}

@@ -263,7 +263,7 @@ const NewTask = (props) => {
                 <div className="form-background">
                     <button className="go-back-button" onClick={() => navigate(-1)}>Home</button>
                     <div className="form">
-                        <div>-
+                        <div>
                             <div>
                                 <h1 className="heading">PUBLISH NEW TASK</h1>
                                 <hr className="heading-line"/>
