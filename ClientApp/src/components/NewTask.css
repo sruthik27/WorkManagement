@@ -253,4 +253,8 @@
     .heading {
         font-size: 20px;
     }
+
+    .modal-inner {
+        width: 80%;
+    }
 }

@@ -336,6 +336,9 @@
         max-height: 70%;
     }
 
+    .popup-inner {
+        max-height: 120vh;
+    }
 }
 
 @media (max-width: 600px) {
