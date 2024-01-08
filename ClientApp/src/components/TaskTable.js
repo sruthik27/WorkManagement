@@ -130,7 +130,7 @@ class TaskTable extends Component {
         this.setState({selectedSubtasks: items, orderChanged: true});
     };
 
-    handleClose = () => {
+     handleClose = () => {
         this.setState({selectedItem: null});
         this.setState({selectedComments: []});
         if (this.state.orderChanged) {
@@ -279,8 +279,18 @@ class TaskTable extends Component {
             });
     };
 
-    HandleUndo = (subtask) => {
+    HandleUndo = async (subtask) => {
         console.log(subtask.task_id);
+        var requestOptions = {
+            method: 'PUT',
+            redirect: 'follow'
+        };
+
+        await fetch(`/db/undotaskcomplete?task_id=${subtask.task_id}`, requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+        this.handleClose();
     }
 
     render() {
@@ -458,7 +468,7 @@ class TaskTable extends Component {
                                                                                     
                                                                                 </div>
                                                                             </li>
-                                                                            <p className='p-ele'> -{subtask.weightage} %</p>
+                                                                            <p className='p-ele'> | {subtask.weightage} %</p>
                                                                             <div className='undo-div'>
                                                                                 <p className='p-ele'>Completed: {subtask.completed
                                                                                 ? '✅' : '❌'}</p>

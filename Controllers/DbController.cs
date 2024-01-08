@@ -365,14 +365,50 @@ public class DbController : ControllerBase
                     worker.current_works.Remove((long)workId);
                 }
                 _context.SaveChanges();
+
+                var completed_queries = _context.Queries.Where(x => x.work == work.work_id);
+                _context.Queries.RemoveRange(completed_queries);
+                _context.SaveChanges();
             }
         }
 
         return Ok(new { message = "Completion updated successfully" });
     }
 
-    //ADD NEW IMAGE URL 
+    [HttpPut("undotaskcomplete")]
+    public IActionResult UndoComplete(string task_id)
+    {
+        var taskid = long.Parse(task_id);
+        var task = _context.Tasks.Find(taskid);
+        if (task == null)
+        {
+            return BadRequest("Task not found");
+        }
 
+        task.completed = false;
+        var workId = task.work_id;
+        var work = _context.Works.Find(workId);
+        work.completed_subtasks -= task.weightage;
+        _context.SaveChanges();
+        if (work.work_status=='C')
+        {
+            // Update work_status in the work table to true
+            if (work != null)
+            {
+                work.work_status = 'A';
+                foreach (var x in work.workers) 
+                {
+                    var worker = _context.Workers.Find(x);
+                    worker.completed_works.Remove((long)workId);
+                    worker.current_works.Add((long)workId);
+                }
+                _context.SaveChanges();
+            }
+        }
+        return Ok(new { message = "Completion undoed successfully" });
+    }
+
+    //ADD NEW IMAGE URL 
     public class ImageItems
     {
         public long id { get; set; }

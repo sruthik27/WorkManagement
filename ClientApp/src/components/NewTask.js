@@ -227,6 +227,8 @@ const NewTask = (props) => {
     };
 
     const handleSubtaskFormSubmit = () => {
+        subtaskDueDate.setHours(dueDate.getHours() + 5);
+        subtaskDueDate.setMinutes(dueDate.getMinutes() + 30);
         const newSubtask = {
             task_name: subtaskDescription,
             due_date: subtaskDueDate.toISOString(),

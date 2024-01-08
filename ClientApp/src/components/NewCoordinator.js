@@ -325,8 +325,18 @@ const NewCoordinator = () => {
         navigate('/NewTask', { state: { worker: workerString } });
     };
 
-    const HandleUndo = (subtask) => {
+    const HandleUndo = async (subtask) => {
         console.log(subtask.task_id);
+        var requestOptions = {
+            method: 'PUT',
+            redirect: 'follow'
+        };
+
+        await fetch(`/db/undotaskcomplete?task_id=${subtask.task_id}`, requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+        handleClose();
     }
 
 
