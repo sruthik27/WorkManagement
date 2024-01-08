@@ -158,7 +158,7 @@ const AdminHome = () => {
                         <div className="radio-box-div">
                             <div className="radio-box-input">
                                 <input style={{cursor: 'pointer'}} type="radio" id="Princi" name="Login" onClick={HandleLoginPrinci} value="P"/>
-                                <label className="radio-box-label" htmlFor='Princi'>Login As DMDR Principal</label>
+                                <label className="radio-box-label" htmlFor='Princi'>Login As Principal</label>
                             </div>
                             <div className="radio-box-input">
                                 <input style={{cursor: 'pointer'}} type="radio" id="Head" name="Login" onClick={HandleLoginHead} value="H"/>

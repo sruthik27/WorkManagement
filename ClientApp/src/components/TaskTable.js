@@ -279,6 +279,10 @@ class TaskTable extends Component {
             });
     };
 
+    HandleUndo = (subtask) => {
+        console.log(subtask.task_id);
+    }
+
     render() {
         const {
             activeTask,
@@ -444,7 +448,7 @@ class TaskTable extends Component {
                                                                         index={index}>
                                                                 {(provided) => (
                                                                     <div>
-                                                                        <div style={{display: "flex", justifyContent: "space-between"}}>
+                                                                        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                                                                             <li {...provided.draggableProps} {...provided.dragHandleProps}
                                                                                 ref={provided.innerRef}>
                                                                                 <div className='sub-star'>
@@ -453,7 +457,16 @@ class TaskTable extends Component {
                                                                                     </div>
                                                                                 </div>
                                                                             </li>
-                                                                            <p style={{marginRight: '20px'}}>Weightage : {subtask.weightage} %</p>
+                                                                            <p className='p-ele'>Weightage : {subtask.weightage} %</p>
+                                                                            <div className='undo-div'>
+                                                                                <p className='p-ele'>Completed: {subtask.completed
+                                                                                ? '✅' : '❌'}</p>
+                                                                                {subtask.completed ? (
+                                                                                    <div>
+                                                                                        <button className='undo-btn' onClick={() => this.HandleUndo(subtask)}>Undo</button>
+                                                                                    </div>
+                                                                                ) : ""}
+                                                                            </div>
                                                                         </div>
                                                                         <hr/>
                                                                     </div>

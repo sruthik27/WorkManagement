@@ -121,6 +121,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: 150px;
 }
 
 .star {
@@ -146,6 +147,34 @@
     border-left: 1px solid #640000;
 }
 
+.undo-div {
+    display: flex;
+    column-gap: 16px;
+    align-items: center;
+}
+
+.p-ele{
+    margin: 0;
+}
+
+.undo-btn {
+    border: 1px solid #640000;
+    background: #fcfc9e;
+    color: #640000;
+    border-radius: 8px;
+}
+
+.undo-btn:hover {
+    background: #640000;
+    color: #fcfc9e;
+    border: 1px solid #fcfc9e;
+}
+
+.undo-btn:active {
+    border: 1px solid #640000;
+    background: #fcfc9e;
+    color: #640000;
+}
 
 @media (max-width: 1220px) {
     .tasktable-home {

@@ -325,6 +325,9 @@ const NewCoordinator = () => {
         navigate('/NewTask', { state: { worker: workerString } });
     };
 
+    const HandleUndo = (subtask) => {
+        console.log(subtask.task_id);
+    }
 
 
     return (
@@ -482,7 +485,7 @@ const NewCoordinator = () => {
                                                                                index={index}>
                                                                         {(provided) => (
                                                                             <div>
-                                                                                <div style={{display: "flex", justifyContent: "space-between"}}>
+                                                                                <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                                                                                     <li {...provided.draggableProps} {...provided.dragHandleProps}
                                                                                         ref={provided.innerRef}>
                                                                                         <div className='sub-star'>
@@ -491,7 +494,16 @@ const NewCoordinator = () => {
                                                                                             </div>
                                                                                         </div>
                                                                                     </li>
-                                                                                    <p style={{marginRight: '20px'}}>Weightage : {subtask.weightage} %</p>
+                                                                                    <p className='p-ele'>Weightage : {subtask.weightage} %</p>
+                                                                                    <div className='undo-div'>
+                                                                                        <p      className='p-ele'>Completed: {subtask.completed
+                                                                                        ? '✅' : '❌'}</p>
+                                                                                        {subtask.completed ? (
+                                                                                            <div>
+                                                                                                <button className='undo-btn' onClick={() => HandleUndo(subtask)}>Undo</button>
+                                                                                            </div>
+                                                                                        ) : ""}
+                                                                                    </div>
                                                                                 </div>
                                                                                 <hr/>
                                                                             </div>
