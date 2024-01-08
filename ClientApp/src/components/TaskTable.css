@@ -121,7 +121,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 150px;
+    width: 200px;
 }
 
 .star {
@@ -155,6 +155,7 @@
 
 .p-ele{
     margin: 0;
+    width: 120px;
 }
 
 .undo-btn {
@@ -175,6 +176,13 @@
     background: #fcfc9e;
     color: #640000;
 }
+
+.undo-in {
+    background: white;
+    color: white;
+    border: none;
+}
+
 
 @media (max-width: 1220px) {
     .tasktable-home {

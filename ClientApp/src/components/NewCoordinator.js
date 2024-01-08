@@ -494,7 +494,7 @@ const NewCoordinator = () => {
                                                                                             </div>
                                                                                         </div>
                                                                                     </li>
-                                                                                    <p className='p-ele'>Weightage : {subtask.weightage} %</p>
+                                                                                    <p className='p-ele'>  -{subtask.weightage} %</p>
                                                                                     <div className='undo-div'>
                                                                                         <p      className='p-ele'>Completed: {subtask.completed
                                                                                         ? '✅' : '❌'}</p>
@@ -502,7 +502,9 @@ const NewCoordinator = () => {
                                                                                             <div>
                                                                                                 <button className='undo-btn' onClick={() => HandleUndo(subtask)}>Undo</button>
                                                                                             </div>
-                                                                                        ) : ""}
+                                                                                        ) : (
+                                                                                            <button className='undo-in'>Undo</button>
+                                                                                        )}
                                                                                     </div>
                                                                                 </div>
                                                                                 <hr/>

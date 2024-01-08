@@ -448,16 +448,17 @@ class TaskTable extends Component {
                                                                         index={index}>
                                                                 {(provided) => (
                                                                     <div>
-                                                                        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+                                                                        <div style={{display: "flex", alignItems: "center", columnGap: '3vw'}}>
                                                                             <li {...provided.draggableProps} {...provided.dragHandleProps}
                                                                                 ref={provided.innerRef}>
                                                                                 <div className='sub-star'>
                                                                                     <div>
                                                                                         {subtask.task_name}
                                                                                     </div>
+                                                                                    
                                                                                 </div>
                                                                             </li>
-                                                                            <p className='p-ele'>Weightage : {subtask.weightage} %</p>
+                                                                            <p className='p-ele'> -{subtask.weightage} %</p>
                                                                             <div className='undo-div'>
                                                                                 <p className='p-ele'>Completed: {subtask.completed
                                                                                 ? '✅' : '❌'}</p>
@@ -465,7 +466,9 @@ class TaskTable extends Component {
                                                                                     <div>
                                                                                         <button className='undo-btn' onClick={() => this.HandleUndo(subtask)}>Undo</button>
                                                                                     </div>
-                                                                                ) : ""}
+                                                                                ) : (
+                                                                                    <button className='undo-in'>Undo</button>
+                                                                                )}
                                                                             </div>
                                                                         </div>
                                                                         <hr/>
