@@ -224,6 +224,7 @@ const NewAdmin = () => {
                 .then(result => console.log(result))
                 .catch(error => console.log('error', error));
         }
+        window.location.reload();
     }
 
     const HandleForward = () => {

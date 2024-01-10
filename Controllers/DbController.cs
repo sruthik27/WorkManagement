@@ -95,7 +95,7 @@ public class DbController : ControllerBase
     [HttpGet("getworksbyid")]
     public IActionResult GetWorksById(long workerid)
     {
-        var works = _context.Works.Where(w => w.workers.Contains(workerid)).Select(work => new
+        var works = _context.Works.Where(w => w.workers.Contains(workerid) && w.work_status == 'A').Select(work => new
         {
             work_id = work.work_id.ToString(),
             work.work_name,
