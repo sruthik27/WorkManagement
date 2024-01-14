@@ -64,8 +64,6 @@ const AdminHome = () => {
             .then(result => console.log(result))
             .then(alert("Please check your email"))
             .catch(error => console.log('error', error));
-
-
     }
 
     const setRememberMeCookie = (who) => {
@@ -115,7 +113,7 @@ const AdminHome = () => {
                     navigate(data.redirectTo, {state: {fromAdminHome: true}});
 
                 } else {
-                    console.log('Authentication failed');
+                    // console.log('Authentication failed');
                     setInputLoginFail("Invalid Email or Password");
                     setTimeout(() => {
                         window.location.reload();

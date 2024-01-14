@@ -9,31 +9,24 @@ import CommentBox from './CommentBox';
 import CommentCard from './CommentCard';
 import Switch from '@mui/material/Switch';
 import {Puff} from 'react-loader-spinner';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import Template from './BasePdf';
 import Print from "./print.svg";
-import tceLogo from './TCE-Logo.jpeg';
+import { text, image, barcodes } from "@pdfme/schemas";
+import { generate } from "@pdfme/generator";
 
 class PuffLoader extends React.Component {
- componentDidMount() {
-   console.log('Rendering Puff');
- }
- componentDidUpdate() {
-  console.log('Rerendering Puff');
- }
-
- render() {
-   return (
-     <Puff
-       height="80"
-       width="80"
-       radius={1}
-       color="#640000"
-       ariaLabel="puff-loading"
-       visible={true}
-     />
-   );
- }
+    render() {
+        return (
+            <Puff
+            height="80"
+            width="80"
+            radius={1}
+            color="#640000"
+            ariaLabel="puff-loading"
+            visible={true}
+            />
+        );
+    }
 }
 
 class TaskTable extends Component {
@@ -66,7 +59,6 @@ class TaskTable extends Component {
         if (this.props.data.length > 0) {
             this.processData(this.props.data);
         }
-        console.log('Rendering Puff');
     }
 
     // Add componentDidUpdate to handle updates to props.data
@@ -82,7 +74,6 @@ class TaskTable extends Component {
     handleItemClick = async (item) => {
     // Set the selected item details when a p tag is clicked
     this.setState({ selectedItem: true,isLoading: true}, async () => {
-        console.log(this.state.isLoading); // This will log the updated state
 
         let fetchedtasks = await fetch(`/db/gettasks?n=${item.work_id}`);
         let tasks = await fetchedtasks.json();
@@ -110,13 +101,10 @@ class TaskTable extends Component {
         currentDate.setHours(0,0,0);
         let diffInTime = dueDate.getTime() - currentDate.getTime();
         let diffInDays = Math.round(diffInTime / (24 * 60 * 60 * 1000));
-        console.log(diffInDays);
 
         // Use the callback function of setState to ensure the state is updated
         this.setState({ selectedItem: item, selectedSubtasks: tasks, dueDateDiff: diffInDays }, () => {
-            this.setState({ isLoading: false }, () => {
-                console.log(this.state.isLoading); // This will log the updated state
-            });
+            this.setState({ isLoading: false });
         });
     });
 }
@@ -215,7 +203,6 @@ class TaskTable extends Component {
         fetch("/db/addpayment", requestOptions)
             .then(response => response.text())
             .then(result => {
-                console.log(result);
                 this.setState({isChecked: false});
             })
             .catch(error => console.log('error', error));
@@ -231,57 +218,43 @@ class TaskTable extends Component {
     }
 
     generatePDF = () => {
-        const elementToCapture = document.getElementById('elementId');
         const currentDate = new Date();
-        
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth() + 1;
         const day = currentDate.getDate();
-
         const formattedMonth = month < 10 ? `0${month}` : month;
         const formattedDay = day < 10 ? `0${day}` : day;
         const formattedDate = `${formattedMonth}/${formattedDay}/${year}`;
 
-        html2canvas(elementToCapture)
-            .then(canvas =>{
-                const doc = new jsPDF({
-                    orientation: "portrait",
-                    unit: "mm",
-                    format: "a4",
-                });
-                doc.addImage(tceLogo, 'jpge',0, 0, 30, 30);
-                doc.setFontSize(25);
-                doc.text('Thiagarajar College Of Engineering', 30, 10)
-                doc.setFontSize(12);
-                doc.text('Department of Modernization,Development and Restoration (DMDR)', 35, 20)
-                doc.setFontSize(20);
-                doc.text(this.state.selectedItem.work_name + ' Data Report', 75, 30);
-                doc.setFontSize(14);
-                doc.text('Work Description    : ' + this.state.selectedItem.work_description, 30, 50);
-                doc.text('Cost Of Work          : ' + 'Rs.' +  this.state.selectedItem.wage, 30, 60);
-                doc.text('Advance Paid         : ' + (this.state.advancePaid === 0 ? "No" : "Rs." + this.state.advancePaid), 30, 70);
-                doc.text('Advance Paid Date: ' + (this.state.dateOfPaid === '-' ? "-" : this.state.dateOfPaid.slice(0, 10)), 30, 80)
-                doc.text('Bill Paid                  : ' + (this.state.selectedItem.bill_paid? "YES" : "NO"), 30, 90);
-                doc.text('Start Date               : ' + this.state.selectedItem.start_date.slice(0, 10), 30, 100);
-                doc.text('Due Date                : ' + this.state.selectedItem.due_date.slice(0, 10), 30, 110);
-                doc.text('Work Status           : ' + (this.state.selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"), 30, 120);
-                doc.text('Coordinator            : ' + this.state.selectedItem.coordinator, 30, 130);
-                doc.text('Worker                   : ' + this.state.selectedItem.worker_names, 30, 140);
-                doc.text('Total SubTask       : ' + this.state.selectedSubtasks.length, 30, 150);
-                doc.text('Downloaded on ' + formattedDate, 10, 200);
-                // Save the PDF with a name
-                doc.save(this.state.selectedItem.work_name + '.PDF');
-
-                doc.text('Advance Paid: '+(this.state.selectedItem.advancePaid ? "YES" : "NO"), 20, 60);
-            })
-            .catch(error => {
-                // Handle errors if any
-                console.error('Error generating PDF:', error);
-            });
+        (async () => {
+            const template = Template;
+            
+            const plugins = { text, image, qrcode: barcodes.qrcode };
+            const inputs = [
+            {
+              "field1": this.state.selectedItem.work_name ,
+              "field2": this.state.selectedItem.work_description,
+              "field3": "Rs." + this.state.selectedItem.wage.toString(),
+              "field4": (this.state.advancePaid === 0 ? "No" : "Rs." + this.state.advancePaid),
+              "field5": (this.state.dateOfPaid === '-' ? "-" : this.state.dateOfPaid.slice(0, 10)),
+              "field6": (this.state.selectedItem.bill_paid ? "Yes" : "No"),
+              "field7": this.state.selectedItem.start_date.slice(0, 10),
+              "field8": this.state.selectedItem.due_date.slice(0, 10),
+              "field9": (this.state.selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"),
+              "field10": this.state.selectedItem.coordinator,
+              "field11": this.state.selectedItem.worker_names,
+              "field12": this.state.selectedSubtasks.length.toString(),
+              "field13": 'Downloaded on ' + formattedDate
+            }
+          ];
+          
+            const pdf = await generate({ template, plugins, inputs });
+            const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
+            window.open(URL.createObjectURL(blob));
+          })();
     };
 
     HandleUndo = async (subtask) => {
-        console.log(subtask.task_id);
         var requestOptions = {
             method: 'PUT',
             redirect: 'follow'
@@ -348,7 +321,6 @@ class TaskTable extends Component {
                         </div>: (
                     selectedItem && (
                         <div id='elementId'>
-                            {console.log(selectedItem)}
                             <h1 className="close-btn" onClick={this.handleClose}>x</h1>
                             {/* Display information related to the selectedItem here */}
                             <h2 className='popup-head'>Work Details:</h2>

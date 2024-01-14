@@ -58,7 +58,6 @@ const NewTask = (props) => {
 
 
     const validateForm = () => {
-        console.log('validation called');
         if (workName === "") {
             setErrorMessage("Work Name is required");
             return false;
@@ -253,7 +252,6 @@ const NewTask = (props) => {
     const handleCloseModal = () => setShowModal(false);
 
     const noOfChecked = Object.values(selectedWorkers.filter(Boolean));
-    console.log(noOfChecked);
 
     return (
         <>

@@ -9,7 +9,7 @@ const CommentBox = (props) => {
             message: comment,
             who:"A"
         }
-        console.log(jsonData);
+        // console.log(jsonData);
         var requestOptions = {
             method: 'POST',
             headers: {

@@ -24,7 +24,6 @@
 
 .container-div {
     display: flex;
-    column-gap: 6vw;
     padding-left: 25px;
     justify-content: space-between;
 }

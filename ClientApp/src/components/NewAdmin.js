@@ -15,23 +15,15 @@ import "react-sliding-pane/dist/react-sliding-pane.css";
 import PopUp from './PopUp';
 import {Puff} from 'react-loader-spinner';
 import Print from "./print.svg";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import Template from './BasePdf';
 import CommentBox from "./CommentBox";
 import noData from './noDataInActive.png';
 import manageWorkers from './ManageWorkes.png';
 import ArrowLeft from './Arrow.gif';
-import tceLogo from './TCE-Logo.jpeg';
 import Tooltip from './ToolTip';
+import { text, image, barcodes } from "@pdfme/schemas";
+import { generate } from "@pdfme/generator";
 class PuffLoader extends React.Component {
-    componentDidMount() {
-        console.log('Rendering Puff');
-    }
-
-    componentDidUpdate() {
-        console.log('Rerendering Puff');
-    }
-
     render() {
         return (
             <Puff
@@ -137,51 +129,41 @@ const NewAdmin = () => {
     }
 
     const generatePDF = () => {
-        const elementToCapture = document.getElementById('elementId');
         const currentDate = new Date();
-
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth() + 1;
         const day = currentDate.getDate();
-
         const formattedMonth = month < 10 ? `0${month}` : month;
         const formattedDay = day < 10 ? `0${day}` : day;
         const formattedDate = `${formattedMonth}/${formattedDay}/${year}`;
 
-        html2canvas(elementToCapture)
-            .then(canvas => {
-                const doc = new jsPDF({
-                    orientation: "portrait",
-                    unit: "mm",
-                    format: "a4",
-                });
-                doc.addImage(tceLogo, 'jpge',10, 0, 35, 30);
-                doc.setFontSize(25);
-                doc.text('Thiagarajar College Of Engineering', 45, 10)
-                doc.setFontSize(12);
-                doc.text('Department of Modernization,Development and Restoration (DMDR)', 50, 20)
-                doc.setFontSize(20);
-                doc.text(selectedItem.work_name + ' Data Report', 30, 40);
-                doc.setFontSize(14);
-                doc.text('Work Description    : ' + selectedItem.work_description, 40, 60);
-                doc.text('Cost Of Work          : ' + 'Rs.' +  selectedItem.wage, 40, 70);
-                doc.text('Advance Paid         : ' + (advancePaid === 0 ? "No" : "Rs." + advancePaid), 40, 80);
-                doc.text('Advance Paid Date: ' + (dateOfPaid === '-' ? "-" : dateOfPaid.slice(0, 10)), 40, 90)
-                doc.text('Bill Paid                  : ' + (selectedItem.bill_paid ? "Yes" : "No"), 40, 100);
-                doc.text('Start Date               : ' + selectedItem.start_date.slice(0, 10), 40, 110);
-                doc.text('Due Date                : ' + selectedItem.due_date.slice(0, 10), 40, 120);
-                doc.text('Work Status           : ' + (selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"), 40, 130);
-                doc.text('Coordinator            : ' + selectedItem.coordinator, 40, 140);
-                doc.text('Worker                   : ' + selectedItem.worker_names, 40, 150);
-                doc.text('Total SubTask       : ' + selectedSubtasks.length, 40, 160);
-                doc.text('Downloaded on ' + formattedDate, 10, 210);
-                // Save the PDF with a name
-                doc.save(selectedItem.work_name + '.PDF');
-            })
-            .catch(error => {
-                // Handle errors if any
-                console.error('Error generating PDF:', error);
-            });
+        (async () => {
+            const template = Template;
+            
+            const plugins = { text, image, qrcode: barcodes.qrcode };
+            const inputs = [
+            {
+              "field1": selectedItem.work_name ,
+              "field2": selectedItem.work_description,
+              "field3": "Rs." + selectedItem.wage.toString(),
+              "field4": (advancePaid === 0 ? "No" : "Rs." + advancePaid),
+              "field5": (dateOfPaid === '-' ? "-" : dateOfPaid.slice(0, 10)),
+              "field6": (selectedItem.bill_paid ? "Yes" : "No"),
+              "field7": selectedItem.start_date.slice(0, 10),
+              "field8": selectedItem.due_date.slice(0, 10),
+              "field9": (selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"),
+              "field10": selectedItem.coordinator,
+              "field11": selectedItem.worker_names,
+              "field12": selectedSubtasks.length.toString(),
+              "field13": 'Downloaded on ' + formattedDate
+            }
+          ];
+          
+            const pdf = await generate({ template, plugins, inputs });
+            const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
+            window.open(URL.createObjectURL(blob));
+          })();
+
     };
 
 

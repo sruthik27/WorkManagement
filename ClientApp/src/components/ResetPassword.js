@@ -15,8 +15,8 @@ const ResetPassword = () => {
     const [inputResetPassword, setInputResetPassword] = useState("");
     const [inputConfirmPassword, setInputConfirmPassword] = useState("");
     const [misMatch, setMisMatch] = useState(false);
-    console.log(id);
 
+    
     useEffect( () => {
         async function fetchData() {
         try {
