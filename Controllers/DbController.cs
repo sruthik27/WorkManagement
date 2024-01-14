@@ -248,7 +248,7 @@ public class DbController : ControllerBase
         }
 
         var to_name = who.who == 'P' ? "Principal" : "DMDR Head";
-        var to_email = who.who == 'P' ? "sruthik2016@gmail.com" : "vigneshkabilan65@gmail.com";
+        var to_email = who.who == 'P' ? "principal@tce.edu" : "smmroomi@tce.edu";
         // Create email message
         var emailMessage = new MimeMessage();
         emailMessage.From.Add(new MailboxAddress("TCE DMDR", "insomniadevs007@gmail.com"));
@@ -303,8 +303,8 @@ public class DbController : ControllerBase
 
         // Send email
         using var smtp = new SmtpClient();
-        smtp.Connect("smtp-relay.brevo.com", 587, SecureSocketOptions.StartTls);
-        smtp.Authenticate("sruthik2016@gmail.com", "a4BrdMsQJXLkcyYE");
+        smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+        smtp.Authenticate("insomniadevs007@gmail.com", "lzhyecgavxzkcgvg");
         smtp.Send(emailMessage);
         smtp.Disconnect(true);
         
