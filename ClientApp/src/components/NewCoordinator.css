@@ -303,6 +303,7 @@
 .workers-table a {
     color: #640000;
     text-decoration: underline;
+    font-size: 14px;
 }
 
 .workers-table button {
@@ -578,6 +579,10 @@
     .workers-table button {
         font-size: 12px;
     }
+
+    .workers-table a {
+        font-size: 12px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -593,4 +598,16 @@
         padding: 10px;
     }
 
+    .workers-table a {
+        font-size: 10px;
+    }
+
+    .slide-pane__content {
+        padding: 0;
+    }
+
+    .notification-inner,.notification-inner-admin {
+        max-width: 95vw;
+        max-height: 55vh;
+    }
 }

@@ -74,7 +74,7 @@ const NewCoordinator = () => {
         } else {
             setLoading(true);
             fetchData();
-            getWorkers();
+            // getWorkers();
             const isOpen = localStorage.getItem('IsPaneOpen');
             if (isOpen === 'true') {
                 // Set your state variable accordingly
@@ -530,7 +530,10 @@ const NewCoordinator = () => {
                             </div>
                         </div>
                         <div className='manage-work-div'>
-                            <div className='manage-agencie-div' onClick={() => setIsPaneOpen(true)}>
+                            <div className='manage-agencie-div' onClick={() => {
+                                getWorkers();
+                                setIsPaneOpen(true);
+                            }}>
                                 <img className='arrow-img' src={ ArrowLeft }/>
                                 <div className='mang-div'>
                                     <p className='mang-agen-p'>AGENCIES</p>
@@ -584,7 +587,8 @@ const NewCoordinator = () => {
                                             alt="delete-sign"/>}
                             isOpen={isPaneOpen}
                             title="Manage Agencies"
-                            subtitle='view or change the verification code for registers and manage the agencies registered'
+                            subtitle='
+                            Modify verification code & assign works'
                             onRequestClose={() => {
                                 setIsPaneOpen(false);
                             }}
@@ -621,7 +625,6 @@ const NewCoordinator = () => {
                                                     <button onClick={() => handleAssignClick(worker.worker_id+"?"+worker.worker_name)}>Assign</button>
                                                 </td>
                                             </tr>
-
                                         ))}
                                         </tbody>
                                     </table>
