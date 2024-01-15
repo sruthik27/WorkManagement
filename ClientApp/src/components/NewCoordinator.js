@@ -86,19 +86,33 @@ const NewCoordinator = () => {
     }, []);
 
     const fetchData = async () => {
-        try {
-            const response = await fetch('/db/getnearworks');
-            const data = await response.json();
-            setActiveData(data.worksData);
-            setTopworks(data["worksData"]);
-            setCompletedPercent(data["percentData"][0]);
-            setActivePercent(data["percentData"][1])
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        } finally {
-            setLoading(false);
-        }
+    try {
+        const response = await fetch('/db/getworks');
+        const data = await response.json();
+
+        const today = getMidnightDate(new Date());
+        const filteredData = data.filter(item => {
+            const dueDate = getMidnightDate(new Date(item.due_date));
+            return dueDate > today;
+        });
+filteredData.sort((a, b) => new Date(a.due_date) - new Date(b.due_date));
+        setTopworks(filteredData.slice(0, 3));
+
+        const completed = data.reduce((count, item) => item.work_status === 'C' ? count + 1 : count, 0);
+        setCompletedPercent(completed);
+        setActivePercent(data.length - completed);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    } finally {
+        setLoading(false);
     }
+};
+
+const getMidnightDate = (date) => {
+    date.setHours(0, 0, 0, 0);
+    return date;
+};
+
 
     const getWorkers = async () => {
         try {
@@ -349,7 +363,7 @@ const NewCoordinator = () => {
                                             <Tooltip text={x.work_name}>
                                                 <h2 className='active-title-h2' onClick={() => {
                                                     HandleSelectedItem(x)
-                                                }}>{x.work_name.slice(0,10)}</h2>
+                                                }}>{x.work_name.slice(0,12)}</h2>
                                             </Tooltip>
                                             <div className='date-div'>
                                                 <img style={{width: '22px', marginRight: '10px'}} src={Flag}/>
@@ -581,7 +595,7 @@ const NewCoordinator = () => {
                         <SlidingPane
                             className="notification-head"
                             overlayClassName="custom-overlay"
-                            width={770}
+                            width={800}
                             closeIcon={<img width="25" height="25"
                                             src="https://img.icons8.com/plasticine/100/delete-sign.png"
                                             alt="delete-sign"/>}

@@ -30,44 +30,9 @@ public class DbController : ControllerBase
         _context = context;
     }
 
-    //TO GET TOP 3 WORKS
-    [HttpGet("getnearworks")]
-    public IActionResult GetNearWorks()
-    {
-        var currentDate = DateTime.UtcNow;
-        var works = _context.Works
-            .AsNoTracking()
-            .Where(work => work.due_date >= currentDate)
-            .OrderBy(work => work.due_date)
-            .Take(3)
-            .Select(work => new
-            {
-                work_id = work.work_id.ToString(),
-                worker_names = string.Join(", ",
-                    _context.Workers.Where(x => work.workers.Contains((x.worker_id))).Select(y => y.worker_name)),
-                work.work_name,
-                work.work_description,
-                work.work_status,
-                work.start_date,
-                work.due_date,
-                work.total_subtasks,
-                work.completed_subtasks,
-                work.wage,
-                work.advance_paid,
-                work.bill_paid,
-                work.coordinator
-            });
-        var completed = _context.Works.Count(x => x.work_status == 'C');
-        var percentages = new List<int> { completed, _context.Works.Count() - completed };
-        return Ok(new
-        {
-            worksData = works, percentData = percentages
-        });
-    }
-
     //TO GET ALL WORKS
     [HttpGet("getworks")]
-    public IActionResult GetWorks()
+    public async Task<IActionResult> GetWorks()
     {
         var works = _context.Works
             .AsNoTracking()
@@ -93,9 +58,9 @@ public class DbController : ControllerBase
 
     //TO GET WORKS OF SPECCIFIC WORKER
     [HttpGet("getworksbyid")]
-    public IActionResult GetWorksById(long workerid)
+    public async Task<IActionResult> GetWorksById(long workerid)
     {
-        var works = _context.Works.Where(w => w.workers.Contains(workerid) && w.work_status == 'A').Select(work => new
+        var works = await _context.Works.Where(w => w.workers.Contains(workerid) && w.work_status == 'A').Select(work => new
         {
             work_id = work.work_id.ToString(),
             work.work_name,
@@ -109,12 +74,12 @@ public class DbController : ControllerBase
             work.advance_paid,
             work.bill_paid,
             work.coordinator
-        });
+        }).ToListAsync();
         return Ok(works);
     }
 
     [HttpGet("gettasks")]
-    public IActionResult GetTasks(string n)
+    public async Task<IActionResult> GetTasks(string n)
     {
         return Ok(_context.Tasks.Where(x => x.work_id == long.Parse(n)).OrderBy(t => t.order_no).Select(y =>
             new
@@ -126,7 +91,7 @@ public class DbController : ControllerBase
 
     //get workers data
     [HttpGet("getworkers")]
-    public IActionResult GetWorkers()
+    public async Task<IActionResult> GetWorkers()
     {
         var workers = _context.Workers.AsNoTracking().Select(w => new
         {
@@ -140,7 +105,7 @@ public class DbController : ControllerBase
 
     //TO GET PAYMENT DETAILS OF WORK ID
     [HttpGet("getpayments")]
-    public IActionResult GetPayments(string workid)
+    public async Task<IActionResult> GetPayments(string workid)
     {
         var work_id = long.Parse(workid);
         return Ok(_context.Payments.Where(x => x.work == work_id));
@@ -148,14 +113,14 @@ public class DbController : ControllerBase
 
     //TO GET REVIEWS/QUERIES ON A WORK ID
     [HttpGet("getreviews")]
-    public IActionResult GetReviews(long workid)
+    public async Task<IActionResult> GetReviews(long workid)
     {
         return Ok(_context.Queries.Where(x => x.work == workid));
     }
 
     //TO GET IMAGES OF A GIVEN WORK
     [HttpGet("getimages")]
-    public IActionResult GetImageUrls()
+    public async Task<IActionResult> GetImageUrls()
     {
         var images = _context.Images.Select(x => new
         {
@@ -167,13 +132,13 @@ public class DbController : ControllerBase
 
     //TO GET VERIFICATION CODE
     [HttpGet("getverificationcode")]
-    public IActionResult GetVerification()
+    public async Task<IActionResult> GetVerification()
     {
         return Ok(_context.Logins.Find("check@verify.in").password);
     }
 
     [HttpGet("getresetkey")]
-    public IActionResult GetResetKey()
+    public async Task<IActionResult> GetResetKey()
     {
         string key = "";
         using (StreamReader streamReader = new StreamReader(@"Files/vault.json"))
@@ -220,7 +185,7 @@ public class DbController : ControllerBase
     }
     
     [HttpPost("resetpasswordlink")]
-    public IActionResult SendPasswordResetEmail([FromBody] Who who)
+    public async Task<IActionResult> SendPasswordResetEmail([FromBody] Who who)
     {
         string randomstuffing = GenerateRandomString();
         try
@@ -292,7 +257,7 @@ public class DbController : ControllerBase
                 <h2>Password Reset</h2>
                 <p>Hello,</p>
                 <p>We received a request to reset your password. Click the button below to reset it.</p>
-                <a href=""https://tceworkmanagement.azurewebsites.net/ResetPassword/{randomstuffing}"" class=""button"" style=""color: #ffffff; text-decoration: none;"">Reset Password</a>
+                <a href=""https://tcedmdr.onrender.com/ResetPassword/{randomstuffing}"" class=""button"" style=""color: #ffffff; text-decoration: none;"">Reset Password</a>
                 <p>If you did not request a password reset, please ignore this email or reply to let us know.</p>
                 <b>This email can be used only once to change the password<b>
                 </div>
@@ -315,7 +280,7 @@ public class DbController : ControllerBase
     //TO UPDATE ORDER OF SUBTASK
     [Route("updateorder")]
     [HttpPut]
-    public IActionResult UpdateOrder(string task_id, int new_order)
+    public async Task<IActionResult> UpdateOrder(string task_id, int new_order)
     {
         var taskid = long.Parse(task_id);
         //FindTask by taskid
@@ -334,7 +299,7 @@ public class DbController : ControllerBase
     //UPDATE COMPLETION OF TASKS (WORK)
     [Route("updatetaskcompletion")]
     [HttpPut]
-    public IActionResult UpdateCompletion(string task_id)
+    public async Task<IActionResult> UpdateCompletion(string task_id)
     {
         var taskid = long.Parse(task_id);
         var task = _context.Tasks.Find(taskid);
@@ -376,7 +341,7 @@ public class DbController : ControllerBase
     }
 
     [HttpPut("undotaskcomplete")]
-    public IActionResult UndoComplete(string task_id)
+    public async Task<IActionResult> UndoComplete(string task_id)
     {
         var taskid = long.Parse(task_id);
         var task = _context.Tasks.Find(taskid);
@@ -417,7 +382,7 @@ public class DbController : ControllerBase
 
     [Route("appendimage")]
     [HttpPut]
-    public IActionResult AppendImage([FromBody] ImageItems imageitem)
+    public async Task<IActionResult> AppendImage([FromBody] ImageItems imageitem)
     {
         var workid = imageitem.id;
         var url = imageitem.url;
@@ -430,7 +395,7 @@ public class DbController : ControllerBase
     //UPDATE BILL PAID
     [Route("updatebill")]
     [HttpPut]
-    public IActionResult UpdateBill(string workid)
+    public async Task<IActionResult> UpdateBill(string workid)
     {
         var work_id = long.Parse(workid);
         var work = _context.Works.Find(work_id);
@@ -441,7 +406,7 @@ public class DbController : ControllerBase
 
     //UPDATE VERIFICATION CODE
     [HttpPut("updatevcode")]
-    public IActionResult UpdateVCode()
+    public async Task<IActionResult> UpdateVCode()
     {
         var vcode = _context.Logins.FirstOrDefault(x => x.email == "check@verify.in");
         int randomNumber = new Random().Next(1000, 10000);
@@ -460,7 +425,7 @@ public class DbController : ControllerBase
     }
 
     [HttpPut("resetpass1")]
-    public IActionResult SetNewPass([FromBody] ResetDto resetDto)
+    public async Task<IActionResult> SetNewPass([FromBody] ResetDto resetDto)
     {
         var email = resetDto.email;
         var newpass = resetDto.newpass;
@@ -505,7 +470,7 @@ public class DbController : ControllerBase
 
     //reset pass for workers
     [HttpPut("resetpass")]
-    public IActionResult ResetPass([FromBody] ResetDto resetDto)
+    public async Task<IActionResult> ResetPass([FromBody] ResetDto resetDto)
     {
         var newpass = resetDto.newpass;
         var user = _context.WLogins.FirstOrDefault(x => x.email == resetDto.email);
@@ -520,7 +485,7 @@ public class DbController : ControllerBase
     //ADMIN - COORDINATOR LOGIN VERIFICATION
     [Route("verify")]
     [HttpPost]
-    public IActionResult Verify([FromBody] Login login)
+    public async Task<IActionResult> Verify([FromBody] Login login)
     {
         if (login == null)
         {
@@ -564,7 +529,7 @@ public class DbController : ControllerBase
 
     [Route("workerlogin")]
     [HttpPost]
-    public IActionResult Login([FromBody] LoginCred cred)
+    public async Task<IActionResult> Login([FromBody] LoginCred cred)
     {
         // Get the WLogin object for the given email.
         WLogin wlogin = _context.WLogins.FirstOrDefault(w => w.email == cred.useremail);
@@ -591,7 +556,7 @@ public class DbController : ControllerBase
 
     //ADD QUERY
     [HttpPost("addquery")]
-    public IActionResult AddQuery([FromBody] Query newQuery)
+    public async Task<IActionResult> AddQuery([FromBody] Query newQuery)
     {
         if (newQuery == null)
         {
@@ -616,7 +581,7 @@ public class DbController : ControllerBase
 
     [Route("addwork")]
     [HttpPost]
-    public IActionResult AddWork([FromBody] WorkWithSubtasks newWork)
+    public async Task<IActionResult> AddWork([FromBody] WorkWithSubtasks newWork)
     {
         if (newWork == null)
         {
@@ -653,7 +618,7 @@ public class DbController : ControllerBase
     //ADD PAYMENT
     [Route("addpayment")]
     [HttpPost]
-    public IActionResult AddPayment([FromBody] Payment newpayment)
+    public async Task<IActionResult> AddPayment([FromBody] Payment newpayment)
     {
         if (newpayment == null)
         {
