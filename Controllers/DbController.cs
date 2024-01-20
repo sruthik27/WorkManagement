@@ -477,7 +477,7 @@ public class DbController : ControllerBase
         var user = _context.WLogins.FirstOrDefault(x => x.email == resetDto.email);
         string passwordHash = BCrypt.Net.BCrypt.HashPassword(newpass);
         user.password = passwordHash;
-        _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
         return Ok(new { message = "success" });
     }
 
