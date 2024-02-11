@@ -227,31 +227,40 @@ class TaskTable extends Component {
         const formattedDate = `${formattedMonth}/${formattedDay}/${year}`;
 
         (async () => {
-            const template = Template;
-            
-            const plugins = { text, image, qrcode: barcodes.qrcode };
-            const inputs = [
-            {
-              "field1": this.state.selectedItem.work_name ,
-              "field2": this.state.selectedItem.work_description,
-              "field3": "Rs." + this.state.selectedItem.wage.toString(),
-              "field4": (this.state.advancePaid === 0 ? "No" : "Rs." + this.state.advancePaid),
-              "field5": (this.state.dateOfPaid === '-' ? "-" : this.state.dateOfPaid.slice(0, 10)),
-              "field6": (this.state.selectedItem.bill_paid ? "Yes" : "No"),
-              "field7": this.state.selectedItem.start_date.slice(0, 10),
-              "field8": this.state.selectedItem.due_date.slice(0, 10),
-              "field9": (this.state.selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"),
-              "field10": this.state.selectedItem.coordinator,
-              "field11": this.state.selectedItem.worker_names,
-              "field12": this.state.selectedSubtasks.length.toString(),
-              "field13": 'Downloaded on ' + formattedDate
-            }
-          ];
-          
-            const pdf = await generate({ template, plugins, inputs });
-            const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
-            window.open(URL.createObjectURL(blob));
-          })();
+  const template = Template;
+
+      const plugins = { text, image, qrcode: barcodes.qrcode };
+      const inputs = [
+      {
+        "field1": this.state.selectedItem.work_name,
+        "field2": "Rs." + this.state.selectedItem.wage.toString(),
+        "field3": (this.state.advancePaid === 0 ? "No" : "Rs." + this.state.advancePaid),
+        "field4": (this.state.dateOfPaid === '-' ? "-" : this.state.dateOfPaid.slice(0, 10)),
+        "field5": (this.state.selectedItem.bill_paid ? "Yes" : "No"),
+        "field6": this.state.selectedItem.start_date.slice(0, 10),
+        "field7": this.state.selectedItem.due_date.slice(0, 10),
+        "field8": (this.state.selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"),
+        "field9": this.state.selectedItem.coordinator,
+        "field10": this.state.selectedItem.worker_names,
+        "field11": this.state.selectedSubtasks.length.toString(),
+        "field12": this.state.selectedItem.work_description,
+        "field13": 'Downloaded on ' + formattedDate
+      }
+    ];
+
+     const pdf = await generate({ template, plugins, inputs });
+
+    // Set the PDF name as work_name
+    const fileName = this.state.selectedItem.work_name + '.pdf';
+
+    const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
+
+    // Create a link element and trigger a click to download the PDF
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
+    })();
     };
 
     HandleUndo = async (subtask) => {

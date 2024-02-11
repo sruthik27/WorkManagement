@@ -182,33 +182,42 @@ const getMidnightDate = (date) => {
         const formattedDay = day < 10 ? `0${day}` : day;
         const formattedDate = `${formattedMonth}/${formattedDay}/${year}`;
 
-        (async () => {
-            const template = Template;
-            
-            const plugins = { text, image, qrcode: barcodes.qrcode };
-            const inputs = [
-            {
-              "field1": selectedItem.work_name ,
-              "field2": selectedItem.work_description,
-              "field3": "Rs." + selectedItem.wage.toString(),
-              "field4": (advancePaid === 0 ? "No" : "Rs." + advancePaid),
-              "field5": (dateOfPaid === '-' ? "-" : dateOfPaid.slice(0, 10)),
-              "field6": (selectedItem.bill_paid ? "Yes" : "No"),
-              "field7": selectedItem.start_date.slice(0, 10),
-              "field8": selectedItem.due_date.slice(0, 10),
-              "field9": (selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"),
-              "field10": selectedItem.coordinator,
-              "field11": selectedItem.worker_names,
-              "field12": selectedSubtasks.length.toString(),
-              "field13": 'Downloaded on ' + formattedDate
-            }
-          ];
-          
-            const pdf = await generate({ template, plugins, inputs });
-            const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
-            window.open(URL.createObjectURL(blob));
-          })();
 
+        (async () => {
+  const template = Template;
+
+      const plugins = { text, image, qrcode: barcodes.qrcode };
+      const inputs = [
+      {
+        "field1": selectedItem.work_name,
+        "field2": "Rs." + selectedItem.wage.toString(),
+        "field3": (advancePaid === 0 ? "No" : "Rs." + advancePaid),
+        "field4": (dateOfPaid === '-' ? "-" : dateOfPaid.slice(0, 10)),
+        "field5": (selectedItem.bill_paid ? "Yes" : "No"),
+        "field6": selectedItem.start_date.slice(0, 10),
+        "field7": selectedItem.due_date.slice(0, 10),
+        "field8": (selectedItem.work_status === 'A' ? "Active Task" : "Completed Task"),
+        "field9": selectedItem.coordinator,
+        "field10": selectedItem.worker_names,
+        "field11": selectedSubtasks.length.toString(),
+        "field12": selectedItem.work_description,
+        "field13": 'Downloaded on ' + formattedDate
+      }
+    ];
+
+       const pdf = await generate({ template, plugins, inputs });
+
+    // Set the PDF name as work_name
+    const fileName = selectedItem.work_name + '.pdf';
+
+    const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
+
+    // Create a link element and trigger a click to download the PDF
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
+  })();
     };
 
 

@@ -7,6 +7,7 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using ClosedXML.Excel;
 using MailKit.Security;
 using MimeKit;
 using Newtonsoft.Json.Linq;
@@ -77,6 +78,96 @@ public class DbController : ControllerBase
         }).ToListAsync();
         return Ok(works);
     }
+
+    
+    private void SetCellValue(IXLCell cell, object value)
+    {
+        if (value == null)
+        {
+            cell.SetValue("");
+        }
+        else if (value is DateTime)
+        {
+            cell.SetValue((DateTime)value);
+        }
+        else if (value is bool)
+        {
+            cell.SetValue((bool)value);
+        }
+        else if (value is string)
+        {
+            cell.SetValue((string)value);
+        }
+        else if (value is double || value is float || value is decimal)
+        {
+            cell.SetValue(Convert.ToDouble(value));
+        }
+        else if (value is int || value is long || value is short || value is byte)
+        {
+            cell.SetValue(Convert.ToInt64(value));
+        }
+        else
+        {
+            cell.SetValue(value.ToString());
+        }
+    }
+    
+    [HttpGet("getexcel")]
+    public IActionResult DownloadExcel()
+    {
+        // Define column headings
+        string[] columnHeadings = { "work_id", "worker_names", "work_name", "work_description", "work_status",
+            "start_date", "due_date", "total_subtasks", "completed_subtasks", "wage",
+            "advance_paid", "bill_paid", "coordinator" };
+
+        var works =  _context.Works
+            .AsNoTracking()
+            .Select(work => new
+            {
+                work_id = work.work_id.ToString(),
+                worker_names = string.Join(", ", _context.Workers.Where(x => work.workers.Contains(x.worker_id)).Select(y => y.worker_name)),
+                work.work_name,
+                work.work_description,
+                work_status = work.work_status=='A'?"Active":"Completed",
+                work.start_date,
+                work.due_date,
+                work.total_subtasks,
+                work.completed_subtasks,
+                work.wage,
+                advance_paid = work.advance_paid==true?"Yes":"No",
+                bill_paid = work.bill_paid==true?"Yes":"No",
+                work.coordinator
+            }).ToList();
+
+        var stream = new MemoryStream();
+
+        using (var workbook = new XLWorkbook())
+        {
+            var worksheet = workbook.Worksheets.Add("Works");
+
+            // Adding column headings
+            for (int i = 0; i < columnHeadings.Length; i++)
+            {
+                worksheet.Cell(1, i + 1).Value = columnHeadings[i];
+            }
+
+            // Adding data rows
+            for (int i = 0; i < works.Count; i++)
+            {
+                var work = works[i];
+                for (int j = 0; j < columnHeadings.Length; j++)
+                {
+                    SetCellValue(worksheet.Cell(i + 2, j + 1), work.GetType().GetProperty(columnHeadings[j]).GetValue(work));
+                }
+            }
+
+            workbook.SaveAs(stream);
+        }
+
+        stream.Position = 0;
+        return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "works.xlsx");
+    }
+    
 
     [HttpGet("gettasks")]
     public async Task<IActionResult> GetTasks(string n)
