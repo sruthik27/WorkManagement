@@ -263,6 +263,28 @@
     animation: spin-anim 1.2s linear infinite;
 }
 
+.topNav {
+    position: absolute;
+    margin: 20px;
+}
+
+.excel-logo {
+    width: 40px;
+    cursor: pointer;
+}
+
+.excel-download {
+    right: 5%;
+    display: flex;
+}
+
+.excel-title {
+    margin: 10px;
+    color: #640000;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 @keyframes spin-anim {
     0% {
         transform: rotate(0deg);

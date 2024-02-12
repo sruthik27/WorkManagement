@@ -3,7 +3,7 @@ import TaskTable from './TaskTable';
 import "./AdminMain.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import routeMappings from "../routeMappings";
-
+import EXCEL from './excel.png';
 
 const Coordinator = () => {
   const [itemData, setItemData] = useState([]);
@@ -70,8 +70,11 @@ const Coordinator = () => {
         </div>
        ) : (
         <div>
-          <button style={{position: 'absolute', margin: '20px'}} className="go-back-button" onClick={() => navigate(routeMappings["Csjdjovn="],{ state: { fromAdminHome: true } })}>Home</button>
-          <button onClick={downloadExcel}></button>
+          <button className="go-back-button topNav" onClick={() => navigate(routeMappings["Csjdjovn="],{ state: { fromAdminHome: true } })}>Home</button>
+          <div className="topNav excel-download" onClick={downloadExcel}>
+            <p className='excel-title '>Download in Excel:</p>
+            <img className='excel-logo' src={EXCEL} />
+          </div>
           <div className='tasktable-home'>
             <TaskTable data={itemData} editable={true}/>
           </div>
